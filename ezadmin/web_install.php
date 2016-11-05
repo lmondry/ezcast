@@ -1,7 +1,7 @@
 <?php
 
 /*
- * EZCAST EZadmin 
+ * EZCAST EZadmin
  * Copyright (C) 2014 Université libre de Bruxelles
  *
  * Written by Michel Jansens <mjansens@ulb.ac.be>
@@ -29,7 +29,7 @@
  */
 /**
  * This file is aimed to install EZcast and its components.
- * It creates the tables of the database and sets up the configuration files 
+ * It creates the tables of the database and sets up the configuration files
  * according to the user's preferences
  */
 require_once '../commons/lib_template.php';
@@ -380,7 +380,7 @@ function validate_form() {
     }
 
     try {
-        // used for the verification of existing tables and columns 
+        // used for the verification of existing tables and columns
         $tables = array(
             escapeshellarg($input['db_prefix'] . 'classrooms') => array(escapeshellarg('room_id'), escapeshellarg('name'), escapeshellarg('IP'), escapeshellarg('enabled')),
             escapeshellarg($input['db_prefix'] . 'courses') => array(escapeshellarg('course_code'), escapeshellarg('course_name'), escapeshellarg('shortname'), escapeshellarg('in_recorders'), escapeshellarg('has_albums'), escapeshellarg('date_created'), escapeshellarg('origin')),
@@ -615,7 +615,7 @@ function create_config_files() {
 function add_first_user() {
     global $input;
 
-    // Add the first user in database 
+    // Add the first user in database
     $first_user = file_get_contents("../first_user");
     $first_user = explode(" , ", $first_user);
 
@@ -627,7 +627,8 @@ function add_first_user() {
 
     //   try {
     if (!db_ready()) {
-        db_prepare(statements_get());
+        $stmts = statements_get();
+        db_prepare($stmts);
     }
     db_user_create($user_ID, $surname, $forename, $passwd, $permissions);
     add_admin_to_file($user_ID);
