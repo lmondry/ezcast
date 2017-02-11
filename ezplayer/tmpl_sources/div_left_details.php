@@ -2,7 +2,7 @@
 /*
  * EZCAST EZplayer
  *
- * Copyright (C) 2014 Université libre de Bruxelles
+ * Copyright (C) 2016 Université libre de Bruxelles
  *
  * Written by Michel Jansens <mjansens@ulb.ac.be>
  * 	      Arnaud Wijns <awijns@ulb.ac.be>
@@ -45,27 +45,27 @@ switch (strtolower($_SESSION['browser_name'])) {
             $playbackRate = true;
         break;
 }
-?> 
+?>
 
 <div id="main_player">
-    <!-- #player_header : contains album title and asset title 
+    <!-- #player_header : contains album title and asset title
         If the current view is the home page, the header is empty
         If the current view is the album page, the header contains album title only
         If the current view is the asset page, the header contains album title and asset title -->
     <div id="site_map">
-        <a class="home-link" href="index.php" title="®Back_to_home®">®Home®</a>    
+        <a class="home-link" href="index.php" title="®Back_to_home®">®Home®</a>
         <?php
         if (acl_has_album_permissions($album)) {
             $token = acl_token_get($album);
             $token = $token['token'];
             ?>
             <div class="right-arrow"></div>
-            <a  href="javascript:show_album_assets('<?php echo $album; ?>', '<?php echo $token; ?>');" title="®Back_to_album®">(<?php echo suffix_remove($album); ?>) <?php echo get_album_title($album); ?></a>   
+            <a  href="javascript:show_album_assets('<?php echo $album; ?>', '<?php echo $token; ?>');" title="®Back_to_album®">(<?php echo suffix_remove($album); ?>) <?php echo get_album_title($album); ?></a>
         <?php } ?>
         <div class="right-arrow"></div><?php print_info($asset_meta['title']); ?>
     </div>
 
-    <div id="video_player">
+    <div id="video_player" class="remove_full">
         <!-- #main_video : HTML5 video player.
             There is no selected source by default.
         -->
@@ -87,7 +87,7 @@ switch (strtolower($_SESSION['browser_name'])) {
             <div class="shortcuts_tab"><a href="javascript:player_shortcuts_toggle();"></a></div>
         </div>
 
-        <?php if (acl_user_is_logged() && acl_has_album_permissions($album) && acl_display_thread_notification()) { ?>
+        <?php if (acl_display_thread_notification()) { ?>
             <script>
                 display_threads_notif = true;
             </script>
@@ -97,17 +97,21 @@ switch (strtolower($_SESSION['browser_name'])) {
             </div>
         <?php } ?>
 
-        <video id="main_video" poster="./images/Generale/poster-<?php echo get_lang(); ?>.jpg" controls src="<?php echo $asset_meta['src']; ?>" preload="auto" type="video/mp4">
+        <video id="main_video" poster="./images/Generale/¤poster¤-<?php echo get_lang(); ?>.jpg" controls src="<?php echo $asset_meta['src']; ?>" preload="auto" type="video/mp4">
             <source id="main_video_source"
+                    <?php if(array_key_exists('low_slide_src', $asset_meta)) { ?>
                     high_slide_src="<?php echo $asset_meta['high_slide_src'] . '&origin=' . $appname; ?>"
-                    high_cam_src="<?php echo $asset_meta['high_cam_src'] . '&origin=' . $appname; ?>"
                     low_slide_src="<?php echo $asset_meta['low_slide_src'] . '&origin=' . $appname; ?>"
-                    low_cam_src="<?php echo $asset_meta['low_cam_src'] . '&origin=' . $appname; ?>">  
+                    <?php } ?>
+                    <?php if(array_key_exists('low_cam_src', $asset_meta)) { ?>
+                    high_cam_src="<?php echo $asset_meta['high_cam_src'] . '&origin=' . $appname; ?>"
+                    low_cam_src="<?php echo $asset_meta['low_cam_src'] . '&origin=' . $appname; ?>"
+                    <?php } ?>>
         </video>
 
         <?php if ($asset_meta['record_type'] == 'camslide') { ?>
 
-            <video id="secondary_video" poster="./images/Generale/poster-<?php echo get_lang(); ?>.jpg" controls src="<?php echo $asset_meta['low_slide_src'] . '&origin=' . $appname; ?>" preload="auto" type="video/mp4">
+            <video id="secondary_video" poster="./images/Generale/¤poster¤-<?php echo get_lang(); ?>.jpg" controls src="<?php echo $asset_meta['low_slide_src'] . '&origin=' . $appname; ?>" preload="auto" type="video/mp4">
             </video>
         <?php } ?>
 
@@ -133,12 +137,14 @@ switch (strtolower($_SESSION['browser_name'])) {
 
 <?php require template_getpath('div_bookmark_form.php'); ?>
 <?php require template_getpath('div_thread_form.php'); ?>
+<?php require template_getpath('div_quiz_form.php'); ?>
+
 
         <div class="video_controls">
             <ul>
 <?php if ($playbackRate) { ?>
                     <li>
-                        <a id="toggleRate" href="javascript:player_playbackspeed_toggle();" title="®Change_speedrate®">1.0x</a> 
+                        <a id="toggleRate" href="javascript:player_playbackspeed_toggle();" title="®Change_speedrate®">1.0x</a>
                     </li>
                     <?php
                 }
@@ -167,14 +173,14 @@ switch (strtolower($_SESSION['browser_name'])) {
                             <a class="add-thread-button" title="®Add_discussion®" href="javascript:player_thread_form_toggle();"></a>
                     <?php } ?>
                     </li>
-<?php } ?>                
+<?php } ?>
                 <li>
-                    <a class="share-button" href="javascript:popup_asset(current_album, current_asset, time, type, 'share_time')" title="®Share_time®" 
+                    <a class="share-button" href="javascript:popup_asset(current_album, current_asset, time, type, 'share_time')" title="®Share_time®"
                        onclick="player_video_link()"></a>
-                </li>      
+                </li>
                 <li>
                     <a class="fullscreen-button" href="javascript:player_video_fullscreen(!fullscreen);" title="®Toggle_fullscreen®" ></a>
-                </li>   
+                </li>
                 <li>
                     <a class="panel-button" href="javascript:player_bookmarks_panel_toggle();" title="®Display_tab®" ></a>
                 </li>

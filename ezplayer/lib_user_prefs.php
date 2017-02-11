@@ -3,7 +3,7 @@
 /*
  * EZCAST EZplayer
  *
- * Copyright (C) 2014 Université libre de Bruxelles
+ * Copyright (C) 2016 Université libre de Bruxelles
  *
  * Written by Michel Jansens <mjansens@ulb.ac.be>
  *            Arnaud Wijns <awijns@ulb.ac.be>
@@ -574,8 +574,10 @@ function user_prefs_album_bookmarks_list_get($user, $album) {
  */
 function user_prefs_asset_bookmarks_list_get($user, $album, $asset) {
     $assoc_album_bookmarks = user_prefs_album_bookmarks_list_get($user, $album);
-    if (!isset($assoc_album_bookmarks) || $assoc_album_bookmarks === false)
+    if (!isset($assoc_album_bookmarks) || $assoc_album_bookmarks === false || 
+            empty($assoc_album_bookmarks)) {
         return false;
+    }
 
     $assoc_asset_bookmarks = array();
     $index = 0;
@@ -586,7 +588,9 @@ function user_prefs_asset_bookmarks_list_get($user, $album, $asset) {
             array_push($assoc_asset_bookmarks, $assoc_album_bookmarks[$index]);
         }
         ++$index;
-        $ref_asset = $assoc_album_bookmarks[$index]['asset'];
+        if($index < $count) {
+            $ref_asset = $assoc_album_bookmarks[$index]['asset'];
+        }
     }
 
     return $assoc_asset_bookmarks;
@@ -639,6 +643,10 @@ function user_prefs_asset_bookmarks_selection_get($user, $album, $asset, $select
  */
 function user_prefs_asset_bookmark_exists($user, $album, $asset, $timecode) {
     $assoc_asset_bookmarks = user_prefs_asset_bookmarks_list_get($user, $album, $asset);
+    if($assoc_asset_bookmarks == false || !is_array($assoc_asset_bookmarks)) {
+        return false;
+    }
+    
     foreach ($assoc_asset_bookmarks as $bookmark) {
         if ($bookmark['timecode'] == $timecode) {
             return true;
@@ -677,7 +685,10 @@ function user_prefs_asset_bookmark_get($user, $album, $asset, $timecode) {
  * @param type $level the level of the bookmark
  * @return boolean
  */
-function user_prefs_asset_bookmark_add($user, $album, $asset, $timecode, $title = '', $description = '', $keywords = '', $level = '1', $type = '') {
+function user_prefs_asset_bookmark_add($user, $album, $asset, $timecode, $title = '', 
+        $description = '', $keywords = '', $level = '1', $type = '') {
+    global $logger;
+    
     // Sanity check
     if (!isset($user) || $user == '')
         return false;
@@ -700,17 +711,20 @@ function user_prefs_asset_bookmark_add($user, $album, $asset, $timecode, $title 
     // set user's file path
     $user_path = $user_files_path . '/' . $user;
     // remove the previous same bookmark if it existed yet
-    user_prefs_asset_bookmark_delete($user, $album, $asset, $timecode);
-
+    $delete_ok = user_prefs_asset_bookmark_delete($user, $album, $asset, $timecode);
+    if(!$delete_ok) {
+        $logger->log(EventType::MANAGER_BOOKMARKS, LogLevel::ERROR, "Could not delete last bookmark (user: $user, album: $album, asset: $asset, timecode: $timecode). New bookmark cannot be added.", array(__FUNCTION__));
+        return false;
+    }
+    
     // if the user's directory doesn't exist yet, we create it
     if (!file_exists($user_path)) {
         mkdir($user_path, 0755, true);
     }
 
-
     // Get the bookmarks list
     $bookmarks_list = user_prefs_album_bookmarks_list_get($user, $album);
-    $count = count($bookmarks_list);
+    $count = $bookmarks_list === false ? 0 : count($bookmarks_list);
     $index = 0;
 
     if ($count > 0) {
@@ -718,7 +732,7 @@ function user_prefs_asset_bookmark_add($user, $album, $asset, $timecode, $title 
         $asset_ref = $bookmarks_list[0]['asset'];
         $timecode_ref = $bookmarks_list[0]['timecode'];
         // loop while the asset is older than the reference asset
-        while ($index < $count && $asset < $asset_ref) {
+        while ($index < ($count-1) && $asset < $asset_ref) {
             ++$index;
             $asset_ref = $bookmarks_list[$index]['asset'];
             $timecode_ref = $bookmarks_list[$index]['timecode'];
@@ -736,6 +750,8 @@ function user_prefs_asset_bookmark_add($user, $album, $asset, $timecode, $title 
         if ($index > $count) // add in last index
             --$index;
     }
+    
+    $logger->log(EventType::MANAGER_BOOKMARKS, LogLevel::DEBUG, "BOOKMARK bookmarks_list: " . print_r($bookmarks_list,true) .", count: $count, index: $index", array(__FUNCTION__));
 
     // extract keywords from the description
     $keywords_array = get_keywords($description);
@@ -846,9 +862,11 @@ function user_prefs_album_bookmarks_add($user, $bookmarks) {
  * @param type $album the album
  * @param type $asset the asset
  * @param type $timecode the timecode of the bookmark
- * @return boolean true if the bookmark has been deleted; false otherwise
+ * @return boolean true if the bookmark has been deleted or does not exists; false if failure
  */
 function user_prefs_asset_bookmark_delete($user, $album, $asset, $timecode) {
+    global $logger;
+    
     // Sanity check
     if (!isset($user) || $user == '')
         return false;
@@ -869,6 +887,9 @@ function user_prefs_asset_bookmark_delete($user, $album, $asset, $timecode) {
     $user_path = $user_files_path . '/' . $user;
 
     if (user_prefs_asset_bookmark_exists($user, $album, $asset, $timecode)) {
+        
+        $logger->log(EventType::MANAGER_BOOKMARKS, LogLevel::DEBUG, "Bookmark already exists (user: $user, album: $album, asset: $asset, timecode: $timecode)", array(__FUNCTION__));
+
         $bookmarks_list = user_prefs_album_bookmarks_list_get($user, $album);
 
         // if there is no bookmark anymore, the file is deleted
@@ -878,10 +899,12 @@ function user_prefs_asset_bookmark_delete($user, $album, $asset, $timecode) {
         foreach ($bookmarks_list as $index => $bookmark) {
             if ($bookmark['asset'] == $asset && $bookmark['timecode'] == $timecode) {
                 unset($bookmarks_list[$index]);
+                break;
             }
         }
         return assoc_array2xml_file($bookmarks_list, $user_path . "/bookmarks_$album.xml", "bookmarks", "bookmark");
     }
+    return true;
 }
 
 /**
@@ -1009,7 +1032,7 @@ function user_prefs_settings_edit($user, $key, $value) {
         return false;
 
     // 1) set the repository path
-    $user_files_path = user_prefs_repository_path($user_files_path);
+    $user_files_path = user_prefs_repository_path();
     if ($user_files_path === false) {
         return false;
     }
@@ -1115,5 +1138,3 @@ function user_prefs_settings_update($user, $key, $value) {
 
     return $settings->asXML($setting_path);
 }
-
-?>

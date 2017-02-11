@@ -1,8 +1,8 @@
 <?php
 
 /*
- * EZCAST EZadmin 
- * Copyright (C) 2014 Université libre de Bruxelles
+ * EZCAST EZadmin
+ * Copyright (C) 2016 Université libre de Bruxelles
  *
  * Written by Michel Jansens <mjansens@ulb.ac.be>
  * 		    Arnaud Wijns <awijns@ulb.ac.be>
@@ -28,6 +28,8 @@
  * @package ezcast.ezadmin.lib.various
  */
 
+require_once(__DIR__."/../commons/lib_database.php");
+
 /**
  * Parses the config file and returns the settings that can be changed in it.
  */
@@ -38,8 +40,8 @@ function parse_config_file() {
         'recorders_option' => $classrooms_category_enabled,
         'add_users_option' => $add_users_enabled,
         'recorder_password_storage_option' => $recorder_password_storage_enabled,
-        'use_course_name' => $use_course_name,
-        'use_user_name' => $use_user_name
+        'course_name_option' => $use_course_name,
+        'user_name_option' => $use_user_name
     );
 
     return $res;
@@ -53,7 +55,8 @@ function parse_config_file() {
  * @param type $use_course_name_option
  * @param type $use_user_name_option
  */
-function update_config_file($recorder_option, $add_users_option, $recorder_password_storage_option, $use_course_name_option, $use_user_name_option) {
+function update_config_file($recorder_option, $add_users_option, $recorder_password_storage_option,
+        $use_course_name_option, $use_user_name_option) {
     $config = file_get_contents('config.inc');
 
     $conf1 = ($recorder_option) ? 'true' : 'false';
@@ -67,6 +70,7 @@ function update_config_file($recorder_option, $add_users_option, $recorder_passw
     $config = preg_replace('/\$recorder_password_storage_enabled = (.+);/', '\$recorder_password_storage_enabled = ' . $conf3 . ';', $config);
     $config = preg_replace('/\$use_course_name = (.+);/', '\$use_course_name = ' . $conf4 . ';', $config);
     $config = preg_replace('/\$use_user_name = (.+);/', '\$use_user_name = ' . $conf5 . ';', $config);
+
     file_put_contents('config.inc', $config);
 }
 
@@ -357,8 +361,11 @@ function push_admins_to_recorders_ezmanager() {
     global $ezplayer_basedir;
     global $ezplayer_subdir;
 
-    if (!db_ready())
-        db_prepare(statements_get());
+    if (!db_ready()) {
+        require_once("lib_sql_management.php");
+        $stmts = statements_get();
+        db_prepare($stmts);
+    }
 
     $classrooms = db_classrooms_list_enabled();
     $admins = db_admins_list();
@@ -368,14 +375,14 @@ function push_admins_to_recorders_ezmanager() {
     foreach ($admins as $a) {
         $admins_str .= '$admin[\'' . $a['user_ID'] . '\']=true;' . PHP_EOL;
     }
-    $admins_str .= '?>' . PHP_EOL;
+
     file_put_contents('var/admin.inc', $admins_str);
 
     // Copying on recorders
     foreach ($classrooms as $c) {
-        exec('ping ' . $c['IP'] . ' 10', $output, $return_val);
+        exec('ping -c 1 ' . $c['IP'], $output, $return_val);
         if ($return_val == 0) {
-            $cmd = 'scp -o ConnectionTimeout=10 ./var/admin.inc ' . $recorder_user . '@' . $c['IP'] . ':' . $recorder_basedir . $recorder_subdir;
+            $cmd = 'scp -o ConnectTimeout=10 ./var/admin.inc ' . $recorder_user . '@' . $c['IP'] . ':' . $recorder_basedir . $recorder_subdir;
             exec($cmd, $output, $return_var);
         }
     }
@@ -389,9 +396,9 @@ function push_admins_to_recorders_ezmanager() {
     }
     else {
         // Remote copy
-        exec('ping ' . $ezmanager_host . ' 10', $output, $return_val);
+        exec('ping -c 1 ' . $ezmanager_host, $output, $return_val);
         if ($return_val == 0) {
-            $cmd = 'scp -o ConnectionTimeout=10 ./var/admin.inc ' . $ezmanager_user . '@' . $ezmanager_host . ':' . $ezmanager_basedir . $ezmanager_subdir;
+            $cmd = 'scp -o ConnectTimeout=10 ./var/admin.inc ' . $ezmanager_user . '@' . $ezmanager_host . ':' . $ezmanager_basedir . $ezmanager_subdir;
             exec($cmd, $output, $return_var);
             if ($return_val == 0) {
                 return false;
@@ -414,10 +421,11 @@ function push_users_courses_to_recorder() {
     global $recorder_user;
     global $recorder_basedir;
     global $recorder_subdir;
-    global $recorder_password_storage_enabled;
 
-    if (!db_ready())
-        db_prepare(statements_get());
+    if (!db_ready()) {
+        $statements = statements_get();
+        db_prepare($statements);
+    }
 
     $users = db_users_in_recorder_get();
     $classrooms = db_classrooms_list_enabled();
@@ -446,11 +454,11 @@ function push_users_courses_to_recorder() {
 
     // Upload all this on server
     foreach ($classrooms as $c) {
-        exec('ping ' . $c['IP'] . ' 10', $output, $return_val);
+        exec('ping -c 1 ' . $c['IP'], $output, $return_val);
         if ($return_val == 0) {
-            $cmd = 'scp -o ConnectTimeout=10 ./var/htpasswd ' . $recorder_user . '@' . $c['IP'] . ':' . $recorder_basedir . $recorder_subdir;
+            $cmd = 'scp -o ConnectTimeout=10 -o BatchMode=yes ./var/htpasswd ' . $recorder_user . '@' . $c['IP'] . ':' . $recorder_basedir . $recorder_subdir;
             exec($cmd, $output, $return_var);
-            $cmd = 'scp -o ConnectTimeout=10 ./var/courselist.php ' . $recorder_user . '@' . $c['IP'] . ':' . $recorder_basedir . $recorder_subdir;
+            $cmd = 'scp -o ConnectTimeout=10 -o BatchMode=yes ./var/courselist.php ' . $recorder_user . '@' . $c['IP'] . ':' . $recorder_basedir . $recorder_subdir;
             exec($cmd, $output, $return_var);
         }
     }
@@ -496,9 +504,9 @@ function push_classrooms_to_ezmanager() {
     }
     else {
         // Remote copy
-        exec('ping ' . $ezmanager_host . ' 10', $output, $return_val);
+        exec('ping -c 1 ' . $ezmanager_host, $output, $return_val);
         if ($return_val == 0) {
-            $cmd = 'scp -o ConnectTimeout=10 ./var/classroom_recorder_ip.inc ' . $ezmanager_user . '@' . $ezmanager_host . ':' . $ezmanager_basedir . $ezmanager_subdir;
+            $cmd = 'scp -o ConnectTimeout=10 -o BatchMode=yes ./var/classroom_recorder_ip.inc ' . $ezmanager_user . '@' . $ezmanager_host . ':' . $ezmanager_basedir . $ezmanager_subdir;
             exec($cmd, $output, $return_var);
         }
 
@@ -529,9 +537,9 @@ function push_renderers_to_ezmanager() {
     }
     else {
         // Remote copy
-        exec('ping ' . $ezmanager_host . ' 10', $output, $return_val);
+        exec('ping -c 1 ' . $ezmanager_host, $output, $return_val);
         if ($return_val == 0) {
-            $cmd = 'scp -o ConnectTimeout=10 ./renderers.inc ' . $ezmanager_user . '@' . $ezmanager_host . ':' . $ezmanager_basedir . $ezmanager_subdir;
+            $cmd = 'scp -o ConnectTimeout=10 -o BatchMode=yes ./renderers.inc ' . $ezmanager_user . '@' . $ezmanager_host . ':' . $ezmanager_basedir . $ezmanager_subdir;
             exec($cmd, $output, $return_var);
         }
 
@@ -567,7 +575,6 @@ function push_users_to_ezmanager() {
         $pwfile .= '$users[\'' . $u['user_ID'] . '\'][\'full_name\']="' . $u['forename'] . ' ' . $u['surname'] . '";' . PHP_EOL;
         $pwfile .= '$users[\'' . $u['user_ID'] . '\'][\'email\']="";' . PHP_EOL . PHP_EOL;
     }
-    $pwfile .= '?>';
 
     file_put_contents('var/pwfile.inc', $pwfile);
 
@@ -580,23 +587,12 @@ function push_users_to_ezmanager() {
     }
     else {
         // Remote copy
-        $cmd = 'scp -o ConnectTimeout=10 ./var/pwfile.inc ' . $ezmanager_user . '@' . $ezmanager_host . ':' . $ezmanager_basedir . $ezmanager_subdir;
+        $cmd = 'scp -o ConnectTimeout=10 -o BatchMode=yes ./var/pwfile.inc ' . $ezmanager_user . '@' . $ezmanager_host . ':' . $ezmanager_basedir . $ezmanager_subdir;
         exec($cmd, $output, $return_var);
 
         if ($return_var != 0) {
             return false;
         }
-    }
-}
-
-/**
- * Checks that $var holds a valid value
- * @param type $var
- * @return type 
- */
-function check_val($var, $error) {
-    if (!isset($var) || empty($var)) {
-        $error = template_get_message($error, 'en');
     }
 }
 
@@ -625,7 +621,7 @@ function checkipsyntax($ipstr) {
  * @desc converts ip string to 4 numbers
  */
 function ipstr2num($ipstr, &$net1, &$net2, &$subnet, &$node) {
-    $res = ereg("^([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$", $ipstr, $regs);
+    $res = preg_match("/^([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/", $ipstr, $regs);
     if (!$res)
         return 1;
     $returncode = 0;
@@ -644,22 +640,13 @@ function ipstr2num($ipstr, &$net1, &$net2, &$subnet, &$node) {
     return $returncode;
 }
 
-/**
- * Boolean to string
- * @param type $bool
- * @return type
- */
-function bool2str($bool) {
-    return ($bool) ? 'true' : 'false';
-}
-
 function ssh_connection_test($username, $hostname, $timeout, $update_known_hosts = true) {
     include 'config.inc';
-    // test the SSH connection  
+    // test the SSH connection
     exec("ssh -o ConnectTimeout=$timeout -o BatchMode=yes " . $username . "@" . $hostname . " \"echo ok\"", $output, $returncode);
 
     if ($update_known_hosts && $returncode) {
-        // SSH connection failed so we verify that the remote renderer is in 
+        // SSH connection failed so we verify that the remote renderer is in
         // the 'known_hosts' file, if not we add it and retry to connect via SSH
         // find .ssh/known_hosts file
 
@@ -726,9 +713,9 @@ function test_php_over_ssh($ssh_user, $ssh_host, $ssh_timeout, $remote_php) {
                 unset($output);
                 exec("ssh -o ConnectTimeout=$ssh_timeout -o BatchMode=yes $ssh_user@$ssh_host \"$remote_php -r 'echo serialize(gd_info());'\"", $output, $returncode);
                 $gd_info = unserialize(implode($output));
-                if (!$gd_info['FreeType Support']) {
+                /*if (!$gd_info['FreeType Support']) {
                     return "gd_missing_freetype";
-                }
+                }*/
             }
         }
         return "";
@@ -789,4 +776,33 @@ function test_over_ssh($ssh_user, $ssh_host, $ssh_timeout, $remote_php, $remote_
     }
 }
 
-?>
+/**
+ * Check if a key is in the array
+ *
+ * @param String $key to test
+ * @param Array $array to test
+ * @return mixed the value of the array key or empty string if not exist
+ */
+function empty_str_if_not_def($key, $array) {
+    if(array_key_exists($key, $array)) {
+        return $array[$key];
+    }
+    return "";
+}
+
+
+function array_increment_or_init_static(&$array, $key) {
+    if(array_key_exists($key, $array)) {
+        ++$array[$key];
+    } else {
+        $array[$key] = 1;
+    }
+}
+
+function array_increment_or_init(&$array, &$key) {
+    if(array_key_exists($key, $array)) {
+        ++$array[$key];
+    } else {
+        $array[$key] = 1;
+    }
+}

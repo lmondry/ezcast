@@ -2,7 +2,7 @@
 /*
  * EZCAST EZplayer
  *
- * Copyright (C) 2014 Université libre de Bruxelles
+ * Copyright (C) 2016 Université libre de Bruxelles
  *
  * Written by Michel Jansens <mjansens@ulb.ac.be>
  * 	      Arnaud Wijns <awijns@ulb.ac.be>
@@ -33,7 +33,8 @@
 </script>
 <?php
 include_once 'lib_print.php';
-?> 
+global $first_connexion;
+?>
 <div class="search_wrapper">
     <div id="search">
         <?php include_once template_getpath('div_search.php'); ?>
@@ -43,8 +44,9 @@ include_once 'lib_print.php';
 <div class="albums">
     <div id="tuto">
         <a href="#" onclick="$('#tuto_video').toggle();" id="tuto_label">®tuto®</a>
-        <video id='tuto_video' width="720" controls  type="video/mp4" src="./videos/tuto.mp4" style="display: <?php echo (!isset($albums) || sizeof($albums) == 0) ? 'block' : 'none'; ?>;">
-            Démonstration EZplayer</video></div>
+        <video id='tuto_video' width="720" controls  type="video/mp4" src="./videos/tuto.mp4" 
+               style="display: <?php echo (!isset($albums) || sizeof($albums) == 0 || $first_connexion) ? 'block' : 'none'; ?>;">
+            ®tuto®</video></div>
     <?php
     if (!isset($albums) || sizeof($albums) == 0) {
         ?>
@@ -60,9 +62,9 @@ include_once 'lib_print.php';
                 if (suffix_get($album['album']) == '-priv')
                     $private = true;
                 ?>
-                <li>    
+                <li>
                     <a class="item <?php if ($private) echo 'private' ?>" href="javascript:show_album_assets('<?php echo $album['album']; ?>', '<?php echo $album['token']; ?>');">
-                        <b style="text-transform:uppercase;"><?php echo suffix_remove($album['album']); ?></b> 
+                        <b style="text-transform:uppercase;"><?php echo suffix_remove($album['album']); ?></b>
                         <?php if ($private) echo '(®Private_album®)' ?>
                         <br/><?php print_info($album['title']); ?>
 
@@ -82,11 +84,11 @@ include_once 'lib_print.php';
                             <?php
                         }
                     }
-                    ?> 
+                    ?>
 
                     <div class="album_options pull-right inline-block">
                         <a  class="button-rect green pull-right inline-block share-rss" href="javascript:popup_album('<?php echo $album['album'] ?>', 'rss');">®subscribe_rss®</a>
-                        <?php if (suffix_get($album['album']) == '-priv' || !acl_has_album_moderation($album['album'])) { ?> 
+                        <?php if (suffix_get($album['album']) == '-priv' || !acl_has_album_moderation($album['album'])) { ?>
                             <a class="delete-album" title="®Delete_album®" href="javascript:popup_album('<?php echo $album['album'] ?>', 'delete');"></a>
                         <?php } ?>
                     </div>

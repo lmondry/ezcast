@@ -3,7 +3,7 @@
 /*
  * EZCAST EZmanager 
  *
- * Copyright (C) 2014 Université libre de Bruxelles
+ * Copyright (C) 2016 Université libre de Bruxelles
  *
  * Written by Michel Jansens <mjansens@ulb.ac.be>
  * 	   Arnaud Wijns <awijns@ulb.ac.be>
@@ -272,7 +272,6 @@ function view_media() {
         //readfile($media_handle);
         //fpassthru($fh);
         passthru('/bin/cat ' . escapeshellarg($media_handle));
-        fclose($fh);
     }
 }
 
@@ -408,5 +407,3 @@ function accepted_type($type) {
     global $accepted_media_types;
     return in_array($type, $accepted_media_types);
 }
-
-?>
