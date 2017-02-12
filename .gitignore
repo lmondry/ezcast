@@ -1,5 +1,3 @@
-**/config.inc
-**/tmpl
 **/pwfile.inc
 **/ldap_servers_auth.json
 **/ldap_servers_cred.json

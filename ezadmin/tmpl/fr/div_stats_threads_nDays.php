@@ -1,0 +1,69 @@
+
+<?php
+if (isset($_SESSION['nDaysStats'])) {
+    ?>
+    <script>
+        var ind3 = 0;
+        var dataArrayPieChartNDays= new Array();
+    </script>
+    <?php
+    $threadsCountNDays = $_SESSION['nDaysStats']['threadsCount'];
+    $commentsCountNDays = $_SESSION['nDaysStats']['commentsCount'];
+    $allAlbums = stat_album_get_all();
+    $allAlbumsNDays = array();
+    foreach ($allAlbums as $albumArr) {
+        $nbThreadsNDays = stat_threads_count_by_album_and_date_interval($albumArr["albumName"], $_SESSION['nDaysStats']['nDaysEarlier'], $_SESSION['nDaysStats']['nDaysLater']);
+        if ($nbThreadsNDays != "0") {
+            $allAlbumsNDays[] = $albumArr;
+            ?>
+            <script>
+                dataArrayPieChartNDays[ind3] = [<?php echo json_encode($albumArr["albumName"]); ?>, <?php echo $nbThreadsNDays; ?>];
+                ind3 += 1;
+            </script>
+            <?php
+        }
+    }
+    ?>
+    <script>
+        var pieChartNDays = jQuery.jqplot('pieChartNDays', [dataArrayPieChartNDays],
+                {
+                    title: 'Nombre de discussions par album [<?php echo substr($_SESSION['nDaysStats']['nDaysEarlier'], 0, 10); ?> - <?php echo substr($_SESSION['nDaysStats']['nDaysLater'], 0, 10); ?>]',
+                    seriesDefaults: {
+                        // Make this a pie chart.
+                        renderer: jQuery.jqplot.PieRenderer,
+                        rendererOptions: {
+                            showDataLabels: true
+                        }
+                    },
+                    legend: {
+                        show: true,
+                        location: 'e'
+                    },
+                    highlighter: {
+                        show: true,
+                        useAxesFormatters: false,
+                        tooltipFormatString: '%s',
+                        sizeAdjust: 1.5
+                    }
+                }
+        );
+    </script>
+    
+    <center>
+        <div id="pieChartNDays" class="pie">
+            <!-- Chart container -->
+        </div>
+    </center>
+    <h4>Totaux</h4>
+    <p class="default">Nombre de discussions    <span class="label label-default"><?php echo $threadsCountNDays; ?></span></p>
+    <p class="default">Nombre de commentaires   <span class="label label-default"><?php echo $commentsCountNDays; ?></span></p>
+    
+    <div id='tableNDays' class="table-responsive">
+        <?php include_once 'div_stats_threads_table_nDays.php'; ?>
+    </div>
+<?php
+} else {
+    echo '<label class="label label-info">NO DATA</label>';
+}
+?>
+
