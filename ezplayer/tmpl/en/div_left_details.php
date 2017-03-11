@@ -45,22 +45,22 @@ switch (strtolower($_SESSION['browser_name'])) {
             $playbackRate = true;
         break;
 }
-?> 
+?>
 
 <div id="main_player">
-    <!-- #player_header : contains album title and asset title 
+    <!-- #player_header : contains album title and asset title
         If the current view is the home page, the header is empty
         If the current view is the album page, the header contains album title only
         If the current view is the asset page, the header contains album title and asset title -->
     <div id="site_map">
-        <a class="home-link" href="index.php" title="Back home">Home</a>    
+        <a class="home-link" href="index.php" title="Back home">Home</a>
         <?php
         if (acl_has_album_permissions($album)) {
             $token = acl_token_get($album);
             $token = $token['token'];
             ?>
             <div class="right-arrow"></div>
-            <a  href="javascript:show_album_assets('<?php echo $album; ?>', '<?php echo $token; ?>');" title="Back to the album">(<?php echo suffix_remove($album); ?>) <?php echo get_album_title($album); ?></a>   
+            <a  href="javascript:show_album_assets('<?php echo $album; ?>', '<?php echo $token; ?>');" title="Back to the album">(<?php echo suffix_remove($album); ?>) <?php echo get_album_title($album); ?></a>
         <?php } ?>
         <div class="right-arrow"></div><?php print_info($asset_meta['title']); ?>
     </div>
@@ -106,7 +106,7 @@ switch (strtolower($_SESSION['browser_name'])) {
                     <?php if(array_key_exists('low_cam_src', $asset_meta)) { ?>
                     high_cam_src="<?php echo $asset_meta['high_cam_src'] . '&origin=' . $appname; ?>"
                     low_cam_src="<?php echo $asset_meta['low_cam_src'] . '&origin=' . $appname; ?>"
-                    <?php } ?>>  
+                    <?php } ?>>
         </video>
 
         <?php if ($asset_meta['record_type'] == 'camslide') { ?>
@@ -137,12 +137,13 @@ switch (strtolower($_SESSION['browser_name'])) {
 
 <?php require template_getpath('div_bookmark_form.php'); ?>
 <?php require template_getpath('div_thread_form.php'); ?>
+<?php require template_getpath('div_quiz_form.php'); ?>
 
         <div class="video_controls">
             <ul>
 <?php if ($playbackRate) { ?>
                     <li>
-                        <a id="toggleRate" href="javascript:player_playbackspeed_toggle();" title="Modify the speed rate">1.0x</a> 
+                        <a id="toggleRate" href="javascript:player_playbackspeed_toggle();" title="Modify the speed rate">1.0x</a>
                     </li>
                     <?php
                 }
@@ -171,14 +172,14 @@ switch (strtolower($_SESSION['browser_name'])) {
                             <a class="add-thread-button" title="Create a discussion" href="javascript:player_thread_form_toggle();"></a>
                     <?php } ?>
                     </li>
-<?php } ?>                
+<?php } ?>
                 <li>
-                    <a class="share-button" href="javascript:popup_asset(current_album, current_asset, time, type, 'share_time')" title="Share this minute of the video" 
+                    <a class="share-button" href="javascript:popup_asset(current_album, current_asset, time, type, 'share_time')" title="Share this minute of the video"
                        onclick="player_video_link()"></a>
-                </li>      
+                </li>
                 <li>
                     <a class="fullscreen-button" href="javascript:player_video_fullscreen(!fullscreen);" title="Change the display" ></a>
-                </li>   
+                </li>
                 <li>
                     <a class="panel-button" href="javascript:player_bookmarks_panel_toggle();" title="Show bookmarks" ></a>
                 </li>

@@ -87,6 +87,7 @@ if ($trace_on) {
         <script type="text/javascript" src="js/lib_threads.js"></script>
         <script type="text/javascript" src="js/lib_bookmarks.js"></script>
         <script type="text/javascript" src="js/lib_chat.js"></script>
+        //<script type="text/javascript" src="js/lib_quiz.js"></script>
 
         <script>
             var current_album;
@@ -384,6 +385,30 @@ if ($trace_on) {
             }
 
             // ============== F O R M   V A L I D A T I O N ============= //
+
+            // -------------- Q U I Z Z E S ------------- //
+
+            function quiz_form_check() {
+
+              var timecode = document.getElementsByClassName('quiz_timecode');
+              var title = document.getElementById('quiz_title');
+
+              for (var i = 0; i < timecode.length; i++) {
+                if (isNaN(timecode[i].value)
+                        || timecode[i].value == ''
+                        || timecode[i].value < 0) {
+                    window.alert('Le code temps de la Q'+(i+1)+' est incorrect');
+                    return false;
+                }
+              }
+
+              if (title === '') {
+                  window.alert('Le titre est obligatoire.');
+                  return false;
+              }
+              return true;
+            }
+
 
             // -------------- B O O K M A R K S ------------- //
 

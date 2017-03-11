@@ -48,6 +48,8 @@ require_once 'lib_threads_pdo.php';
 require_once 'lib_chat_pdo.php';
 require_once 'lib_cache.php';
 require_once 'lib_acl.php';
+require_once 'ChromePhp.php';
+require_once 'lib_quiz.php';
 
 $input = array_merge($_GET, $_POST);
 
@@ -121,13 +123,13 @@ if (!user_logged_in()) {
 // At this point of the code, the user is supposed to be logged in.
 // We check whether they specified an action to perform. If not, it means they landed
 // here through a page reload, so we check the session variables to restore the page as it was.
-else if (isset($_SESSION['ezplayer_logged']) && (!isset($input['action']) || empty($input['action']))) {    
+else if (isset($_SESSION['ezplayer_logged']) && (!isset($input['action']) || empty($input['action']))) {
     // Check if player first connexion
     global $first_connexion;
     $first_connexion = !isset($_COOKIE['has_connected_once']);
     // Cookie life: one year
     setcookie('has_connected_once', true, time() + (365 * 24 * 60 * 60));
-    
+
     redraw_page();
 }
 
@@ -149,20 +151,20 @@ function load_page() {
     global $input;
     $action = $input['action'];
     $redraw = false;
-    
+
     /**
      * Until pages and services are divided, mark some action as services
      * A service = action not returning a page.
      * A lot of these services actually return presentation too (in the form on popups), presentation should be moved to calling page
      */
-    global $service; //true if we're currently running a service. 
+    global $service; //true if we're currently running a service.
     $service = false;
-    
+
     //
     // Actions
     //
     // Controller goes here
-    
+
     $paramController = array();
     switch ($action) {
         // ============== L O G I N  /  L O G O U T =============== //
@@ -183,13 +185,13 @@ function load_page() {
             requireController('user_logout.php');
             break;
 
-        // ============== N A V I G A T I O N ============= // 
+        // ============== N A V I G A T I O N ============= //
         // displays the list of assets for a given album
         case 'view_album_assets':
             requireController('album_assets_view.php');
             break;
 
-        // displays a specific asset 
+        // displays a specific asset
         case 'view_asset_details':
             requireController('asset_view.php');
             break;
@@ -224,15 +226,15 @@ function load_page() {
         case 'streaming_config_update':
             requireController('asset_streaming_player_update.php');
             break;
-        
+
         case 'streaming_chat_update':
             requireController('asset_streaming_chat_update.php');
             break;
-        
+
         case 'streaming_chat_get_last':
             requireController('asset_streaming_chat_get_last.php');
             break;
-        
+
         case 'chat_message_add':
             requireController('chat_message_add.php');
             break;
@@ -273,6 +275,11 @@ function load_page() {
         // increments the view count for a specific range of a video
         case 'asset_range_count_update':
             requireController('asset_range_count_update.php');
+            break;
+
+        // ============== Q U I Z Z E S =============== //
+        case 'quiz_add':
+            requireController('quiz_add.php');
             break;
 
         // ============== B O O K M A R K S =============== //
@@ -389,7 +396,7 @@ function load_page() {
             break;
 
         // ============== P O P - U P ================= //
-        // renders a modal window related to the album 
+        // renders a modal window related to the album
         case 'album_popup':
             requireController('album_popup.php');
             break;
@@ -440,13 +447,13 @@ function load_page() {
             albums_view();
             return;
     }
-    
-    
+
+
     // Call the function to view the page
     index($paramController);
-    
+
     db_close();
-    
+
 }
 
 // =================== L O G I N  /  L O G O U T ===================== //
@@ -514,7 +521,7 @@ function user_login($login, $passwd) {
 
     $login_parts = explode("/", $login);
 
-    // checks if runas 
+    // checks if runas
     if (count($login_parts) == 2) {
         if (!file_exists('admin.inc')) {
             $error = "Not admin. runas login failed";
@@ -612,18 +619,18 @@ function view_login_form() {
     if (isset($input['no_flash']))
         $_SESSION['has_flash'] = false;
     $url = $ezplayer_url;
-    
+
     $lang = isset($input['lang']) ? $input['lang'] : 'fr';
     set_lang($lang);
-    
+
     template_repository_path($template_folder . get_lang());
-    
+
     // template include goes here
     require_once template_getpath('login.php');
 }
 
 /**
- * $refresh_page is used to determine if we need to refresh the whole page 
+ * $refresh_page is used to determine if we need to refresh the whole page
  * or just a part of the page
  * Displays the home page
  */
@@ -652,7 +659,7 @@ function albums_view($refresh_page = true) {
     ezmam_repository_path($repository_path);
     user_prefs_repository_path($user_files_path);
     if (acl_user_is_logged()) {
-        // loads all public albums of the user 
+        // loads all public albums of the user
         $moderated_albums = array_keys(acl_moderated_albums_list());
         $moderated_tokens = array();
         foreach ($moderated_albums as $index => $album) {
@@ -660,7 +667,7 @@ function albums_view($refresh_page = true) {
             $moderated_tokens[$index]['title'] = get_album_title($album . '-pub');
             $moderated_tokens[$index]['token'] = ezmam_album_token_get($album . '-pub');
         }
-        // add the list of moderated public albums 
+        // add the list of moderated public albums
         user_prefs_tokens_add($_SESSION['user_login'], $moderated_tokens);
         acl_update_permissions_list();
     }
@@ -680,7 +687,7 @@ function albums_view($refresh_page = true) {
 /**
  * This function is called whenever the user chose to refresh the page.
  * It loads the last album viewed, but not the asset details.
- * @global type $repository_path 
+ * @global type $repository_path
  */
 function redraw_page() {
     global $repository_path;
@@ -847,7 +854,7 @@ function trace_append($array) {
 
     // 3) Username and realname of the user that provoked the event
     // There can be no login if the operation was performed by a CLI tool for instance.
-    // In that case, we display "nologin" instead. 
+    // In that case, we display "nologin" instead.
     if (!isset($_SESSION['user_login']) || empty($_SESSION['user_login']) || $_SESSION['user_login'] === "anon") {
         $data .= 'nologin';
     }
@@ -879,7 +886,7 @@ function trace_append($array) {
 
 function thread_details_update($display = true) {
     global $input;
-    
+
     if (array_key_exists('thread_id', $input) && $input['thread_id'] != NULL) {
         $id = $input['thread_id'];
         $_SESSION['current_thread'] = $id;
@@ -890,7 +897,7 @@ function thread_details_update($display = true) {
     $thread = thread_select_by_id($id);
     $thread['best_comment'] = comment_select_best($id);
     $thread['comments'] = comment_select_by_thread($id);
-    
+
 
     if ($display) {
         include template_getpath('div_thread_details.php');

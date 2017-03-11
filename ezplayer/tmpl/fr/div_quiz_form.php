@@ -23,6 +23,8 @@
  */
 ?>
 
+<button>click</button>
+
 <div class="form" id="quiz_form">
     <div id="quiz_form_header" class="quiz-color">
         <span id="quiz_form_header_logo" class="quiz-logo"></span>
@@ -50,20 +52,10 @@
             <br/>
 
             <label>Selectionnez le cours&nbsp;:</label>
-            <select id="selectCourses"></select>
+            <select id="selectCourses" name="courseId"></select>
 
             <label>Selectionnez le quiz&nbsp;:</label>
-            <select id="selectQuizzes"></select>
-
-
-            <?php // TODO: Remettre ça bien ?>
-            <!-- Timecode field
-            <div>
-              <label>Temps Questions &nbsp;:
-                  <span class="small">Q1 &nbsp;:</span>
-              </label>
-              <input name="timecode" tabindex='15' id="quiz_timecode_Q1" type="number" value="0" required/>
-            </div>-->
+            <select id="selectQuizzes" name="quizId"></select>
 
             <br/>
 
@@ -82,4 +74,39 @@
         </form>
     </div>
 </div>
-<script> $.getScript('js/lib_quiz.js'); </script>
+
+<script>
+
+$(document).ready(function() {
+  $.getScript('js/lib_quiz.js');
+
+  $('#quiz_form input').keydown(function (e) {
+      if (e.keyCode == 13) {
+          if (quiz_form_check()){
+            quiz_form_submit();
+          }
+      }
+  });
+});
+
+/*
+function quiz_form_submit() {
+  console.log($('#submit_quiz_form').serialize());
+    var tab = document.getElementById('bookmark_source').value;
+    (tab == 'personal') ? current_tab = 'main' : current_tab = 'toc';
+    $.ajax({
+        type: 'POST',
+        url: 'index.php?action=bookmark_add&click=true',
+        data: $('#submit_quiz_form').serialize(),
+        success: function (response) {
+            console.log(response);
+            $('#div_right').html(response);
+        }
+    });
+    // doesn't work in IE < 10
+    //   ajaxSubmitForm('submit_bookmark_form', 'index.php', '?action=bookmark_add', 'div_right');
+    player_bookmark_form_hide(true);
+
+}
+*/
+</script>

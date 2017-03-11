@@ -37,7 +37,7 @@ require_once dirname(__FILE__) . '/../commons/lib_template.php';
  * Trims the '-priv' or '-pub' suffix from an album name
  * TODO: check that it's only the end of the name that's removed
  * @param string $album_name
- * @return string 
+ * @return string
  */
 function suffix_remove($album_name) {
     $res = $album_name;
@@ -52,7 +52,7 @@ function suffix_remove($album_name) {
 
 /**
  * Changes "priv" to "pub" and controversely. If the album name has neither suffix, returns the same string.
- * @param type $album_name 
+ * @param type $album_name
  * @return string
  */
 function suffix_replace($album_name) {
@@ -70,7 +70,7 @@ function suffix_replace($album_name) {
 /**
  * Returns an album suffix based on its name
  * @param type $album_name
- * @return string|false the suffix (with the initial hyphen) if all went well, false otherwise 
+ * @return string|false the suffix (with the initial hyphen) if all went well, false otherwise
  */
 function suffix_get($album_name) {
     if (substr($album_name, -4) == "-pub")
@@ -84,7 +84,7 @@ function suffix_get($album_name) {
 /**
  * Checks whether an album is private based on its suffix
  * @param type $album_name
- * @return bool true if album is private 
+ * @return bool true if album is private
  */
 function album_is_private($album_name) {
     return (suffix_get($album_name) == '-priv');
@@ -93,7 +93,7 @@ function album_is_private($album_name) {
 /**
  * Checks whether an album is public based on its suffix
  * @param type $album_name
- * @return bool true if album is public 
+ * @return bool true if album is public
  */
 function album_is_public($album_name) {
     return (suffix_get($album_name) == '-pub');
@@ -172,7 +172,7 @@ function get_user_friendly_duration($duration) {
 /**
  * Takes a date as a year and month, and returns a string representing the academic year thereof
  * @param string $year
- * @param string $month 
+ * @param string $month
  * @return A string of format currentYear-nextYear
  */
 function get_anac($year, $month) {
@@ -188,8 +188,8 @@ function get_anac($year, $month) {
 
 /**
  * Returns the asset full title from an asset name
- * @global type $repository_path 
- * @param type $album 
+ * @global type $repository_path
+ * @param type $album
  * @param type $asset the original asset name
  * @return boolean|string the asset full title if the asset exists ; false otherwise
  */
@@ -375,7 +375,7 @@ function file_get_extension($filename) {
 
 /**
  * Sets the current language to the one chosen in parameter
- * @param type $lang 
+ * @param type $lang
  */
 //function set_lang($lang) {
 //    $_SESSION['lang'] = $lang;
@@ -383,7 +383,7 @@ function file_get_extension($filename) {
 
 /**
  * Returns current chosen language
- * @return string(fr|en) 
+ * @return string(fr|en)
  */
 //function get_lang() {
 //    //if(isset($_SESSION['lang']) && in_array($_SESSION['lang'], $accepted_languages)) {
@@ -395,7 +395,7 @@ function file_get_extension($filename) {
 //}
 
 /**
- * Isolates keywords from a string 
+ * Isolates keywords from a string
  * Each keyword must be surrounded by a '#' tag (i.e: #keyword#)
  * @param type $string
  * @return string
@@ -417,7 +417,7 @@ function get_keywords(&$string) {
             }
             // if it ends by '#', it is a keyword
             if ($string[$j] == "#") {
-                // pushes the keyword in the array 
+                // pushes the keyword in the array
                 $keywords[] = trim($keyword);
                 // removes the '#' tags from the text
                 $string[$i] = ' ';
@@ -446,7 +446,7 @@ function surround_url($string) {
     // all prefixes we want to surround
     $patterns = array('http://', 'https://', 'www.', 'mailto:');
     $end_of_line = array(' ', PHP_EOL, '<', '>', '(', ')', '[', ']', '{', '}', '"', '\'');
-    
+
     while ($pos >= 0) {
         // finds the first occurence of each pattern
         $pos_array = array();
@@ -458,7 +458,7 @@ function surround_url($string) {
         }
         // saves the position of the first encountered pattern
         $pos = (empty($pos_array)) ? -1 : min($pos_array);
-        if ($pos != -1) { // ends if there is no pattern found 
+        if ($pos != -1) { // ends if there is no pattern found
             if ($pos == 0 || $string[$pos - 1] != '*') { // the url is not yet surrounded
                 // adds a '*' tag before the url
                 $string = substr($string, 0, $pos) . "**" . substr($string, $pos);
@@ -471,7 +471,7 @@ function surround_url($string) {
                     $pos--;
                 // adds a '*' at the end of the url
                 $string = substr($string, 0, $pos) . "**" . substr($string, $pos);
-                
+
                 $pos+=2;
             } else { // the url is already surrounded, just move to the next '*' tag
                 $tmp_pos = stripos(substr($string, $pos), '**');
@@ -497,7 +497,7 @@ function safe_text($string){
     // remove php and javascript tags
     $string = preg_replace('/(<\?{1}[pP\s]{1}.+\?>)/Us', "", $string);
     $string = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $string);
-    
+
     $string = str_replace('javascript', "-javascript-", $string);
     $string = str_replace('onmouseover', "-onmouseover-", $string);
     $string = str_replace('onclick', "-onclick-", $string);
@@ -513,7 +513,7 @@ function safe_text($string){
     $string = preg_replace('/<\/div>/is', '&lt;/div&gt;', $string);
     // prevent mysql injections
     $string = htmlspecialchars($string, ENT_QUOTES);
-     
+
     return $string;
 }
 
@@ -584,6 +584,7 @@ function xml_file2assoc_array($xml, $anonymous_key = 'anon') {
 }
 
 function simple_assoc_array2xml_file($assoc_array, $file_path, $global) {
+    ChromePhp::log("Inside simple_assoc_array2xml_file");
     $xmlstr = "<?xml version='1.0' standalone='yes'?>\n<$global>\n</$global>\n";
     $xml = new SimpleXMLElement($xmlstr);
     foreach ($assoc_array as $key => $value) {
@@ -603,8 +604,11 @@ function simple_assoc_array2xml_file($assoc_array, $file_path, $global) {
  * @return boolean
  */
 function assoc_array2xml_file($array, $file_path, $global = 'bookmarks', $each = 'bookmark') {
+    ChromePhp::log("Inside assoc_array2xml_file");
+
     $xmlstr = "<?xml version='1.0' standalone='yes'?>\n<$global>\n</$global>\n";
     $xml = new SimpleXMLElement($xmlstr);
+
     foreach ($array as $assoc_array) {
         $node = $xml->addChild($each);
         foreach ($assoc_array as $key => $value) {
@@ -614,8 +618,9 @@ function assoc_array2xml_file($array, $file_path, $global = 'bookmarks', $each =
     $xml_txt = $xml->asXML();
     $res = file_put_contents($file_path, $xml_txt, LOCK_EX);
     //did we write all the characters
-    if ($res != strlen($xml_txt))
+    if ($res != strlen($xml_txt)){
         return false; //no
+    }
 
     return true;
 }
@@ -643,7 +648,7 @@ function assoc_array2xml_string($array, $global = 'bookmarks', $each = 'bookmark
  * Searches a specific pattern in a bookmarks list
  * @param type $search the pattern to search (array containing a selection of words to find)
  * @param type $bookmarks the eligible bookmarks list
- * @param type $fields the bookmark fields where to search : 
+ * @param type $fields the bookmark fields where to search :
  * it can be the title, the description and/or the keywords
  * @return the matching bookmarks list
  */
@@ -652,7 +657,7 @@ function search_in_array($search, $bookmarks, $fields, $level) {
     // set $relevancy to true if the result is aimed to be sorted by relevancy.
     // With $relevancy = false, as soon as a word is found in any of the fields,
     // we stop the search and check for the next bookmark.
-    // With $relevancy = true, we search for every words in every fields and 
+    // With $relevancy = true, we search for every words in every fields and
     // give a score to each bookmark, according to certain rules.
     $relevancy = false;
     $score = 0;
@@ -661,7 +666,7 @@ function search_in_array($search, $bookmarks, $fields, $level) {
         if ($level == 0 || $bookmark['level'] == $level) {
             foreach ($search as $word) {
                 foreach ($fields as $field) {
-                    // Does the field contain the word ? 
+                    // Does the field contain the word ?
                     $offset = stripos($bookmark[$field], $word);
                     if ($offset !== false) {
                         if ($relevancy) {

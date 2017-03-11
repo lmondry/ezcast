@@ -78,8 +78,8 @@
         </form>
     </div>
 </div>
-<script type="text/javascript" src="js/lib_quiz.js"></script>
 <script>
+  $.getScript('js/lib_quiz.js');
     /*$('#quiz_form input').keydown(function (e) {
         if (e.keyCode == 13) {
             if (quiz_form_check())
