@@ -73,6 +73,8 @@
     </div>
 </div>
 
+<?php $_SESSION['moodleToken'] = '5f553956068392ae27280ad3dcb2403e'; ?>
+
 <script>
 
 $(document).ready(function() {

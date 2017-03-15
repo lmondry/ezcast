@@ -507,6 +507,8 @@ function user_anonymous_session() {
  * @param string $passwd
  */
 function user_login($login, $passwd) {
+    // TODO : Get the moodle token here
+    
     global $input;
     global $template_folder;
     global $error;

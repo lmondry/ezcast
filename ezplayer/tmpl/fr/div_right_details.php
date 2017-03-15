@@ -52,19 +52,19 @@ include_once 'lib_print.php';
 <?php }
 if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_bookmarks) == 0) && (isset($official_bookmarks) && sizeof($official_bookmarks) != 0))) {
     ?>
-        current_tab = 'quiz';
+        current_tab = 'toc';
 <?php } ?>
     $(document).ready(function () {
         if (current_tab == 'toc') {
             setActivePane('.toc_button');
-            $('#side_pane').scrollTo('#album_toc');
+            $('#side_pane').scrollTo('#asset_toc');
         }else if(current_tab == 'main'){
             setActivePane('.bookmarks_button');
             $('#side_pane').scrollTo('#asset_bookmarks');
         }else{
           console.log("here scroll");
           setActivePane('.quiz_button');
-          $('#side_pane').scrollTo('#quiz_asset');
+          $('#side_pane').scrollTo('#asset_quiz');
 
         }
         if (show_panel) {
@@ -95,14 +95,13 @@ if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_b
 <div id="side_wrapper" <?php if($hiden_side) { echo 'style="right: -232px;"'; } ?>>
     <div id="side_menu">
 
-                                                <?php if ($has_bookmark) { ?>
+        <?php if ($has_bookmark) { ?>
             <div class="bookmarks_button active"><a href="#asset_bookmarks" onclick="setActivePane('.bookmarks_button'); server_trace(new Array('3', 'bookmarks_swap', current_album, current_asset, current_tab));" title="Afficher les signets de l'enregistrement"></a></div>
-                <?php
-            }
-            ?>
-        <div class='toc_button'><a href="#album_toc" onclick="setActivePane('.toc_button'); server_trace(new Array('3', 'bookmarks_swap', current_album, current_asset, current_tab));" title="Afficher les signets officiels"></a></div>
+        <?php } ?>
 
-        <div class='quiz_button'><a href="#quiz_asset" onclick="setActivePane('.quiz_button'); server_trace(new Array('3', 'quiz_swap', current_album, current_asset, current_tab));" title="Afficher les quiz"></a></div>
+        <div class='toc_button'><a href="#asset_toc" onclick="setActivePane('.toc_button'); server_trace(new Array('3', 'bookmarks_swap', current_album, current_asset, current_tab));" title="Afficher les signets officiels"></a></div>
+
+        <div class='quiz_button'><a href="#asset_quiz" onclick="setActivePane('.quiz_button'); server_trace(new Array('3', 'quiz_swap', current_album, current_asset, current_tab));" title="Afficher les quiz"></a></div>
 
         <div class="settings bookmarks">
             <a class="menu-button" title="Gestion des signets" onclick="$(this).toggleClass('active')" href="javascript:toggle('#bookmarks_actions');"></a>
@@ -121,9 +120,11 @@ if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_b
                 <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
                     <li><a href="javascript:popup_bookmarks_import();" title="Importer les signets du cours">Importer les signets</a></li>
                     <li><a href="javascript:popup_bookmarks('<?php echo $_SESSION['album']; ?>', '<?php echo $_SESSION['asset']; ?>', 'official', 'details', 'delete')" title="Supprimer les signets liés à cet enregistrement">Supprimer les signets</a></li>
-<?php } ?>
+                <?php } ?>
             </ul>
         </div>
+
+        <!-- TODO : Settings Quiz -->
     </div>
 
 
@@ -134,31 +135,31 @@ if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_b
     <div id="side_pane">
         <div id="side-pane-scroll-area">
 
-                <?php if ($has_bookmark) { ?>
+            <?php if ($has_bookmark) { ?>
                 <div class="side_pane_content" id="asset_bookmarks">
                     <div class="side_pane_up"><a href="javascript:bookmarks_scroll('down','.bookmark_scroll');"></a></div>
                     <script>var personal_bookmarks_time_code = new Array();</script>
-                    <?php
-                    if (!isset($personal_bookmarks) || $personal_bookmarks == false || sizeof($personal_bookmarks) == 0) {
-                        ?>
+                    <?php if (!isset($personal_bookmarks) || $personal_bookmarks == false || sizeof($personal_bookmarks) == 0) { ?>
                         <div class="no_content">Il n y a aucun signet à afficher.</div>
-                        <?php
-                    } else {
-                        ?>
+                    <?php } else { ?>
                         <ul class="bookmark_scroll">
-                            <?php
-                            foreach ($personal_bookmarks as $index => $bookmark) {
-                                ?>
+                            <?php foreach ($personal_bookmarks as $index => $bookmark) { ?>
                                 <script>personal_bookmarks_time_code.push(<?php echo $bookmark['timecode']; ?>);</script>
                                 <li id="bookmark_<?php echo $index; ?>" class="blue level_<?php echo $bookmark['level']; ?>">
                                     <form action="index.php" method="post" id="submit_bookmark_form_<?php echo $index; ?>" onsubmit="return false">
 
                                         <a class="item blue" href="javascript:player_video_seek(<?php echo $bookmark['timecode'] ?>, '<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>');">
-                                            <span class="timecode">(<?php print_time($bookmark['timecode']); ?>) </span>
-                                            <span id="bookmark<?php echo $index; ?>"><b><?php print_bookmark_title($bookmark['title']); ?></b></span>
+                                            <span class="timecode">
+                                                (<?php print_time($bookmark['timecode']); ?>)
+                                            </span>
+                                            <span id="bookmark<?php echo $index; ?>">
+                                                <b><?php print_bookmark_title($bookmark['title']); ?></b>
+                                            </span>
                                             <input name="title" id="bookmark_title_<?php echo $index; ?>" type="text" maxlength="70"/>
                                         </a>
-                                        <span class="more"><a class="more-button small" onclick="bookmark_more_toggle('<?php echo $index; ?>', 'bookmark', $(this));"></a></span>
+                                        <span class="more">
+                                            <a class="more-button small" onclick="bookmark_more_toggle('<?php echo $index; ?>', 'bookmark', $(this));"></a>
+                                        </span>
                                         <div class="bookmark_detail" id="bookmark_detail_<?php echo $index; ?>">
                                             <div class="bookmark_info" id="bookmark_info_<?php echo $index; ?>">
                                                 <div class="blue-title">Description :</div>
@@ -190,122 +191,109 @@ if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_b
                                                 <a class="delete-button" title="Supprimer le signet" href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'custom', 'details', 'remove')"></a>
                                                 <a class="edit-button" title="Editer le signet" href="javascript:bookmark_edit('<?php echo $index; ?>', 'bookmark', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['title'])) ?>', '<?php echo htmlspecialchars(str_replace(array('"', "'"), array("", "\'"), $bookmark['description'])) ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['keywords'])) ?>', '<?php echo $bookmark['level'] ?>', '<?php echo $bookmark['timecode'] ?>');"></a>
                                                 <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
-                                                    <a class="copy-button" title="Ajouter aux signets officiels"  href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'custom', 'details', 'copy')""></a>
-                                                    <?php
-                                                }
-                                                ?>
+                                                    <a class="copy-button" title="Ajouter aux signets officiels"  href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'custom', 'details', 'copy')"></a>
+                                                <?php } ?>
                                             </div>
                                         </div>
-
                                     </form>
                                 </li>
-                                    <?php if (array_key_exists('timecode', $bookmark) && isset($timecode) && $timecode == $bookmark['timecode']) { ?>
+                                <?php if (array_key_exists('timecode', $bookmark) && isset($timecode) && $timecode == $bookmark['timecode']) { ?>
                                     <script>
-                                        bookmark_more_toggle('<?php echo $index; ?>', 'bookmark', $("#bookmark_<?php echo $index; ?> .more a"));</script>
-                                    <?php
-                                }
-                            }
-                            ?>
+                                        bookmark_more_toggle('<?php echo $index; ?>', 'bookmark', $("#bookmark_<?php echo $index; ?> .more a"));
+                                    </script>
+                                <?php } ?>
+                            <?php } ?>
                         </ul>
-
-                        <?php
-                    }
-                    ?>
+                    <?php } ?>
                     <div class="side_pane_down"><a href="javascript:bookmarks_scroll('up','.bookmark_scroll');"></a></div>
                 </div>
-                <?php } ?>
-            <div class="side_pane_content" id="album_toc">
+            <?php } ?>
+            <div class="side_pane_content" id="asset_toc">
                 <div class="side_pane_up"><a href="javascript:bookmarks_scroll('down','.toc_scroll');"></a></div>
                 <script>var official_bookmarks_time_code = new Array();</script>
-                <?php if (!isset($official_bookmarks) || $official_bookmarks == false || sizeof($official_bookmarks) == 0) {
-                    ?>
-                    <div class="no_content">Il n'y a pas de signet officiel pour ce cours.</div>
-                    <?php
-                } else {
-                    ?>
+                <?php if (!isset($official_bookmarks) || $official_bookmarks == false || sizeof($official_bookmarks) == 0) { ?>
+                    <div class="no_content">Il n y a pas de signet officiel pour ce cours.</div>
+                <?php } else { ?>
                     <ul class="toc_scroll">
-                        <?php
-                        foreach ($official_bookmarks as $index => $bookmark) {
-                            ?>
+                        <?php foreach ($official_bookmarks as $index => $bookmark) { ?>
                             <script>official_bookmarks_time_code.push(<?php echo $bookmark['timecode']; ?>);</script>
                             <li id="toc_<?php echo $index; ?>" class="orange level_<?php echo $bookmark['level']; ?>">
                                 <form action="index.php" method="post" id="submit_toc_form_<?php echo $index; ?>" onsubmit="return false">
-
-                                        <?php if ($bookmark['asset'] == $asset) { ?>
-                                        <a class="item orange" href="javascript:player_video_seek(<?php echo $bookmark['timecode'] ?>, '<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>');">
-                                            <?php } else { ?>
-                                            <a class="item orange" href="javascript:show_asset_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', '<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>')">
-        <?php } ?>
-                                            <span class="timecode orange">(<?php print_time($bookmark['timecode']); ?>) </span>
-                                            <span id="toc<?php echo $index; ?>"><b><?php print_bookmark_title($bookmark['title']); ?></b></span>
-                                            <input name="title" id="toc_title_<?php echo $index; ?>" type="text" maxlength="70"/>
-                                        </a>
-                                        <span class="more"><a class="more-button small orange" onclick="bookmark_more_toggle('<?php echo $index; ?>', 'toc', $(this));"></a></span>
-                                        <div class="bookmark_detail" id="toc_detail_<?php echo $index; ?>">
-                                            <div class="bookmark_info" id="toc_info_<?php echo $index; ?>">
-                                                <div class="orange-title">Description :</div>
-                                                <?php print_info($bookmark['description']); ?>
-                                                <div class="orange-title" style="margin-top: 6px;">Mots clés : </div>
-                                                <?php print_search($bookmark['keywords']); ?>
-                                            </div>
-
-                                            <div class="edit_bookmark_form" id="edit_toc_<?php echo $index; ?>">
-                                                <input type="hidden" name="album" id="toc_album_<?php echo $index; ?>" value="<?php echo $bookmark['album']; ?>"/>
-                                                <input type="hidden" name="asset" id="toc_asset_<?php echo $index; ?>" value="<?php echo $bookmark['asset']; ?>"/>
-                                                <input type="hidden" name="source" id="toc_source_<?php echo $index; ?>" value="official"/><br/>
-                                                <input type="hidden" name="timecode" id="toc_timecode_<?php echo $index; ?>" value="<?php echo $bookmark['timecode']; ?>"/>
-                                                <input type="hidden" name="type" id="toc_type_<?php echo $index; ?>" value="<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>"/>
-                                                <div class="orange-title">Description :</div>
-                                                <textarea name="description" id="toc_description_<?php echo $index; ?>" rows="4" ></textarea>
-                                                <div class="orange-title" style="margin-top: 6px;">Mots clés : </div>
-                                                <input name="keywords" id="toc_keywords_<?php echo $index; ?>" type="text"/>
-                                                <div class="orange-title" style="margin-top: 6px;">Niveau : </div>
-                                                <input type="number" name="level" id="toc_level_<?php echo $index; ?>" min="1" max="3" value="1"/>
-                                                <!-- Submit button -->
-                                                <br/>
-                                                <div class="editButtons">
-                                                    <a class="button" href="javascript: bookmark_edit_form_toggle('<?php echo $index; ?>', 'toc');">Annuler</a>
-                                                    <a class="button orange" href="javascript: if(bookmark_edit_form_check('<?php echo $index; ?>', 'toc')) bookmark_edit_form_submit('<?php echo $index; ?>', 'toc');">Soumettre</a>
-                                                </div>
-                                                <br />
-                                            </div>
-        <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
-                                                <div class="bookmark_options">
-                                                    <a class="delete-button" title="Supprimer le signet" href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'official', 'details', 'remove')"></a>
-                                                    <a class="edit-button orange" title="Editer le signet" href="javascript:bookmark_edit('<?php echo $index; ?>', 'toc', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['title'])) ?>', '<?php echo htmlspecialchars(str_replace(array('"', "'"), array("", "\'"), $bookmark['description'])) ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['keywords'])) ?>', '<?php echo $bookmark['level'] ?>', '<?php echo $bookmark['timecode'] ?>');"></a>
-                                                </div>
-        <?php } ?>
+                                <?php if ($bookmark['asset'] == $asset) { ?>
+                                    <a class="item orange" href="javascript:player_video_seek(<?php echo $bookmark['timecode'] ?>, '<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>');">
+                                <?php } else { ?>
+                                    <a class="item orange" href="javascript:show_asset_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', '<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>')">
+                                <?php } ?>
+                                        <span class="timecode orange">(<?php print_time($bookmark['timecode']); ?>) </span>
+                                        <span id="toc<?php echo $index; ?>"><b><?php print_bookmark_title($bookmark['title']); ?></b></span>
+                                        <input name="title" id="toc_title_<?php echo $index; ?>" type="text" maxlength="70"/>
+                                    </a>
+                                    <span class="more"><a class="more-button small orange" onclick="bookmark_more_toggle('<?php echo $index; ?>', 'toc', $(this));"></a></span>
+                                    <div class="bookmark_detail" id="toc_detail_<?php echo $index; ?>">
+                                        <div class="bookmark_info" id="toc_info_<?php echo $index; ?>">
+                                            <div class="orange-title">Description :</div>
+                                            <?php print_info($bookmark['description']); ?>
+                                            <div class="orange-title" style="margin-top: 6px;">Mots clés : </div>
+                                            <?php print_search($bookmark['keywords']); ?>
                                         </div>
+
+                                        <div class="edit_bookmark_form" id="edit_toc_<?php echo $index; ?>">
+                                            <input type="hidden" name="album" id="toc_album_<?php echo $index; ?>" value="<?php echo $bookmark['album']; ?>"/>
+                                            <input type="hidden" name="asset" id="toc_asset_<?php echo $index; ?>" value="<?php echo $bookmark['asset']; ?>"/>
+                                            <input type="hidden" name="source" id="toc_source_<?php echo $index; ?>" value="official"/><br/>
+                                            <input type="hidden" name="timecode" id="toc_timecode_<?php echo $index; ?>" value="<?php echo $bookmark['timecode']; ?>"/>
+                                            <input type="hidden" name="type" id="toc_type_<?php echo $index; ?>" value="<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>"/>
+                                            <div class="orange-title">Description :</div>
+                                            <textarea name="description" id="toc_description_<?php echo $index; ?>" rows="4" ></textarea>
+                                            <div class="orange-title" style="margin-top: 6px;">Mots clés : </div>
+                                            <input name="keywords" id="toc_keywords_<?php echo $index; ?>" type="text"/>
+                                            <div class="orange-title" style="margin-top: 6px;">Niveau : </div>
+                                            <input type="number" name="level" id="toc_level_<?php echo $index; ?>" min="1" max="3" value="1"/>
+                                            <!-- Submit button -->
+                                            <br/>
+                                            <div class="editButtons">
+                                                <a class="button" href="javascript: bookmark_edit_form_toggle('<?php echo $index; ?>', 'toc');">Annuler</a>
+                                                <a class="button orange" href="javascript: if(bookmark_edit_form_check('<?php echo $index; ?>', 'toc')) bookmark_edit_form_submit('<?php echo $index; ?>', 'toc');">Soumettre</a>
+                                            </div>
+                                            <br />
+                                        </div>
+                                    <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
+                                        <div class="bookmark_options">
+                                            <a class="delete-button" title="Supprimer le signet" href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'official', 'details', 'remove')"></a>
+                                            <a class="edit-button orange" title="Editer le signet" href="javascript:bookmark_edit('<?php echo $index; ?>', 'toc', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['title'])) ?>', '<?php echo htmlspecialchars(str_replace(array('"', "'"), array("", "\'"), $bookmark['description'])) ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['keywords'])) ?>', '<?php echo $bookmark['level'] ?>', '<?php echo $bookmark['timecode'] ?>');"></a>
+                                        </div>
+                                    <?php } ?>
+                                    </div>
                                 </form>
                             </li>
-                            <?php if (isset($timecode) && $timecode == $bookmark['timecode']) { ?>
-                                <script>bookmark_more_toggle('<?php echo $index; ?>', 'toc', $("#toc_<?php echo $index; ?> .more a"));</script>
-                                <?php
-                            }
-                        }
-                        ?>
+                        <?php if (isset($timecode) && $timecode == $bookmark['timecode']) { ?>
+                            <script>bookmark_more_toggle('<?php echo $index; ?>', 'toc', $("#toc_<?php echo $index; ?> .more a"));</script>
+                        <?php }} ?>
                     </ul>
-<?php }
-?>
-                <div class="side_pane_down"><a href="javascript:bookmarks_scroll('up','.toc_scroll');"></a></div>
+                    <div class="side_pane_down"><a href="javascript:bookmarks_scroll('up','.toc_scroll');"></a></div>
             </div>
 
-            <div class="side_pane_content" id="quiz_asset">
+            <div class="side_pane_content" id="asset_quiz">
                 <script>var quiz_time_code = new Array();</script>
-                <?php if (!isset($quiz) || $quiz == false || sizeof($quiz) == 0) {  ?>
-                    <div class="no_content">Il n y a aucun quiz à afficher.</div>
-                <?php } else { foreach ($quiz as $index => $question) { ?>
+            <?php if (!isset($quiz) || $quiz == false || sizeof($quiz) == 0) {  ?>
+                <div class="no_content">Il n y a aucun quiz à afficher.</div>
+            <?php } else { ?>
+                <ul class="quiz_scroll">
+                    <?php foreach ($quiz as $index => $question) { ?>
                     <script>quiz_time_code.push(<?php echo $question['timecode']; ?>);</script>
                     <li id="question_<?php echo $index; ?>">
                         <a class="item blue" href="javascript:player_video_seek(<?php echo $question['timecode'] ?>, '');">
                             <span class="timecode">(<?php print_time($question['timecode']); ?>) </span>
-                            <span id="question<?php echo $index; ?>"><b><?php echo "Question $index"; ?></b></span>
+                            <span id="question<?php echo $index; ?>"><b><?php $indexQ = $index+1; echo "Question $indexQ"; ?></b></span>
                             <input name="title" id="question_title_<?php echo $index; ?>" type="text" maxlength="70"/>
                         </a>
                     </li>
-<?php }} ?>
+                    <?php } ?>
+            <?php } ?>
+                </ul>
             </div>
         </div>
+        <?php } ?>
     </div>
 </div>
 
