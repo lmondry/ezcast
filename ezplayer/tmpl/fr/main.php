@@ -741,13 +741,19 @@ if ($trace_on) {
                     $('.settings.bookmarks').show();
                     $('.settings.toc').hide();
                     current_tab = 'main';
-                } else {
+                } else if (elem == '.toc_button'){
                     $('.settings.bookmarks').hide();
                     $('.settings.toc').show();
                     current_tab = 'toc';
+                } else {
+                  $('.settings.bookmarks').hide();
+                  $('.settings.toc').hide();
+                  current_tab = 'quiz';
+                  // TODO : add .setting_quiz
                 }
                 $('.bookmarks_button').removeClass("active");
                 $('.toc_button').removeClass("active");
+                $('.quiz_button').removeClass("active");
                 $(elem).addClass("active");
             }
 

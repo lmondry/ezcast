@@ -12,7 +12,7 @@
  * @return boolean true if the bookmark has been added to the table of contents;
  * false otherwise
  */
-function quiz_asset_add($album, $asset, $question_timecode, $title = '', $description = '', $courseId, $quizId, $questionId) {
+function quiz_asset_add($album, $asset, $quiz) {
     // Sanity check
     ChromePhp::log("inside 'lib_quiz.php'");
 
@@ -22,11 +22,7 @@ function quiz_asset_add($album, $asset, $question_timecode, $title = '', $descri
 
     if (!ezmam_asset_exists($album, $asset))
         return false;
-
-
-    if (!isset($question_timecode) || $question_timecode == '' || $question_timecode < 0){
-      return false;
-    }
+    // TODO : make verifications
 
     // 1) set the repository path
     $quiz_path = ezmam_repository_path();
@@ -87,10 +83,72 @@ function quiz_asset_add($album, $asset, $question_timecode, $title = '', $descri
     // add a bookmark at the specified index in the albums list
     array_splice($bookmarks_list, $index, 0, array(null));*/
 
-    $question = array('album' => $album, 'asset' => $asset, 'timecode' => $question_timecode,
-        'title' => $title, 'description' => $description, 'courseId' => $courseId, 'quizId' => $quizId, 'questionId' => $questionId);
 
-    return simple_assoc_array2xml_file($question, $quiz_path . "/_quiz.xml", "quiz", "question");
+
+    return assoc_array2xml_file($quiz, $quiz_path . "/_quiz.xml", "quiz", "question");
 }
+
+/**
+ * Returns the list of (official) bookmarks for a given album
+ * @param type $album the name of the album
+ * @return the list of bookmarks for a given album; false if an error occurs
+ */
+function quiz_album_quiz_list_get($album) {
+    // Sanity check
+
+    if (!ezmam_album_exists($album))
+        return false;
+
+    // 1) set repository path
+    $quiz_path = ezmam_repository_path();
+    if ($quiz_path === false) {
+        return false;
+    }
+    // 2) set user's file path
+    $quiz_path = $quiz_path . "/" . $album;
+
+    $assoc_album_quiz = array();
+    // 3) if the xml file exists, it is converted in associative array
+    if (file_exists($quiz_path . "/_quiz.xml")) {
+        $xml = simplexml_load_file($quiz_path . "/_quiz.xml");
+        if (!$xml)
+            return false;
+        $assoc_album_quiz = xml_file2assoc_array($xml, 'question');
+    }
+
+    return $assoc_album_quiz;
+}
+
+/**
+ * Returns the list of (official) bookmarks for a specific asset in a given album
+ * @param type $album the name of the album
+ * @param type $asset the name of the asset
+ * @return boolean|array the list of bookmarks related to the given asset,
+ * false if an error occurs
+ */
+function quiz_asset_question_list_get($album, $asset) {
+    $assoc_album_quiz = quiz_album_quiz_list_get($album);
+    if (!isset($assoc_album_quiz) || $assoc_album_quiz === false || empty($assoc_album_quiz)) {
+        return false;
+    }
+
+    $assoc_asset_quiz = array();
+    $index = 0;
+    $ref_asset = $assoc_album_quiz[$index]['asset'];
+    $count = count($assoc_album_quiz);
+    while ($index < $count && $asset >= $ref_asset) {
+        if ($asset == $ref_asset) {
+            array_push($assoc_asset_quiz, $assoc_album_quiz[$index]);
+        }
+        ++$index;
+        if($index < $count) {
+            $ref_asset = $assoc_album_quiz[$index]['asset'];
+        }
+    }
+
+    return $assoc_asset_quiz;
+}
+
+// ---------------
 
 ?>

@@ -794,6 +794,59 @@ function bookmarks_list_update($display = true, &$official_bookmarks = array(), 
     return true;
 }
 
+// ============== Q U I Z =============== //
+
+/**
+ * Refreshes the right_div containing the bookmarks
+ * @global type $repository_path
+ * @global type $user_files_path
+ * @global type $has_quiz
+ * @param type $display
+ * @return boolean
+ */
+function quiz_list_update($display = true, &$quiz = array()) {
+    ChromePhp::log("inside 'quiz_list_update'");
+    global $repository_path;
+    global $default_official_bm_order;
+
+    ezmam_repository_path($repository_path);
+
+    $album = $_SESSION['album'];
+    $asset = $_SESSION['asset'];
+
+    //ChromePhp::log($asset);
+
+    if (!isset($album) || $album == '')
+        return false;
+    if (!ezmam_album_exists($album))
+        return false;
+
+
+
+    if (isset($asset) && $asset != '' && ezmam_asset_exists($album, $asset)) {
+        $quiz = quiz_asset_question_list_get($album, $asset);
+    } else {
+        $quiz = quiz_album_quiz_list_get($album);
+    }
+
+
+    // sorts the bookmarks following user's prefs
+    /*$order = acl_value_get("official_bm_order");
+    if (isset($order) && $order != '' && $order != $default_official_bm_order) {
+        $quiz = array_reverse($quiz);
+    }*/
+
+    ChromePhp::log($quiz);
+    if ($display) {
+        if ($_SESSION['ezplayer_mode'] == 'view_album_assets') {
+            include_once template_getpath('div_right_assets.php');
+        } else {
+            include_once template_getpath('div_right_details.php');
+        }
+    }
+    return true;
+}
+
 // ============== C H A T ================= //
 
 

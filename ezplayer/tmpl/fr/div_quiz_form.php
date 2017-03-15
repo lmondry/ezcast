@@ -23,8 +23,6 @@
  */
 ?>
 
-<button>click</button>
-
 <div class="form" id="quiz_form">
     <div id="quiz_form_header" class="quiz-color">
         <span id="quiz_form_header_logo" class="quiz-logo"></span>

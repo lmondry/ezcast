@@ -90,7 +90,10 @@ function index($param = array()) {
         $bookmark_album, $bookmark_asset, $bookmark_timecode, $bookmark_source, $bookmark_type,
         $bookmark_title, $bookmark_description, $bookmark_keywords, $bookmark_level));
 
-    bookmarks_list_update();*/
+    */
+    quiz_list_update();
+    
+
     if (acl_user_is_logged()) {
       $quiz = array();
 
@@ -101,20 +104,10 @@ function index($param = array()) {
                 'title' => $quiz_title, 'description' => $quiz_description, 'courseId' => $quiz_courseId, 'quizId' => $quiz_quizId, 'questionId' => $quiz_questionId[$i]);
             array_push($quiz,$question);
       }
-      ChromePhp::log($quiz);
+      //ChromePhp::log($quiz);
 
-      $quiz_path = ezmam_repository_path();
-
-
-      if ($quiz_path === false) {
-          return false;
-      }
-
-      // set user's file path
-      $quiz_path = $quiz_path . '/' . $album;
-
-      return assoc_array2xml_file($quiz, $quiz_path . "/_quiz.xml", "quiz", "question");
+      quiz_asset_add($quiz_album, $quiz_asset, $quiz);
     }
-    //TODO test that
 }
+
 ?>

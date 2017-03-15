@@ -6,7 +6,7 @@
  * the player should be loaded at a specific timecode
  * @global type $input
  * @global type $appname
- * @global type $user_files_path 
+ * @global type $user_files_path
  * @global type $repository_path
  * @global type $ezplayer_url
  * @global type $album the current album
@@ -35,7 +35,7 @@ function index($param = array()) {
     $has_bookmark = false;
     $seek = (count($param) == 1 && $param[0]);
     $ezplayer_mode = ($seek) ? 'view_asset_bookmark' : 'view_asset_details';
-    
+
     // the session has expired, the whole page has to be refreshed
     if (isset($_SESSION['reloaded'])) {
         unset($input['click']);
@@ -108,7 +108,7 @@ function index($param = array()) {
                 $error_path = template_getpath('error_permission_denied.php');
                 include_once template_getpath('main.php');
             }
-            log_append('warning', $ezplayer_mode . ': tried to access asset ' . $input['asset'] . 'in album ' . $input['album'] . ' with invalid token ' . 
+            log_append('warning', $ezplayer_mode . ': tried to access asset ' . $input['asset'] . 'in album ' . $input['album'] . ' with invalid token ' .
                     $input['asset_token']);
             die;
         }
@@ -140,6 +140,7 @@ function index($param = array()) {
             $asset_meta['src'] = $asset_meta['low_slide_src'] . '&origin=' . $appname . "#t=" . $timecode;
         }
     }
+
     /*
       // user is logged and has access to the selected album
       if ($has_bookmark) {
@@ -168,7 +169,7 @@ function index($param = array()) {
     if ($seek && isset($thread_id))
         $_SESSION['current_thread'] = $thread_id;
     $_SESSION['asset_token'] = $asset_token;
-    
+
     if($seek) {
         if(array_key_exists('type', $input)) {
             $_SESSION['loaded_type'] = $input['type'];
@@ -180,9 +181,10 @@ function index($param = array()) {
             $_SESSION['loaded_type'] = $asset_meta['record_type'];
         }
     }
-    
+
 
     bookmarks_list_update(false, $official_bookmarks, $personal_bookmarks);
+    quiz_list_update(false,$quiz);
 
     if (acl_display_threads()) {
         if (isset($thread_id)) {
@@ -203,8 +205,8 @@ function index($param = array()) {
         if(!array_key_exists('no_trace', $input) || !$input['no_trace']) {
             trace_append(array('3', $ezplayer_mode, $album, $asset, $asset_meta['record_type'], ($has_bookmark) ? 'view_and_add' : 'view_only', 'from_external'));
         }
-        
+
         include_once template_getpath('main.php');
     }
-    
+
 }
