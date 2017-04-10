@@ -278,10 +278,11 @@ if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_b
             <?php if (!isset($quiz) || $quiz == false || sizeof($quiz) == 0) {  ?>
                 <div class="no_content">Il n y a aucun quiz à afficher.</div>
             <?php } else { ?>
-                <ul class="quiz_scroll">
+                <ul class="quiz_scroll" class="blue level_1">
                     <?php foreach ($quiz as $index => $question) { ?>
+                    <script>quiz_array.push({courseId:<?php echo $question['courseId']; ?>,quizId:<?php echo $question['quizId']; ?>,questionId:<?php echo $question['questionId']; ?>,timecode:<?php echo $question['timecode']; ?>,done:false});</script>
                     <script>quiz_time_code.push(<?php echo $question['timecode']; ?>);</script>
-                    <li id="question_<?php echo $index; ?>">
+                    <li id="question_<?php echo $index; ?>" class="blue level_3">
                         <a class="item blue" href="javascript:player_video_seek(<?php echo $question['timecode'] ?>, '');">
                             <span class="timecode">(<?php print_time($question['timecode']); ?>) </span>
                             <span id="question<?php echo $index; ?>"><b><?php $indexQ = $index+1; echo "Question $indexQ"; ?></b></span>

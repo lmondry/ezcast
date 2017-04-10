@@ -97,6 +97,7 @@ if ($trace_on) {
             var clippy;
             var ie_browser = false;
             var threads_array = new Array();
+            var quiz_array = new Array();
             var display_thread_details = false;
             var display_threads_notif = false;
             var thread_to_display = null;

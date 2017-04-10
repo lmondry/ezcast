@@ -48,8 +48,12 @@ require_once 'lib_threads_pdo.php';
 require_once 'lib_chat_pdo.php';
 require_once 'lib_cache.php';
 require_once 'lib_acl.php';
-require_once 'ChromePhp.php';
-require_once 'lib_quiz.php';
+
+require_once './Quizzes/lib_chrome_php.php';
+require_once './Quizzes/lib_curl.php';
+require_once './Quizzes/lib_simple_html_dom.php';
+require_once './Quizzes/lib_moodle.php';
+require_once './Quizzes/lib_quiz.php';
 
 $input = array_merge($_GET, $_POST);
 
@@ -508,7 +512,7 @@ function user_anonymous_session() {
  */
 function user_login($login, $passwd) {
     // TODO : Get the moodle token here
-    
+
     global $input;
     global $template_folder;
     global $error;

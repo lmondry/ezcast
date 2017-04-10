@@ -65,6 +65,8 @@ switch (strtolower($_SESSION['browser_name'])) {
         <div class="right-arrow"></div><?php print_info($asset_meta['title']); ?>
     </div>
 
+    <div id="question_div" style="display: none"></div>
+    
     <div id="video_player" class="remove_full">
         <!-- #main_video : HTML5 video player.
             There is no selected source by default.
@@ -167,6 +169,7 @@ switch (strtolower($_SESSION['browser_name'])) {
                         <?php }
                         if (acl_has_album_moderation($album) || acl_is_admin()) { ?>
                             <a class="add-toc-button" title="Créer un signet officiel" href="javascript:player_bookmark_form_toggle('official');"></a>
+                            <!--<a class="add-quiz-button" title="Ajouter un quiz" href="javascript:ajaxRequest('core_webservice_get_site_info',false).success(function(response){getUserCourses(response);});player_quiz_form_toggle();"></a>-->
                             <a class="add-quiz-button" title="Ajouter un quiz" href="javascript:player_quiz_form_toggle();"></a>
                             <?php
                         }
