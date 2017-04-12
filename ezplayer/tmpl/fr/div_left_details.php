@@ -84,7 +84,7 @@ switch (strtolower($_SESSION['browser_name'])) {
                     <li><span class="key d"></span><span>Nouvelle discussion</span></li>
                     <li><span class="key shift"></span><span>Afficher les signets</span></li>
                     <li><span class="key f"></span><span>Plein écran</span></li>
-                    <li><span>Q :</span><span>Plein écran</span></li>
+                    <li><span class="key q"></span><span>Nouveau Quiz</span></li>
                     <!-- TODO : Find image for Q -->
                 </ul>
             </div>

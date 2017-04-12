@@ -917,6 +917,11 @@ body {
     background: url(../images/Generale/r.png) no-repeat center;
 }
 
+.shortcuts ul li span.key.q{
+    background: url(../images/Generale/q.png) no-repeat center;
+}
+
+
 .shortcuts_tab{
     display: inline-block;
     position: relative;
