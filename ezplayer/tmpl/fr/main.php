@@ -170,10 +170,10 @@ if ($trace_on) {
             function modalLoad(show){
               $body = $("body");
               if (show) {
-                console.log("should load");
+                //console.log("should load");
                 $body.addClass("loading");
               }else {
-                console.log("should remove load");
+                //console.log("should remove load");
                 $body.removeClass("loading");
               }
             }

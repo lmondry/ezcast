@@ -42,13 +42,13 @@
             <label>Titre&nbsp;:
                 <span class="small">Max. 70 caractères</span>
             </label>
-            <input name="title" tabindex='11' id="quiz_title" type="text" maxlength="70" value="test"/>
+            <input name="title" tabindex='11' id="quiz_title" type="text" maxlength="70" value=""/>
 
             <!-- Description field-->
             <label>Description&nbsp;:
                 <span class="small">Facultatif</span>
             </label>
-            <textarea name="description" tabindex='12' id="bookmark_description" rows="4" ></textarea>
+            <textarea name="description" tabindex='12' id="quiz_description" rows="4" ></textarea>
 
             <br/>
 
@@ -127,7 +127,6 @@ function populateDivQuestions(courseId,quizId){
 
   if(document.getElementById('selectCourses')){
     document.getElementById('selectCourses').onchange = function(){
-      console.log("heeeere");
 
       if ($('#divQuizQuestion.quizQuestion')){
         $('#divQuizQuestion').find('.quizQuestion').remove().end();
@@ -138,6 +137,8 @@ function populateDivQuestions(courseId,quizId){
           for (var j = 0; j < all.courses[i].quizzes.length; j++) {
             if(all.courses[i].quizzes[j].id == document.getElementById('selectQuizzes').value){
               populateDivQuestions(i,j);
+              document.getElementById('quiz_title').value = all.courses[i].quizzes[j].name;
+              document.getElementById('quiz_description').value = all.courses[i].quizzes[j].intro.replace(/<(?:.|\n)*?>/gm, '');
               return;
             }
           }
@@ -151,11 +152,12 @@ function populateDivQuestions(courseId,quizId){
   if(document.getElementById('selectQuizzes')){
 
     document.getElementById('selectQuizzes').onchange = function(){
-      console.log("hello world");
       for(var i = 0;i<all.courses.length;i++){
         for (var j = 0; j < all.courses[i].quizzes.length; j++) {
           if(all.courses[i].quizzes[j].id == document.getElementById('selectQuizzes').value){
             populateDivQuestions(i,j);
+            document.getElementById('quiz_title').value = all.courses[i].quizzes[j].name;
+            document.getElementById('quiz_description').value = all.courses[i].quizzes[j].intro.replace(/<(?:.|\n)*?>/gm, '');
             return;
           }
         }
