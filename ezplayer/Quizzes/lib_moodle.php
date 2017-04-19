@@ -112,7 +112,7 @@
           }
           $currentPage = $attempt->nextpage;
         } while ($currentPage > 0);
-
+        // TODO : stop quiz
       }
 
     }

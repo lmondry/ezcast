@@ -35,6 +35,7 @@
 require_once 'config.inc';
 session_name($appname);
 session_start();
+require_once './Quizzes/lib_chrome_php.php';
 require_once 'lib_error.php';
 require_once 'lib_ezmam.php';
 require_once '../commons/lib_auth.php';
@@ -49,7 +50,6 @@ require_once 'lib_chat_pdo.php';
 require_once 'lib_cache.php';
 require_once 'lib_acl.php';
 
-require_once './Quizzes/lib_chrome_php.php';
 require_once './Quizzes/lib_curl.php';
 require_once './Quizzes/lib_simple_html_dom.php';
 require_once './Quizzes/lib_moodle.php';
@@ -816,12 +816,8 @@ function quiz_list_update($display = true, &$quiz = array()) {
     global $default_official_bm_order;
 
     ezmam_repository_path($repository_path);
-
     $album = $_SESSION['album'];
     $asset = $_SESSION['asset'];
-
-    //ChromePhp::log($asset);
-
     if (!isset($album) || $album == '')
         return false;
     if (!ezmam_album_exists($album))
@@ -835,6 +831,8 @@ function quiz_list_update($display = true, &$quiz = array()) {
         $quiz = quiz_album_quiz_list_get($album);
     }
 
+    ChromePhp::log("back to 'quiz_list_update'");
+    //
 
     // sorts the bookmarks following user's prefs
     /*$order = acl_value_get("official_bm_order");
@@ -842,14 +840,18 @@ function quiz_list_update($display = true, &$quiz = array()) {
         $quiz = array_reverse($quiz);
     }*/
 
-    ChromePhp::log($quiz);
     if ($display) {
         if ($_SESSION['ezplayer_mode'] == 'view_album_assets') {
             include_once template_getpath('div_right_assets.php');
         } else {
+            ChromePhp::log("should be here");
             include_once template_getpath('div_right_details.php');
+            ChromePhp::log("should be here");
         }
     }
+
+    ChromePhp::log($quiz);
+
     return true;
 }
 

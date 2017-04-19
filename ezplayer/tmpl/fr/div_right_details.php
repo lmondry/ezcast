@@ -62,7 +62,6 @@ if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_b
             setActivePane('.bookmarks_button');
             $('#side_pane').scrollTo('#asset_bookmarks');
         }else{
-          console.log("here scroll");
           setActivePane('.quiz_button');
           $('#side_pane').scrollTo('#asset_quiz');
 
@@ -85,7 +84,6 @@ if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_b
     }
 }
 ?>
-
 </script>
 
 <div id="search">
@@ -278,8 +276,14 @@ if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_b
             <?php if (!isset($quiz) || $quiz == false || sizeof($quiz) == 0) {  ?>
                 <div class="no_content">Il n y a aucun quiz à afficher.</div>
             <?php } else { ?>
-                <ul class="quiz_scroll" class="blue level_1">
-                    <?php foreach ($quiz as $index => $question) { ?>
+                <ul class="quiz_scroll">
+                    <script> console.log("quizzes : "); console.log(<?php echo json_encode($quiz)?>); </script>
+                    <li class="blue level_1"><span id="quiz_title">
+                      <a class="item blue" href="">
+                          <span id="quiz_title"><b><i>Title :</i> <?php echo $quiz[0]["title"]; ?></b></span>
+                      </a>
+                    </li>
+                    <?php foreach ($quiz as $index => $question) {  ?>
                     <script>quiz_array.push({courseId:<?php echo $question['courseId']; ?>,quizId:<?php echo $question['quizId']; ?>,questionId:<?php echo $question['questionId']; ?>,timecode:<?php echo $question['timecode']; ?>,done:false});</script>
                     <script>quiz_time_code.push(<?php echo $question['timecode']; ?>);</script>
                     <li id="question_<?php echo $index; ?>" class="blue level_3">

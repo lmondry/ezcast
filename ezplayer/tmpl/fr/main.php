@@ -87,7 +87,7 @@ if ($trace_on) {
         <script type="text/javascript" src="js/lib_threads.js"></script>
         <script type="text/javascript" src="js/lib_bookmarks.js"></script>
         <script type="text/javascript" src="js/lib_chat.js"></script>
-        //<script type="text/javascript" src="js/lib_quiz.js"></script>
+        <script type="text/javascript" src="js/lib_quiz.js"></script>
 
         <script>
             var current_album;
@@ -167,6 +167,17 @@ if ($trace_on) {
                 // history.pushState({"key": "show-album-assets", "function": "show_album_assets(" + album + "," + token + ")", "url": "index.php?action=view_album_assets&album=" + album + "&token=" + token}, 'album-details', 'index.php?action=view_album_assets');
             }
 
+            function modalLoad(show){
+              $body = $("body");
+              if (show) {
+                console.log("should load");
+                $body.addClass("loading");
+              }else {
+                console.log("should remove load");
+                $body.removeClass("loading");
+              }
+            }
+
             /**
              * Navigates to the given asset
              * @param {type} album
@@ -178,6 +189,7 @@ if ($trace_on) {
                 current_album = album;
                 current_asset = asset;
                 display_thread_details = false;
+
 
                 makeRequest('index.php', '?action=view_asset_details&album=' + album + '&asset=' + asset + '&asset_token=' + asset_token + '&click=true', 'div_center');
                 //   history.pushState({"key": "show-asset-details", "function": "show_asset_details(" + album + "," + asset + "," + asset_token + ")", "url": "index.php?action=view_asset_details&album=" + album + "&asset=" + asset + "&asset_token=" + asset_token}, 'asset-details', 'index.php?action=view_asset_details');
@@ -878,6 +890,6 @@ if ($trace_on) {
 
         <!-- Popup are generated on demand and included in this div -->
         <div id="div_popup" class="reveal-modal"></div>
-
+        <div class="modal"><!-- Place at bottom of page --></div>
     </body>
 </html>

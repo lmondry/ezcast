@@ -584,7 +584,7 @@ function xml_file2assoc_array($xml, $anonymous_key = 'anon') {
 }
 
 function simple_assoc_array2xml_file($assoc_array, $file_path, $global) {
-    ChromePhp::log("Inside simple_assoc_array2xml_file");
+    //ChromePhp::log("Inside simple_assoc_array2xml_file");
     $xmlstr = "<?xml version='1.0' standalone='yes'?>\n<$global>\n</$global>\n";
     $xml = new SimpleXMLElement($xmlstr);
     foreach ($assoc_array as $key => $value) {
@@ -604,7 +604,7 @@ function simple_assoc_array2xml_file($assoc_array, $file_path, $global) {
  * @return boolean
  */
 function assoc_array2xml_file($array, $file_path, $global = 'bookmarks', $each = 'bookmark') {
-    ChromePhp::log("Inside assoc_array2xml_file");
+    //ChromePhp::log("Inside assoc_array2xml_file");
 
     $xmlstr = "<?xml version='1.0' standalone='yes'?>\n<$global>\n</$global>\n";
     $xml = new SimpleXMLElement($xmlstr);

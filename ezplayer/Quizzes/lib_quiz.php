@@ -14,7 +14,7 @@
  */
 function quiz_asset_add($album, $asset, $quiz) {
     // Sanity check
-    ChromePhp::log("inside 'lib_quiz.php'");
+    ChromePhp::log("inside quiz_asset_add");
 
 
     if (!ezmam_album_exists($album))
@@ -33,7 +33,7 @@ function quiz_asset_add($album, $asset, $quiz) {
     }
 
     // set user's file path
-    $quiz_path = $quiz_path . '/' . $album;
+    $quiz_path = $quiz_path . '/' . $album . '/' . $asset;
 
 
     // remove the previous same bookmark if it existed yet
@@ -84,6 +84,8 @@ function quiz_asset_add($album, $asset, $quiz) {
     array_splice($bookmarks_list, $index, 0, array(null));*/
 
 
+    ChromePhp::log($quiz);
+    ChromePhp::log($quiz_path);
 
     return assoc_array2xml_file($quiz, $quiz_path . "/_quiz.xml", "quiz", "question");
 }
@@ -93,19 +95,22 @@ function quiz_asset_add($album, $asset, $quiz) {
  * @param type $album the name of the album
  * @return the list of bookmarks for a given album; false if an error occurs
  */
-function quiz_album_quiz_list_get($album) {
+function quiz_album_quiz_list_get($album,$asset) {
+    ChromePhp::log("inside quiz_album_quiz_list_get");
     // Sanity check
 
-    if (!ezmam_album_exists($album))
+    if (!ezmam_album_exists($album)){
         return false;
+    }
 
     // 1) set repository path
     $quiz_path = ezmam_repository_path();
     if ($quiz_path === false) {
         return false;
     }
+
     // 2) set user's file path
-    $quiz_path = $quiz_path . "/" . $album;
+    $quiz_path = $quiz_path . "/" . $album . "/" . $asset;
 
     $assoc_album_quiz = array();
     // 3) if the xml file exists, it is converted in associative array
@@ -127,7 +132,9 @@ function quiz_album_quiz_list_get($album) {
  * false if an error occurs
  */
 function quiz_asset_question_list_get($album, $asset) {
-    $assoc_album_quiz = quiz_album_quiz_list_get($album);
+    ChromePhp::log("inside quiz_asset_question_list_get");
+    $assoc_album_quiz = quiz_album_quiz_list_get($album,$asset);
+
     if (!isset($assoc_album_quiz) || $assoc_album_quiz === false || empty($assoc_album_quiz)) {
         return false;
     }
@@ -145,7 +152,6 @@ function quiz_asset_question_list_get($album, $asset) {
             $ref_asset = $assoc_album_quiz[$index]['asset'];
         }
     }
-
     return $assoc_asset_quiz;
 }
 
@@ -168,7 +174,7 @@ function generate_form($token, $all){
       $html .= '</select>';
 
       $html .+ '<br/>';
-      
+
       $html .= '<div id="divQuizQuestion" style="width:800px;height:200px;overflow:auto;">';
       if (count($all['courses'][0]['quizzes'][$j]['questions']) > 0){
         foreach ($all['courses'][0]['quizzes'][$j]['questions'] as $k => $question) {
@@ -177,7 +183,7 @@ function generate_form($token, $all){
           $html .= '<p style="padding-left:10pt;">'.$question['text'].'</p>';
           $html .= '<input type="hidden" id="quiz_asset" name="quiz_questionId_Q'.($k+1).'" value="'.$question['slot'].'"/>';
           $html .= '<input class="quiz_timecode" id="quiz_timecode_Q'.($k+1).'" name="quiz_timecode_Q'.($k+1).'" type="number" value="0" required/>';
-          $html .= '<a class="button" href="javascript:document.getElementById(\x27quiz_timecode_Q'.($k+1).'\x27).value = time;">Current Time</a>';
+          $html .= '<a class="button" href="javascript:document.getElementById("quiz_timecode_Q'.($k+1).'").value = time;">Current Time</a>';
         }
       }
       $html .= '</div>';
@@ -187,7 +193,6 @@ function generate_form($token, $all){
     $html .= '<select id="selectQuizzes" disabled>';
     $html .= '<option value="-1">No quiz</option>';
     $html .= '</select>';
-    $html .= '</div>';
     $html .= '<div id="divQuizQuestion" style="width:800px;height:200px;overflow:auto;"></div>';
   }
 

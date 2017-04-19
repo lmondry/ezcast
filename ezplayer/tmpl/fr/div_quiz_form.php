@@ -64,7 +64,6 @@
             <div id="divQuizQuestion" style="width:800px;height:200px;overflow:auto;">
             </div>
             -->
-
             <?php echo generate_form($t,$all); ?>
 
             <br/><br/>
@@ -135,7 +134,7 @@ function populateDivQuestions(courseId,quizId){
       }
       for(var i = 0;i<all.courses.length;i++){
         if(all.courses[i].id == document.getElementById('selectCourses').value){
-          populateSelect('selectQuizzes',all.courses[i].quizzes,"name","id",{id:-1,name:"No quiz"});
+          populateSelect('selectQuizzes','quizId',all.courses[i].quizzes,"name","id",{id:-1,name:"No quiz"});
           for (var j = 0; j < all.courses[i].quizzes.length; j++) {
             if(all.courses[i].quizzes[j].id == document.getElementById('selectQuizzes').value){
               populateDivQuestions(i,j);

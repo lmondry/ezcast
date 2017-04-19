@@ -1,5 +1,5 @@
 /*
-* EZCAST EZmanager 
+* EZCAST EZmanager
 *
 * Copyright (C) 2016 Université libre de Bruxelles
 *
@@ -31,7 +31,7 @@
 function show_asset_details(album, asset) {
     var targetElement;
     targetElement = document.getElementById('asset_'+asset+'_details') ;
-    
+
     // Case 1: The div was hidden; we retrieve the info and display it
     if (targetElement.style.display == "none")
     {
