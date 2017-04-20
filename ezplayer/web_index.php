@@ -811,7 +811,7 @@ function bookmarks_list_update($display = true, &$official_bookmarks = array(), 
  * @return boolean
  */
 function quiz_list_update($display = true, &$quiz = array()) {
-    ChromePhp::log("inside 'quiz_list_update'");
+    //ChromePhp::log("inside 'quiz_list_update'");
     global $repository_path;
     global $default_official_bm_order;
 
@@ -831,7 +831,7 @@ function quiz_list_update($display = true, &$quiz = array()) {
         $quiz = quiz_album_quiz_list_get($album);
     }
 
-    ChromePhp::log("back to 'quiz_list_update'");
+    //ChromePhp::log("back to 'quiz_list_update'");
     //
 
     // sorts the bookmarks following user's prefs

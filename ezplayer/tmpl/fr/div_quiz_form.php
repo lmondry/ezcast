@@ -66,6 +66,14 @@
             -->
             <?php echo generate_form($t,$all); ?>
 
+            <br/>
+
+            <label>Feedback &nbsp;:
+                <span class="small">After the last question</span>
+            </label>
+            <input type="checkbox" name="feedback" id="quiz_feedback" value="1">
+
+
             <br/><br/>
             <!-- Submit button -->
             <div class="cancelButton">
@@ -97,6 +105,19 @@
 
 var all = <?php echo json_encode($all); ?>;
 
+function getTimecode(id){
+  document.getElementById('quiz_timecode_Q'+(id)).value = time;
+}
+
+
+if(all.courses[0].quizzes[0].name){
+  document.getElementById('quiz_title').value = all.courses[0].quizzes[0].name;
+}
+
+if(all.courses[0].quizzes[0].intro){
+  document.getElementById('quiz_description').value = all.courses[0].quizzes[0].intro.replace(/<(?:.|\n)*?>/gm, '');
+}
+
 function populateDivQuestions(courseId,quizId){
     var fragment = document.createDocumentFragment();
     var sel = document.getElementById('divQuizQuestion');
@@ -116,12 +137,11 @@ function populateDivQuestions(courseId,quizId){
           opt.innerHTML += '<p style="padding-left:10pt;">'+obj.text+'</p>';
           opt.innerHTML += '<input type="hidden" id="quiz_asset" name="quiz_questionId_Q'+(index+1)+'" value="'+obj.slot+'"/>';
           opt.innerHTML += '<input class="quiz_timecode" id="quiz_timecode_Q'+(index+1)+'" name="quiz_timecode_Q'+(index+1)+'" type="number" value="0" required/>';
-          opt.innerHTML += '<a class="button" href="javascript:document.getElementById(\x27quiz_timecode_Q'+(index+1)+'\x27).value = time;">Current Time</a>';
+          opt.innerHTML += '<a class="button" href="javascript:getTimecode('+(index+1)+');">Current Time</a>';
           opt.innerHTML += '<br><br>';
           fragment.appendChild(opt);
       });
     }
-    //fragment.appendChild(document.createElement('br'));
     sel.appendChild(fragment);
   }
 

@@ -84,8 +84,8 @@ function quiz_asset_add($album, $asset, $quiz) {
     array_splice($bookmarks_list, $index, 0, array(null));*/
 
 
-    ChromePhp::log($quiz);
-    ChromePhp::log($quiz_path);
+    //ChromePhp::log($quiz);
+    //ChromePhp::log($quiz_path);
 
     return assoc_array2xml_file($quiz, $quiz_path . "/_quiz.xml", "quiz", "question");
 }
@@ -96,7 +96,7 @@ function quiz_asset_add($album, $asset, $quiz) {
  * @return the list of bookmarks for a given album; false if an error occurs
  */
 function quiz_album_quiz_list_get($album,$asset) {
-    ChromePhp::log("inside quiz_album_quiz_list_get");
+    //ChromePhp::log("inside quiz_album_quiz_list_get");
     // Sanity check
 
     if (!ezmam_album_exists($album)){
@@ -120,6 +120,7 @@ function quiz_album_quiz_list_get($album,$asset) {
             return false;
         $assoc_album_quiz = xml_file2assoc_array($xml, 'question');
     }
+    ChromePhp::log($assoc_album_quiz);
 
     return $assoc_album_quiz;
 }
@@ -132,7 +133,7 @@ function quiz_album_quiz_list_get($album,$asset) {
  * false if an error occurs
  */
 function quiz_asset_question_list_get($album, $asset) {
-    ChromePhp::log("inside quiz_asset_question_list_get");
+    //ChromePhp::log("inside quiz_asset_question_list_get");
     $assoc_album_quiz = quiz_album_quiz_list_get($album,$asset);
 
     if (!isset($assoc_album_quiz) || $assoc_album_quiz === false || empty($assoc_album_quiz)) {
@@ -167,23 +168,26 @@ function generate_form($token, $all){
   $html .= '</select>';
 
   if (count($all['courses'][0]['quizzes']) > 0){
+    error_log("here",0);
     $html .= '<label>Selectionnez le quiz&nbsp;:</label>';
-    $html .= '<select id="selectQuizzes" name="quizId"></select>';
+    $html .= '<select id="selectQuizzes" name="quizId">';
     foreach ($all['courses'][0]['quizzes'] as $j => $quiz) {
-      $html .= '<option value="'.$quiz['id'].'"">'.$quiz['name'].'</option>';
+      $html .= '<option value="'.$quiz['id'].'">'.$quiz['name'].'</option>';
       $html .= '</select>';
 
       $html .+ '<br/>';
 
-      $html .= '<div id="divQuizQuestion" style="width:800px;height:200px;overflow:auto;">';
+      $html .= '<div id="divQuizQuestion" style="width:100%;height:200px;overflow:auto;">';
       if (count($all['courses'][0]['quizzes'][$j]['questions']) > 0){
         foreach ($all['courses'][0]['quizzes'][$j]['questions'] as $k => $question) {
+          $html .= '<div class="quizQuestion" id="'.$k.'">';
           $html .= '<label style="width:20px;">Q'.($k+1).':</label>';
           $html .= '<br>';
           $html .= '<p style="padding-left:10pt;">'.$question['text'].'</p>';
           $html .= '<input type="hidden" id="quiz_asset" name="quiz_questionId_Q'.($k+1).'" value="'.$question['slot'].'"/>';
           $html .= '<input class="quiz_timecode" id="quiz_timecode_Q'.($k+1).'" name="quiz_timecode_Q'.($k+1).'" type="number" value="0" required/>';
-          $html .= '<a class="button" href="javascript:document.getElementById("quiz_timecode_Q'.($k+1).'").value = time;">Current Time</a>';
+          $html .= '<a class="button" href="javascript:getTimecode('.($k+1).');">Current Time</a>';
+          $html .= '</div>';
         }
       }
       $html .= '</div>';
@@ -193,10 +197,10 @@ function generate_form($token, $all){
     $html .= '<select id="selectQuizzes" disabled>';
     $html .= '<option value="-1">No quiz</option>';
     $html .= '</select>';
-    $html .= '<div id="divQuizQuestion" style="width:800px;height:200px;overflow:auto;"></div>';
+    $html .= '<div id="divQuizQuestion" style="width:100%;height:200px;overflow:auto;"></div>';
   }
 
-  //ChromePhp::log($html);
+  ChromePhp::log($html);
   return $html;
 }
 

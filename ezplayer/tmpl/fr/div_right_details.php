@@ -277,21 +277,58 @@ if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_b
                 <div class="no_content">Il n y a aucun quiz à afficher.</div>
             <?php } else { ?>
                 <ul class="quiz_scroll">
-                    <script> console.log("quizzes : "); console.log(<?php echo json_encode($quiz)?>); </script>
                     <li class="blue level_1"><span id="quiz_title">
-                      <a class="item blue" href="">
+                      <a class="item blue" style="pointer-events: none; cursor: default;">
                           <span id="quiz_title"><b><i>Title :</i> <?php echo $quiz[0]["title"]; ?></b></span>
                       </a>
                     </li>
                     <?php foreach ($quiz as $index => $question) {  ?>
-                    <script>quiz_array.push({courseId:<?php echo $question['courseId']; ?>,quizId:<?php echo $question['quizId']; ?>,questionId:<?php echo $question['questionId']; ?>,timecode:<?php echo $question['timecode']; ?>,done:false});</script>
+                    <script>quiz_array.push({courseId:<?php echo $question['courseId']; ?>,quizId:<?php echo $question['quizId']; ?>,questionId:<?php echo $question['questionId']; ?>,timecode:<?php echo $question['timecode']; ?>,feedback:<?php echo $question['feedback']; ?>,done:false});</script>
                     <script>quiz_time_code.push(<?php echo $question['timecode']; ?>);</script>
                     <li id="question_<?php echo $index; ?>" class="blue level_3">
+                      <form action="index.php" method="post" id="submit_quiz_form_<?php echo $index; ?>" onsubmit="return false">
                         <a class="item blue" href="javascript:player_video_seek(<?php echo $question['timecode'] ?>, '');">
                             <span class="timecode">(<?php print_time($question['timecode']); ?>) </span>
                             <span id="question<?php echo $index; ?>"><b><?php $indexQ = $index+1; echo "Question $indexQ"; ?></b></span>
                             <input name="title" id="question_title_<?php echo $index; ?>" type="text" maxlength="70"/>
                         </a>
+                        <!--
+                        <span class="more"><a class="more-button small orange" onclick="bookmark_more_toggle('<?php echo $index; ?>', 'toc', $(this));"></a></span>
+                        <div class="bookmark_detail" id="toc_detail_<?php echo $index; ?>">
+                            <div class="bookmark_info" id="toc_info_<?php echo $index; ?>">
+                                <div class="orange-title">Description :</div>
+                                <?php print_info($bookmark['description']); ?>
+                                <div class="orange-title" style="margin-top: 6px;">Mots clés : </div>
+                                <?php print_search($bookmark['keywords']); ?>
+                            </div>
+
+                            <div class="edit_bookmark_form" id="edit_toc_<?php echo $index; ?>">
+                                <input type="hidden" name="album" id="toc_album_<?php echo $index; ?>" value="<?php echo $bookmark['album']; ?>"/>
+                                <input type="hidden" name="asset" id="toc_asset_<?php echo $index; ?>" value="<?php echo $bookmark['asset']; ?>"/>
+                                <input type="hidden" name="source" id="toc_source_<?php echo $index; ?>" value="official"/><br/>
+                                <input type="hidden" name="timecode" id="toc_timecode_<?php echo $index; ?>" value="<?php echo $bookmark['timecode']; ?>"/>
+                                <input type="hidden" name="type" id="toc_type_<?php echo $index; ?>" value="<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>"/>
+                                <div class="orange-title">Description :</div>
+                                <textarea name="description" id="toc_description_<?php echo $index; ?>" rows="4" ></textarea>
+                                <div class="orange-title" style="margin-top: 6px;">Mots clés : </div>
+                                <input name="keywords" id="toc_keywords_<?php echo $index; ?>" type="text"/>
+                                <div class="orange-title" style="margin-top: 6px;">Niveau : </div>
+                                <input type="number" name="level" id="toc_level_<?php echo $index; ?>" min="1" max="3" value="1"/>
+                                <!-- Submit button -->
+                                <br/>
+                                <div class="editButtons">
+                                    <a class="button" href="javascript: bookmark_edit_form_toggle('<?php echo $index; ?>', 'toc');">Annuler</a>
+                                    <a class="button orange" href="javascript: if(bookmark_edit_form_check('<?php echo $index; ?>', 'toc')) bookmark_edit_form_submit('<?php echo $index; ?>', 'toc');">Soumettre</a>
+                                </div>
+                                <br />
+                            </div>
+                        <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
+                            <div class="bookmark_options">
+                                <a class="delete-button" title="Supprimer le signet" href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'official', 'details', 'remove')"></a>
+                                <a class="edit-button orange" title="Editer le signet" href="javascript:bookmark_edit('<?php echo $index; ?>', 'toc', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['title'])) ?>', '<?php echo htmlspecialchars(str_replace(array('"', "'"), array("", "\'"), $bookmark['description'])) ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['keywords'])) ?>', '<?php echo $bookmark['level'] ?>', '<?php echo $bookmark['timecode'] ?>');"></a>
+                            </div>
+                        <?php } ?>
+                        </div> -->
                     </li>
                     <?php } ?>
             <?php } ?>

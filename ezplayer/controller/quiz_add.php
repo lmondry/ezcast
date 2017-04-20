@@ -42,6 +42,13 @@ function index($param = array()) {
         }
     }
 
+    if($input["feedback"]){
+      $quiz_feedback = 1;
+    }else{
+      $quiz_feedback = 0;
+
+    }
+
     if (!acl_user_is_logged()) {
         return false;
     }
@@ -106,7 +113,7 @@ function index($param = array()) {
             //ChromePhp::log($quiz_timecode[$i]);
             //quiz_asset_add($quiz_album, $quiz_asset, $quiz_timecode[$i], $quiz_title, $quiz_description, $quiz_courseId, $quiz_quizId, $quiz_questionId[$i]);
             $question = array('album' => $quiz_album, 'asset' => $quiz_asset, 'timecode' =>  $quiz_timecode[$i],
-                'title' => $quiz_title, 'description' => $quiz_description, 'courseId' => $quiz_courseId, 'quizId' => $quiz_quizId, 'questionId' => $quiz_questionId[$i]);
+                'title' => $quiz_title, 'description' => $quiz_description, 'courseId' => $quiz_courseId, 'quizId' => $quiz_quizId, 'questionId' => $quiz_questionId[$i], 'feedback' => $quiz_feedback);
             array_push($quiz,$question);
       }
 
