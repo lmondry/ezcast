@@ -85,7 +85,6 @@ switch (strtolower($_SESSION['browser_name'])) {
                     <li><span class="key shift"></span><span>Afficher les signets</span></li>
                     <li><span class="key f"></span><span>Plein écran</span></li>
                     <li><span class="key q"></span><span>Nouveau Quiz</span></li>
-                    <!-- TODO : Find image for Q -->
                 </ul>
             </div>
             <div class="shortcuts_tab"><a href="javascript:player_shortcuts_toggle();"></a></div>

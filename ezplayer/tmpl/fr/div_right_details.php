@@ -1,28 +1,28 @@
 <?php
 /*
- * EZCAST EZplayer
- *
- * Copyright (C) 2016 Université libre de Bruxelles
- *
- * Written by Michel Jansens <mjansens@ulb.ac.be>
- * 	      Arnaud Wijns <awijns@ulb.ac.be>
- *            Carlos Avidmadjessi
- * UI Design by Julien Di Pietrantonio
- *
- * This software is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+* EZCAST EZplayer
+*
+* Copyright (C) 2016 Université libre de Bruxelles
+*
+* Written by Michel Jansens <mjansens@ulb.ac.be>
+* 	      Arnaud Wijns <awijns@ulb.ac.be>
+*            Carlos Avidmadjessi
+* UI Design by Julien Di Pietrantonio
+*
+* This software is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 3 of the License, or (at your option) any later version.
+*
+* This software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this software; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
 
 include_once 'lib_print.php';
 ?>
@@ -43,15 +43,11 @@ include_once 'lib_print.php';
 
     history.pushState({"url": 'index.php?action=view_asset_details&album=' + current_album + '&asset=' + current_asset + '&asset_token=' + '<?php echo $_SESSION['asset_token']; ?>'}, '', '');
 
-<?php global $show_panel;
-    if ((!isset($personal_bookmarks) || sizeof($personal_bookmarks) == 0) && (!isset($official_bookmarks) || sizeof($official_bookmarks) == 0)
-        && !isset($show_panel)) { $hiden_side = true; ?>
+<?php global $show_panel; if ((!isset($personal_bookmarks) || sizeof($personal_bookmarks) == 0) && (!isset($official_bookmarks) || sizeof($official_bookmarks) == 0) && !isset($show_panel)) { $hiden_side = true; ?>
         show_panel = false;
 <?php } else { $hiden_side = false; ?>
         show_panel = true;
-<?php }
-if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_bookmarks) == 0) && (isset($official_bookmarks) && sizeof($official_bookmarks) != 0))) {
-    ?>
+<?php } if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_bookmarks) == 0) && (isset($official_bookmarks) && sizeof($official_bookmarks) != 0))) { ?>
         current_tab = 'toc';
 <?php } ?>
     $(document).ready(function () {
@@ -62,8 +58,8 @@ if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_b
             setActivePane('.bookmarks_button');
             $('#side_pane').scrollTo('#asset_bookmarks');
         }else{
-          setActivePane('.quiz_button');
-          $('#side_pane').scrollTo('#asset_quiz');
+            setActivePane('.quiz_button');
+            $('#side_pane').scrollTo('#asset_quiz');
 
         }
         if (show_panel) {
@@ -76,14 +72,12 @@ if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_b
     ezplayer_mode = '<?php echo $_SESSION['ezplayer_mode']; ?>';
     is_lecturer = false;
     is_logged = false;
-<?php if (acl_user_is_logged()) { ?>
+    <?php if (acl_user_is_logged()) { ?>
         is_logged = true;
-    <?php if (acl_has_album_moderation($album)) { ?>;
+        <?php if (acl_has_album_moderation($album)) { ?>;
             is_lecturer = true;
-    <?php
-    }
-}
-?>
+        <?php }
+    } ?>
 </script>
 
 <div id="search">
@@ -206,139 +200,143 @@ if (!acl_user_is_logged() || ((!isset($personal_bookmarks) || sizeof($personal_b
                     <div class="side_pane_down"><a href="javascript:bookmarks_scroll('up','.bookmark_scroll');"></a></div>
                 </div>
             <?php } ?>
-            <div class="side_pane_content" id="asset_toc">
-                <div class="side_pane_up"><a href="javascript:bookmarks_scroll('down','.toc_scroll');"></a></div>
-                <script>var official_bookmarks_time_code = new Array();</script>
-                <?php if (!isset($official_bookmarks) || $official_bookmarks == false || sizeof($official_bookmarks) == 0) { ?>
-                    <div class="no_content">Il n y a pas de signet officiel pour ce cours.</div>
-                <?php } else { ?>
-                    <ul class="toc_scroll">
-                        <?php foreach ($official_bookmarks as $index => $bookmark) { ?>
-                            <script>official_bookmarks_time_code.push(<?php echo $bookmark['timecode']; ?>);</script>
-                            <li id="toc_<?php echo $index; ?>" class="orange level_<?php echo $bookmark['level']; ?>">
-                                <form action="index.php" method="post" id="submit_toc_form_<?php echo $index; ?>" onsubmit="return false">
-                                <?php if ($bookmark['asset'] == $asset) { ?>
-                                    <a class="item orange" href="javascript:player_video_seek(<?php echo $bookmark['timecode'] ?>, '<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>');">
-                                <?php } else { ?>
-                                    <a class="item orange" href="javascript:show_asset_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', '<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>')">
+                <div class="side_pane_content" id="asset_toc">
+                    <div class="side_pane_up"><a href="javascript:bookmarks_scroll('down','.toc_scroll');"></a></div>
+                    <script>var official_bookmarks_time_code = new Array();</script>
+                    <?php if (!isset($official_bookmarks) || $official_bookmarks == false || sizeof($official_bookmarks) == 0) { ?>
+                        <div class="no_content">Il n y a pas de signet officiel pour ce cours.</div>
+                    <?php } else { ?>
+                        <ul class="toc_scroll">
+                            <?php foreach ($official_bookmarks as $index => $bookmark) { ?>
+                                <script>official_bookmarks_time_code.push(<?php echo $bookmark['timecode']; ?>);</script>
+                                <li id="toc_<?php echo $index; ?>" class="orange level_<?php echo $bookmark['level']; ?>">
+                                    <form action="index.php" method="post" id="submit_toc_form_<?php echo $index; ?>" onsubmit="return false">
+                                    <?php if ($bookmark['asset'] == $asset) { ?>
+                                        <a class="item orange" href="javascript:player_video_seek(<?php echo $bookmark['timecode'] ?>, '<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>');">
+                                    <?php } else { ?>
+                                        <a class="item orange" href="javascript:show_asset_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', '<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>')">
+                                    <?php } ?>
+                                            <span class="timecode orange">(<?php print_time($bookmark['timecode']); ?>) </span>
+                                            <span id="toc<?php echo $index; ?>"><b><?php print_bookmark_title($bookmark['title']); ?></b></span>
+                                            <input name="title" id="toc_title_<?php echo $index; ?>" type="text" maxlength="70"/>
+                                        </a>
+                                        <span class="more"><a class="more-button small orange" onclick="bookmark_more_toggle('<?php echo $index; ?>', 'toc', $(this));"></a></span>
+                                        <div class="bookmark_detail" id="toc_detail_<?php echo $index; ?>">
+                                            <div class="bookmark_info" id="toc_info_<?php echo $index; ?>">
+                                                <div class="orange-title">Description :</div>
+                                                <?php print_info($bookmark['description']); ?>
+                                                <div class="orange-title" style="margin-top: 6px;">Mots clés : </div>
+                                                <?php print_search($bookmark['keywords']); ?>
+                                            </div>
+
+                                            <div class="edit_bookmark_form" id="edit_toc_<?php echo $index; ?>">
+                                                <input type="hidden" name="album" id="toc_album_<?php echo $index; ?>" value="<?php echo $bookmark['album']; ?>"/>
+                                                <input type="hidden" name="asset" id="toc_asset_<?php echo $index; ?>" value="<?php echo $bookmark['asset']; ?>"/>
+                                                <input type="hidden" name="source" id="toc_source_<?php echo $index; ?>" value="official"/><br/>
+                                                <input type="hidden" name="timecode" id="toc_timecode_<?php echo $index; ?>" value="<?php echo $bookmark['timecode']; ?>"/>
+                                                <input type="hidden" name="type" id="toc_type_<?php echo $index; ?>" value="<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>"/>
+                                                <div class="orange-title">Description :</div>
+                                                <textarea name="description" id="toc_description_<?php echo $index; ?>" rows="4" ></textarea>
+                                                <div class="orange-title" style="margin-top: 6px;">Mots clés : </div>
+                                                <input name="keywords" id="toc_keywords_<?php echo $index; ?>" type="text"/>
+                                                <div class="orange-title" style="margin-top: 6px;">Niveau : </div>
+                                                <input type="number" name="level" id="toc_level_<?php echo $index; ?>" min="1" max="3" value="1"/>
+                                                <!-- Submit button -->
+                                                <br/>
+                                                <div class="editButtons">
+                                                    <a class="button" href="javascript: bookmark_edit_form_toggle('<?php echo $index; ?>', 'toc');">Annuler</a>
+                                                    <a class="button orange" href="javascript: if(bookmark_edit_form_check('<?php echo $index; ?>', 'toc')) bookmark_edit_form_submit('<?php echo $index; ?>', 'toc');">Soumettre</a>
+                                                </div>
+                                                <br />
+                                            </div>
+                                        <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
+                                            <div class="bookmark_options">
+                                                <a class="delete-button" title="Supprimer le signet" href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'official', 'details', 'remove')"></a>
+                                                <a class="edit-button orange" title="Editer le signet" href="javascript:bookmark_edit('<?php echo $index; ?>', 'toc', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['title'])) ?>', '<?php echo htmlspecialchars(str_replace(array('"', "'"), array("", "\'"), $bookmark['description'])) ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['keywords'])) ?>', '<?php echo $bookmark['level'] ?>', '<?php echo $bookmark['timecode'] ?>');"></a>
+                                            </div>
+                                        <?php } ?>
+                                        </div>
+                                    </form>
+                                </li>
+                                <?php if (isset($timecode) && $timecode == $bookmark['timecode']) { ?>
+                                    <script>
+                                        bookmark_more_toggle('<?php echo $index; ?>', 'toc', $("#toc_<?php echo $index; ?> .more a"));
+                                    </script>
                                 <?php } ?>
-                                        <span class="timecode orange">(<?php print_time($bookmark['timecode']); ?>) </span>
-                                        <span id="toc<?php echo $index; ?>"><b><?php print_bookmark_title($bookmark['title']); ?></b></span>
-                                        <input name="title" id="toc_title_<?php echo $index; ?>" type="text" maxlength="70"/>
+                            <?php } ?>
+                        </ul>
+                    <?php } ?>
+                    <div class="side_pane_down"><a href="javascript:bookmarks_scroll('up','.toc_scroll');"></a></div>
+                </div>
+
+                <div class="side_pane_content" id="asset_quiz">
+                    <script>var quiz_time_code = new Array();</script>
+                    <?php if (!isset($quiz) || $quiz == false || sizeof($quiz) == 0) {  ?>
+                        <div class="no_content">Il n y a aucun quiz à afficher.</div>
+                    <?php } else { ?>
+                        <ul class="quiz_scroll">
+                            <li class="blue level_1">
+                                <form action="index.php" method="post" id="submit_quiz_form_<?php echo $index; ?>" onsubmit="return false">
+                                    <a class="item blue" style="pointer-events: none; cursor: default;">
+                                        <span id="quiz_title"><b><i>Title :</i> <?php echo $quiz[0]["title"]; ?> </b></span>
                                     </a>
-                                    <span class="more"><a class="more-button small orange" onclick="bookmark_more_toggle('<?php echo $index; ?>', 'toc', $(this));"></a></span>
-                                    <div class="bookmark_detail" id="toc_detail_<?php echo $index; ?>">
-                                        <div class="bookmark_info" id="toc_info_<?php echo $index; ?>">
+                                    <span class="more"><a class="more-button small orange" onclick="quiz_more_toggle($(this));"></a></span>
+
+                                    <div class="quiz_detail" id="quiz_detail">
+                                        <div class="quiz_info" id="quiz_info">
                                             <div class="orange-title">Description :</div>
-                                            <?php print_info($bookmark['description']); ?>
-                                            <div class="orange-title" style="margin-top: 6px;">Mots clés : </div>
-                                            <?php print_search($bookmark['keywords']); ?>
+                                            <?php print_info($quiz[0]['description']); ?>
                                         </div>
 
-                                        <div class="edit_bookmark_form" id="edit_toc_<?php echo $index; ?>">
-                                            <input type="hidden" name="album" id="toc_album_<?php echo $index; ?>" value="<?php echo $bookmark['album']; ?>"/>
-                                            <input type="hidden" name="asset" id="toc_asset_<?php echo $index; ?>" value="<?php echo $bookmark['asset']; ?>"/>
-                                            <input type="hidden" name="source" id="toc_source_<?php echo $index; ?>" value="official"/><br/>
-                                            <input type="hidden" name="timecode" id="toc_timecode_<?php echo $index; ?>" value="<?php echo $bookmark['timecode']; ?>"/>
-                                            <input type="hidden" name="type" id="toc_type_<?php echo $index; ?>" value="<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>"/>
+                                        <div class="edit_quiz_form" id="edit_quiz">
+                                            <input type="hidden" name="album" id="quiz_album" value="<?php echo $quiz[0]['album']; ?>"/>
+                                            <input type="hidden" name="asset" id="quiz_asset" value="<?php echo $quiz[0]['asset']; ?>"/>
+                                            <input type="hidden" name="courseId" id="quiz_course_id" value="<?php echo $quiz[0]['quizId']; ?>"/>
+                                            <input type="hidden" name="quizId" id="quiz_id" value="<?php echo $quiz[0]['timecode']; ?>"/>
                                             <div class="orange-title">Description :</div>
-                                            <textarea name="description" id="toc_description_<?php echo $index; ?>" rows="4" ></textarea>
-                                            <div class="orange-title" style="margin-top: 6px;">Mots clés : </div>
-                                            <input name="keywords" id="toc_keywords_<?php echo $index; ?>" type="text"/>
-                                            <div class="orange-title" style="margin-top: 6px;">Niveau : </div>
-                                            <input type="number" name="level" id="toc_level_<?php echo $index; ?>" min="1" max="3" value="1"/>
+                                            <textarea name="description" id="quiz_description" rows="4" ></textarea>
+                                            <?php foreach ($quiz as $index => $question) {  ?>
+                                                <div class="orange-title">Question <?php echo ($index+1) ?> : </div>
+                                                <input type="number" name="timecode_<?php echo $index+1; ?>" id="quiz_timecode_<?php echo $index+1; ?>" value="<?php echo $question['timecode']; ?>"/>
+                                            <?php } ?>
                                             <!-- Submit button -->
                                             <br/>
                                             <div class="editButtons">
-                                                <a class="button" href="javascript: bookmark_edit_form_toggle('<?php echo $index; ?>', 'toc');">Annuler</a>
-                                                <a class="button orange" href="javascript: if(bookmark_edit_form_check('<?php echo $index; ?>', 'toc')) bookmark_edit_form_submit('<?php echo $index; ?>', 'toc');">Soumettre</a>
+                                                <a class="button" href="">test</a>
                                             </div>
-                                            <br />
+                                            <br/>
                                         </div>
                                     <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
                                         <div class="bookmark_options">
-                                            <a class="delete-button" title="Supprimer le signet" href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'official', 'details', 'remove')"></a>
-                                            <a class="edit-button orange" title="Editer le signet" href="javascript:bookmark_edit('<?php echo $index; ?>', 'toc', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['title'])) ?>', '<?php echo htmlspecialchars(str_replace(array('"', "'"), array("", "\'"), $bookmark['description'])) ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['keywords'])) ?>', '<?php echo $bookmark['level'] ?>', '<?php echo $bookmark['timecode'] ?>');"></a>
+                                            <a class="delete-button" title="Supprimer le quiz" href=""></a>
                                         </div>
                                     <?php } ?>
                                     </div>
                                 </form>
                             </li>
-                        <?php if (isset($timecode) && $timecode == $bookmark['timecode']) { ?>
-                            <script>bookmark_more_toggle('<?php echo $index; ?>', 'toc', $("#toc_<?php echo $index; ?> .more a"));</script>
-                        <?php }} ?>
-                    </ul>
-                    <div class="side_pane_down"><a href="javascript:bookmarks_scroll('up','.toc_scroll');"></a></div>
-            </div>
-
-            <div class="side_pane_content" id="asset_quiz">
-                <script>var quiz_time_code = new Array();</script>
-            <?php if (!isset($quiz) || $quiz == false || sizeof($quiz) == 0) {  ?>
-                <div class="no_content">Il n y a aucun quiz à afficher.</div>
-            <?php } else { ?>
-                <ul class="quiz_scroll">
-                    <li class="blue level_1"><span id="quiz_title">
-                      <a class="item blue" style="pointer-events: none; cursor: default;">
-                          <span id="quiz_title"><b><i>Title :</i> <?php echo $quiz[0]["title"]; ?></b></span>
-                      </a>
-                    </li>
-                    <?php foreach ($quiz as $index => $question) {  ?>
-                    <script>quiz_array.push({courseId:<?php echo $question['courseId']; ?>,quizId:<?php echo $question['quizId']; ?>,questionId:<?php echo $question['questionId']; ?>,timecode:<?php echo $question['timecode']; ?>,feedback:<?php echo $question['feedback']; ?>,done:false});</script>
-                    <script>quiz_time_code.push(<?php echo $question['timecode']; ?>);</script>
-                    <li id="question_<?php echo $index; ?>" class="blue level_3">
-                      <form action="index.php" method="post" id="submit_quiz_form_<?php echo $index; ?>" onsubmit="return false">
-                        <a class="item blue" href="javascript:player_video_seek(<?php echo $question['timecode'] ?>, '');">
-                            <span class="timecode">(<?php print_time($question['timecode']); ?>) </span>
-                            <span id="question<?php echo $index; ?>"><b><?php $indexQ = $index+1; echo "Question $indexQ"; ?></b></span>
-                            <input name="title" id="question_title_<?php echo $index; ?>" type="text" maxlength="70"/>
-                        </a>
-                        <!--
-                        <span class="more"><a class="more-button small orange" onclick="bookmark_more_toggle('<?php echo $index; ?>', 'toc', $(this));"></a></span>
-                        <div class="bookmark_detail" id="toc_detail_<?php echo $index; ?>">
-                            <div class="bookmark_info" id="toc_info_<?php echo $index; ?>">
-                                <div class="orange-title">Description :</div>
-                                <?php print_info($bookmark['description']); ?>
-                                <div class="orange-title" style="margin-top: 6px;">Mots clés : </div>
-                                <?php print_search($bookmark['keywords']); ?>
-                            </div>
-
-                            <div class="edit_bookmark_form" id="edit_toc_<?php echo $index; ?>">
-                                <input type="hidden" name="album" id="toc_album_<?php echo $index; ?>" value="<?php echo $bookmark['album']; ?>"/>
-                                <input type="hidden" name="asset" id="toc_asset_<?php echo $index; ?>" value="<?php echo $bookmark['asset']; ?>"/>
-                                <input type="hidden" name="source" id="toc_source_<?php echo $index; ?>" value="official"/><br/>
-                                <input type="hidden" name="timecode" id="toc_timecode_<?php echo $index; ?>" value="<?php echo $bookmark['timecode']; ?>"/>
-                                <input type="hidden" name="type" id="toc_type_<?php echo $index; ?>" value="<?php echo (isset($bookmark['type'])) ? $bookmark['type'] : ''; ?>"/>
-                                <div class="orange-title">Description :</div>
-                                <textarea name="description" id="toc_description_<?php echo $index; ?>" rows="4" ></textarea>
-                                <div class="orange-title" style="margin-top: 6px;">Mots clés : </div>
-                                <input name="keywords" id="toc_keywords_<?php echo $index; ?>" type="text"/>
-                                <div class="orange-title" style="margin-top: 6px;">Niveau : </div>
-                                <input type="number" name="level" id="toc_level_<?php echo $index; ?>" min="1" max="3" value="1"/>
-                                <!-- Submit button -->
-                                <br/>
-                                <div class="editButtons">
-                                    <a class="button" href="javascript: bookmark_edit_form_toggle('<?php echo $index; ?>', 'toc');">Annuler</a>
-                                    <a class="button orange" href="javascript: if(bookmark_edit_form_check('<?php echo $index; ?>', 'toc')) bookmark_edit_form_submit('<?php echo $index; ?>', 'toc');">Soumettre</a>
-                                </div>
-                                <br />
-                            </div>
-                        <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
-                            <div class="bookmark_options">
-                                <a class="delete-button" title="Supprimer le signet" href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'official', 'details', 'remove')"></a>
-                                <a class="edit-button orange" title="Editer le signet" href="javascript:bookmark_edit('<?php echo $index; ?>', 'toc', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['title'])) ?>', '<?php echo htmlspecialchars(str_replace(array('"', "'"), array("", "\'"), $bookmark['description'])) ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['keywords'])) ?>', '<?php echo $bookmark['level'] ?>', '<?php echo $bookmark['timecode'] ?>');"></a>
-                            </div>
-                        <?php } ?>
-                        </div> -->
-                    </li>
+                            <?php if (isset($timecode) && $timecode == $bookmark['timecode']) { ?>
+                                <script>
+                                    bookmark_more_toggle('<?php echo $index; ?>', 'toc', $("#toc_<?php echo $index; ?> .more a"));
+                                </script>
+                            <?php } ?>
+                            <?php foreach ($quiz as $index => $question) {  ?>
+                                <script>quiz_array.push({courseId:<?php echo $question['courseId']; ?>,quizId:<?php echo $question['quizId']; ?>,questionId:<?php echo $question['questionId']; ?>,timecode:<?php echo $question['timecode']; ?>,feedback:<?php echo $question['feedback']; ?>,done:false});</script>
+                                <script>quiz_time_code.push(<?php echo $question['timecode']; ?>);</script>
+                                <li id="question_<?php echo $index; ?>" class="blue level_3">
+                                    <a class="item blue" href="javascript:player_video_seek(<?php echo $question['timecode']; ?>, '');">
+                                        <span class="timecode">(<?php print_time($question['timecode']); ?>) </span>
+                                        <span id="question<?php echo $index; ?>"><b><?php $indexQ = $index+1; echo "Question ".$indexQ; ?></b></span>
+                                        <input name="title" id="question_title_<?php echo $index; ?>" type="text" maxlength="70"/>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                        </ul>
                     <?php } ?>
-            <?php } ?>
-                </ul>
-            </div>
+                </div>
+                <!-- end quiz tab -->
         </div>
-        <?php } ?>
     </div>
 </div>
-
 <script>
     $(window).trigger('resize');
 </script>
