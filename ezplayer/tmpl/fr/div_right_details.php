@@ -275,45 +275,48 @@ include_once 'lib_print.php';
                         <div class="no_content">Il n y a aucun quiz à afficher.</div>
                     <?php } else { ?>
                         <ul class="quiz_scroll">
-                            <li class="blue level_1">
-                                <form action="index.php" method="post" id="submit_quiz_form_<?php echo $index; ?>" onsubmit="return false">
+                            <form action="index.php" method="post" id="submit_quiz_form_<?php echo $index; ?>" onsubmit="return false">
+                                <li class="blue level_1">
                                     <a class="item blue" style="pointer-events: none; cursor: default;">
-                                        <span id="quiz_title"><b><i>Title :</i> <?php echo $quiz[0]["title"]; ?> </b></span>
+                                        <span id="quiz_title"><b><i>Title :</i></b> <?php echo $quiz[0]["title"]; ?></span>
                                     </a>
-                                    <span class="more"><a class="more-button small orange" onclick="quiz_more_toggle($(this));"></a></span>
-
+                                    <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
+                                        <span class="more"><a class="more-button small orange" onclick="quiz_more_toggle($(this));"></a></span>
+                                    <?php } ?>
+                                <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
                                     <div class="quiz_detail" id="quiz_detail">
-                                        <div class="quiz_info" id="quiz_info">
-                                            <div class="orange-title">Description :</div>
-                                            <?php print_info($quiz[0]['description']); ?>
-                                        </div>
-
                                         <div class="edit_quiz_form" id="edit_quiz">
                                             <input type="hidden" name="album" id="quiz_album" value="<?php echo $quiz[0]['album']; ?>"/>
                                             <input type="hidden" name="asset" id="quiz_asset" value="<?php echo $quiz[0]['asset']; ?>"/>
                                             <input type="hidden" name="courseId" id="quiz_course_id" value="<?php echo $quiz[0]['quizId']; ?>"/>
                                             <input type="hidden" name="quizId" id="quiz_id" value="<?php echo $quiz[0]['timecode']; ?>"/>
                                             <div class="orange-title">Description :</div>
-                                            <textarea name="description" id="quiz_description" rows="4" ></textarea>
+                                            <textarea name="description" id="quiz_description" rows="4" ><?php print_info($quiz[0]['description']); ?></textarea>
                                             <?php foreach ($quiz as $index => $question) {  ?>
-                                                <div class="orange-title">Question <?php echo ($index+1) ?> : </div>
-                                                <input type="number" name="timecode_<?php echo $index+1; ?>" id="quiz_timecode_<?php echo $index+1; ?>" value="<?php echo $question['timecode']; ?>"/>
+                                                <div class="orange-title">Question <?php echo ($index+1); ?> : </div>
+                                                <!--<input type="number" name="timecode_<?php echo $index+1; ?>" id="quiz_timecode_<?php echo $index+1; ?>">-->
+                                                <input id="quiz_timecode_Q<?php echo $index+1; ?>" name="timecode_<?php echo $index+1; ?>" type="number" value="<?php echo $question['timecode']; ?>" required/>
                                             <?php } ?>
-                                            <!-- Submit button -->
                                             <br/>
+
+                                            <?php // submit button ?>
+
                                             <div class="editButtons">
-                                                <a class="button" href="">test</a>
+                                                <a class="button" href="javascript:alert('ok');">Edit</a>
                                             </div>
                                             <br/>
                                         </div>
-                                    <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
+
                                         <div class="bookmark_options">
                                             <a class="delete-button" title="Supprimer le quiz" href=""></a>
                                         </div>
-                                    <?php } ?>
                                     </div>
-                                </form>
-                            </li>
+                                <?php } ?>
+                                </li>
+                                <li class="blue level_1">
+                                    <span id="quiz_description"><b><i>Description :</i></b> <?php print_info($quiz[0]['description']); ?></span>
+                                </li>
+                            </form>
                             <?php if (isset($timecode) && $timecode == $bookmark['timecode']) { ?>
                                 <script>
                                     bookmark_more_toggle('<?php echo $index; ?>', 'toc', $("#toc_<?php echo $index; ?> .more a"));
