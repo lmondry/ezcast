@@ -276,25 +276,33 @@ include_once 'lib_print.php';
                     <?php } else { ?>
                         <ul class="quiz_scroll">
                             <form action="index.php" method="post" id="submit_quiz_form_<?php echo $index; ?>" onsubmit="return false">
-                                <li class="blue level_1">
-                                    <a class="item blue" style="pointer-events: none; cursor: default;">
+                                <li class="rose level_1">
+                                    <a class="item rose" style="pointer-events: none; cursor: default;">
                                         <span id="quiz_title"><b><i>Title :</i></b> <?php echo $quiz[0]["title"]; ?></span>
                                     </a>
                                     <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
-                                        <span class="more"><a class="more-button small orange" onclick="quiz_more_toggle($(this));"></a></span>
+                                        <span class="more"><a class="more-button small rose" onclick="quiz_more_toggle($(this));"></a></span>
                                     <?php } ?>
                                 <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
                                     <div class="quiz_detail" id="quiz_detail">
+                                        <div class="quiz_info" id="quiz_info">
+                                            <div class="orange-title">Description :</div>
+                                            <?php print_info($bookmark['description']); ?>
+                                            <div class="orange-title" style="margin-top: 6px;">Mots clés : </div>
+                                            <?php print_search($bookmark['keywords']); ?>
+                                        </div>
+
                                         <div class="edit_quiz_form" id="edit_quiz">
                                             <input type="hidden" name="album" id="quiz_album" value="<?php echo $quiz[0]['album']; ?>"/>
                                             <input type="hidden" name="asset" id="quiz_asset" value="<?php echo $quiz[0]['asset']; ?>"/>
                                             <input type="hidden" name="courseId" id="quiz_course_id" value="<?php echo $quiz[0]['quizId']; ?>"/>
                                             <input type="hidden" name="quizId" id="quiz_id" value="<?php echo $quiz[0]['timecode']; ?>"/>
-                                            <div class="orange-title">Description :</div>
+                                            <div class="rose-title">Title :</div>
+                                            <input name="title" id="quiz_title" type="text" maxlength="70" value="<?php echo $quiz[0]["title"]; ?>"/>
+                                            <div class="rose-title">Description :</div>
                                             <textarea name="description" id="quiz_description" rows="4" ><?php print_info($quiz[0]['description']); ?></textarea>
                                             <?php foreach ($quiz as $index => $question) {  ?>
-                                                <div class="orange-title">Question <?php echo ($index+1); ?> : </div>
-                                                <!--<input type="number" name="timecode_<?php echo $index+1; ?>" id="quiz_timecode_<?php echo $index+1; ?>">-->
+                                                <div class="rose-title">Question <?php echo ($index+1); ?> : </div>
                                                 <input id="quiz_timecode_Q<?php echo $index+1; ?>" name="timecode_<?php echo $index+1; ?>" type="number" value="<?php echo $question['timecode']; ?>" required/>
                                             <?php } ?>
                                             <br/>
@@ -302,19 +310,21 @@ include_once 'lib_print.php';
                                             <?php // submit button ?>
 
                                             <div class="editButtons">
-                                                <a class="button" href="javascript:alert('ok');">Edit</a>
+                                                <a class="button" href="javascript:console.log('edit');">Edit</a>
                                             </div>
                                             <br/>
                                         </div>
 
                                         <div class="bookmark_options">
-                                            <a class="delete-button" title="Supprimer le quiz" href=""></a>
+                                            <a class="delete-button" title="Supprimer le quiz" href="javascript:console.log('delete');"></a>
                                         </div>
                                     </div>
                                 <?php } ?>
                                 </li>
-                                <li class="blue level_1">
-                                    <span id="quiz_description"><b><i>Description :</i></b> <?php print_info($quiz[0]['description']); ?></span>
+                                <li class="rose level_1">
+                                    <a class="item rose" style="pointer-events: none; cursor: default;">
+                                        <span class="item rose" id="quiz_description"><b><i>Description :</i></b> <?php print_info($quiz[0]['description']); ?></span>
+                                    </a>
                                 </li>
                             </form>
                             <?php if (isset($timecode) && $timecode == $bookmark['timecode']) { ?>
@@ -325,9 +335,9 @@ include_once 'lib_print.php';
                             <?php foreach ($quiz as $index => $question) {  ?>
                                 <script>quiz_array.push({courseId:<?php echo $question['courseId']; ?>,quizId:<?php echo $question['quizId']; ?>,questionId:<?php echo $question['questionId']; ?>,timecode:<?php echo $question['timecode']; ?>,feedback:<?php echo $question['feedback']; ?>,done:false});</script>
                                 <script>quiz_time_code.push(<?php echo $question['timecode']; ?>);</script>
-                                <li id="question_<?php echo $index; ?>" class="blue level_3">
-                                    <a class="item blue" href="javascript:player_video_seek(<?php echo $question['timecode']; ?>, '');">
-                                        <span class="timecode">(<?php print_time($question['timecode']); ?>) </span>
+                                <li id="question_<?php echo $index; ?>" class="rose level_3">
+                                    <a class="item rose" href="javascript:player_video_seek(<?php echo $question['timecode']; ?>, '');">
+                                        <span class="timecode rose">(<?php print_time($question['timecode']); ?>) </span>
                                         <span id="question<?php echo $index; ?>"><b><?php $indexQ = $index+1; echo "Question ".$indexQ; ?></b></span>
                                         <input name="title" id="question_title_<?php echo $index; ?>" type="text" maxlength="70"/>
                                     </a>
