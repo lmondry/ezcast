@@ -286,6 +286,10 @@ function load_page() {
             requireController('quiz_add.php');
             break;
 
+        case 'quiz_delete':
+            requireController('quiz_delete.php');
+            break;
+
         // ============== B O O K M A R K S =============== //
         // creates a new bookmark
         case 'bookmark_add':
@@ -790,6 +794,10 @@ function bookmarks_list_update($display = true, &$official_bookmarks = array(), 
         $official_bookmarks = array_reverse($official_bookmarks);
     }
 
+    if (isset($asset) && $asset != '' && ezmam_asset_exists($album, $asset)) {
+        $quiz = quiz_question_list_get($album,$asset);
+    }
+
     if ($display) {
         if ($_SESSION['ezplayer_mode'] == 'view_album_assets') {
             include_once template_getpath('div_right_assets.php');
@@ -811,43 +819,27 @@ function bookmarks_list_update($display = true, &$official_bookmarks = array(), 
  * @return boolean
  */
 function quiz_list_update($display = true, &$quiz = array()) {
-    //ChromePhp::log("inside 'quiz_list_update'");
+    ChromePhp::log("inside 'quiz_list_update'");
+
     global $repository_path;
-    global $default_official_bm_order;
 
     ezmam_repository_path($repository_path);
     $album = $_SESSION['album'];
     $asset = $_SESSION['asset'];
+
     if (!isset($album) || $album == '')
         return false;
     if (!ezmam_album_exists($album))
         return false;
 
-
-
     if (isset($asset) && $asset != '' && ezmam_asset_exists($album, $asset)) {
-        $quiz = quiz_asset_question_list_get($album, $asset);
-    } else {
-        $quiz = quiz_album_quiz_list_get($album);
+        $quiz = quiz_question_list_get($album,$asset);
     }
 
     //ChromePhp::log("back to 'quiz_list_update'");
-    //
-
-    // sorts the bookmarks following user's prefs
-    /*$order = acl_value_get("official_bm_order");
-    if (isset($order) && $order != '' && $order != $default_official_bm_order) {
-        $quiz = array_reverse($quiz);
-    }*/
 
     if ($display) {
-        if ($_SESSION['ezplayer_mode'] == 'view_album_assets') {
-            include_once template_getpath('div_right_assets.php');
-        } else {
-            ChromePhp::log("should be here");
-            include_once template_getpath('div_right_details.php');
-            ChromePhp::log("should be here");
-        }
+        include_once template_getpath('div_right_details.php');
     }
 
     ChromePhp::log($quiz);

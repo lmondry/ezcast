@@ -42,6 +42,12 @@ function print_info($info, $suffix = '', $htmlspecialchars = true) {
         echo 'Non disponible';
 }
 
+function print_feedback($feedback) {
+    if ($feedback === "1")
+        echo 'Vrai';
+    else
+        echo 'Faux';
+}
 
 function print_search($keywords){
     

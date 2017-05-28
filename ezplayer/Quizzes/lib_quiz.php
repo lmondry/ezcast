@@ -22,7 +22,6 @@ function quiz_asset_add($album, $asset, $quiz) {
 
     if (!ezmam_asset_exists($album, $asset))
         return false;
-    // TODO : make verifications
 
     // 1) set the repository path
     $quiz_path = ezmam_repository_path();
@@ -40,52 +39,6 @@ function quiz_asset_add($album, $asset, $quiz) {
     //toc_asset_bookmark_delete($album, $asset, $timecode);
     // TODO
 
-    /*
-    // Get the bookmarks list
-    $bookmarks_list = toc_album_bookmarks_list_get($album);
-    $count = count($bookmarks_list);
-    $index = 0;
-
-    if ($count > 0) {
-        $index = -1;
-
-        // loop while the asset is older than the reference asset
-        do {
-            ++$index;
-            $asset_ref = $bookmarks_list[$index]['asset'];
-            $timecode_ref = $bookmarks_list[$index]['timecode'];
-        } while($index < ($count-1) && $asset > $asset_ref);
-
-        // if the asset already contains bookmarks, loop while
-        // timecode is bigger than reference timecode
-        while ($index < ($count-1) && $asset == $asset_ref && $timecode > $timecode_ref) {
-            ++$index;
-            $timecode_ref = $bookmarks_list[$index]['timecode'];
-            $asset_ref = $bookmarks_list[$index]['asset'];
-        }
-
-        if ($index < 0) // no bookmarks yet
-            $index = 0;
-        if ($index > $count) // bookmark is in last position in the table of contents
-            --$index;
-    }
-
-        // extract keywords from the description
-    $keywords_array = get_keywords($description);
-    // and save them as keywords
-    foreach ($keywords_array as $keyword){
-        if (strlen($keywords) > 0) $keywords .= ', ';
-        $keywords .= $keyword;
-    }
-
-    // surround every url by '*' for url recognition in EZplayer
-    $description = surround_url($description);
-    // add a bookmark at the specified index in the albums list
-    array_splice($bookmarks_list, $index, 0, array(null));*/
-
-
-    //ChromePhp::log($quiz);
-    //ChromePhp::log($quiz_path);
 
     return assoc_array2xml_file($quiz, $quiz_path . "/_quiz.xml", "quiz", "question");
 }
@@ -95,7 +48,7 @@ function quiz_asset_add($album, $asset, $quiz) {
  * @param type $album the name of the album
  * @return the list of bookmarks for a given album; false if an error occurs
  */
-function quiz_album_quiz_list_get($album,$asset) {
+function quiz_question_list_get($album,$asset) {
     //ChromePhp::log("inside quiz_album_quiz_list_get");
     // Sanity check
 
