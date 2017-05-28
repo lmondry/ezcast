@@ -270,8 +270,12 @@ include_once 'lib_print.php';
                 </div>
 
                 <div class="side_pane_content" id="asset_quiz">
-                    <script>var quiz_time_code = new Array();</script>
-                    <?php if (!isset($quiz) || $quiz == false || sizeof($quiz) == 0) {  ?>
+                    <script>
+                        var quiz_time_code = new Array();
+                        console.log("$quiz variable");
+                        console.log(<?php echo json_encode($quiz); ?>);
+                    </script>
+                    <?php if (!isset($quiz) || $quiz == false || sizeof($quiz) == 0 || $quiz === "\n") {  ?>
                         <div class="no_content">Il n y a aucun quiz à afficher.</div>
                     <?php } else { ?>
                         <ul class="quiz_scroll">
@@ -323,9 +327,7 @@ include_once 'lib_print.php';
 
                                         <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
                                             <div class="quiz_options">
-                                                <!--<a class="delete-button" title="Supprimer le quiz" href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'official', 'details', 'remove')"></a>-->
-                                                <a class="delete-button" title="Supprimer le quiz" href="javascript:console.log('delete');"></a>
-                                                <!--<a class="edit-button rose" title="Editer le quiz" href="javascript:bookmark_edit('<?php echo $index; ?>', 'toc', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['title'])) ?>', '<?php echo htmlspecialchars(str_replace(array('"', "'"), array("", "\'"), $bookmark['description'])) ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['keywords'])) ?>', '<?php echo $bookmark['level'] ?>', '<?php echo $bookmark['timecode'] ?>');"></a>-->
+                                                <a class="delete-button" title="Supprimer le quiz" href="javascript:popup_quiz('<?php echo $quiz[0]['album']; ?>', '<?php echo $quiz[0]['asset']; ?>', '<?php echo $quiz[0]['title']; ?>');"></a>
                                                 <a class="edit-button rose" title="Editer le quiz" href="javascript:quiz_edit('<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['title'])); ?>','<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['description'])); ?>', quiz_array);"></a>
                                             </div>
                                         <?php } ?>

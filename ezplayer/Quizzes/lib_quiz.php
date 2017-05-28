@@ -78,6 +78,8 @@ function quiz_question_list_get($album,$asset) {
     return $assoc_album_quiz;
 }
 
+
+// TODO : not userful ?
 /**
  * Returns the list of (official) bookmarks for a specific asset in a given album
  * @param type $album the name of the album
@@ -108,6 +110,35 @@ function quiz_asset_question_list_get($album, $asset) {
     }
     return $assoc_asset_quiz;
 }
+
+
+/**
+ * Removes a specific bookmark from the bookmarks file (table of contents).
+ * If it is the last bookmark contained in the file, the file is deleted.
+ * @param type $album the album of the bookmark
+ * @param type $asset the asset of the bookmark
+ * @param type $timecode the timecode of the bookmark
+ * @return an array of bookmarks if the bookmark has been deleted; false otherwise
+ */
+function quiz_delete($album, $asset, $title) {
+    // Sanity check
+    if (!ezmam_album_exists($album))
+        return false;
+
+
+    // 1) set the repository path
+    $quiz_path = ezmam_repository_path();
+    if ($quiz_path === false) {
+        return false;
+    }
+
+    // set user's file path
+    $quiz_path = $quiz_path . "/" . $album . "/" . $asset;
+
+    return assoc_array2xml_file("", $quiz_path . "/_quiz.xml", "quiz", "question");
+
+}
+
 
 // ---------------
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Removes an asset bookmark from the user's bookmarks list
+ * Return a specific bookmark to display in a popup (delete_bookmark / copy_bookmark)
  * @global type $input
  * @global type $repository_path
  * @global type $user_files_path
@@ -12,13 +12,9 @@ function index($param = array()) {
 
     $quiz_album = $input['album'];
     $quiz_asset = $input['asset'];
+    $quiz_title = $input['title'];
 
-    // init paths
     ezmam_repository_path($repository_path);
 
-    quiz_delete($quiz_album, $quiz_asset);
-
-    $quiz = array();
-
-    bookmarks_list_update();
+    include_once template_getpath('popup_quiz_delete.php');
 }

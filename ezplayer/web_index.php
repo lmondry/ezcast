@@ -424,6 +424,11 @@ function load_page() {
             requireController('bookmarks_popup.php');
             break;
 
+        // renders a modal window related to a specific bookmark
+        case 'quiz_popup':
+            requireController('quiz_popup.php');
+            break;
+
         // renders a modal window for the thread visibility choice
         case 'thread_visibility':
             requireController('thread_visibility.php');
