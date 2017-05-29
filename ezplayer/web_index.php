@@ -302,6 +302,11 @@ function load_page() {
             requireController('quizzes_load.php');
             break;
 
+        case 'quiz_display_question':
+            requireController('quiz_display_question.php');
+            break;
+
+
         // ============== B O O K M A R K S =============== //
         // creates a new bookmark
         case 'bookmark_add':
