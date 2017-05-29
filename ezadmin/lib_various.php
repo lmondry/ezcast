@@ -101,7 +101,7 @@ function update_config_file($recorder_option, $add_users_option, $recorder_passw
  * @param type $use_user_name
  * @param type $https_ready
  */
-function edit_config_file($php_cli_cmd, $rsync_pgm, $application_url, $repository_basedir, $organization_name, $organization_url, $copyright, $mailto_alert, $basedir, $db_type, $db_host, $db_login, $db_passwd, $db_name, $db_prefix, $recorder_user, $recorder_basedir, $ezmanager_host, $ezmanager_url, $classrooms_category_enabled, $add_users_enable, $recorder_password_storage_enabled, $use_course_name, $use_user_name, $https_ready) {
+function edit_config_file($php_cli_cmd, $rsync_pgm, $application_url, $repository_basedir, $moodle_basedir, $moodle_webservice, $organization_name, $organization_url, $copyright, $mailto_alert, $basedir, $db_type, $db_host, $db_login, $db_passwd, $db_name, $db_prefix, $recorder_user, $recorder_basedir, $ezmanager_host, $ezmanager_url, $classrooms_category_enabled, $add_users_enable, $recorder_password_storage_enabled, $use_course_name, $use_user_name, $https_ready) {
     $global_config = (file_exists('../commons/config.inc')) ? file_get_contents('../commons/config.inc') : file_get_contents('../commons/config-sample.inc');
 
     $conf = ($https_ready) ? 'true' : 'false';
@@ -115,6 +115,15 @@ function edit_config_file($php_cli_cmd, $rsync_pgm, $application_url, $repositor
     $global_config = preg_replace('/\$mailto_alert = (.+);/', '\$mailto_alert = "' . $mailto_alert . '";', $global_config);
     $global_config = preg_replace('/\$application_url = (.+);/', '\$application_url = "' . $application_url . '";', $global_config);
     $global_config = preg_replace('/\$repository_basedir = (.+);/', '\$repository_basedir = "' . $repository_basedir . '";', $global_config);
+
+    if(empty($moodle_basedir)) 
+        $moodle_basedir=false;
+    if(empty($moodle_webservice))
+        $moodle_webservice=false;
+
+    $global_config = preg_replace('/\$moodle_basedir = (.+);/', '\$moodle_basedir = "' . $moodle_basedir . '";', $global_config);
+    $global_config = preg_replace('/\$moodle_webservice = (.+);/', '\$moodle_webservice = "' . $moodle_webservice . '";', $global_config);
+
     $global_config = preg_replace('/\$basedir = (.+);/', '\$basedir = "' . $basedir . '";', $global_config);
     $global_config = preg_replace('/\$db_type = (.+);/', '\$db_type = "' . $db_type . '";', $global_config);
     $global_config = preg_replace('/\$db_host = (.+);/', '\$db_host = "' . $db_host . '";', $global_config);

@@ -277,6 +277,7 @@ include_once 'lib_print.php';
                     </script>
                     <?php if (!isset($quiz) || $quiz == false || sizeof($quiz) == 0 || $quiz === "\n") {  ?>
                         <div class="no_content">Il n y a aucun quiz à afficher.</div>
+                        <script>get_moodle_token_session();</script>
                     <?php } else { ?>
                         <ul class="quiz_scroll">
 

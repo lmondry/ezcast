@@ -704,7 +704,8 @@ function create_config_files() {
 
     // Write config file
     edit_config_file(
-            $input['php_cli_cmd'], $input['rsync_pgm'], $input['application_url'], $input['repository_basedir'], $input['organization_name'], 
+            $input['php_cli_cmd'], $input['rsync_pgm'], $input['application_url'], 
+            $input['repository_basedir'], $input['moodle_basedir'], $input['moodle_webservice'], $input['organization_name'], 
             $input['organization_url'], $input['copyright'], $input['mailto_alert'], $input['ezcast_basedir'], $input['db_type'], $input['db_host'], 
             $input['db_login'], $input['db_passwd'], $input['db_name'], $input['db_prefix'], $input['recorder_user'], $input['recorder_basedir'], 
             $input['ezmanager_host'], $input['ezmanager_user'], !empty($input['classrooms_category_enabled']) ? true : false, 

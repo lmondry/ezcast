@@ -290,6 +290,18 @@ function load_page() {
             requireController('quiz_delete.php');
             break;
 
+        case 'get_moodle_token':
+            requireController('retrieve_moodle_token.php');
+            break;
+
+        case 'quiz_new_popup':
+            requireController('quiz_new_popup.php');
+            break;
+
+        case 'quizzes_load':
+            requireController('quizzes_load.php');
+            break;
+
         // ============== B O O K M A R K S =============== //
         // creates a new bookmark
         case 'bookmark_add':
@@ -567,6 +579,7 @@ function user_login($login, $passwd) {
         die;
     }
 
+    save_moodle_token_session(strtolower($login),$passwd,"MoodleQuizTest");
 
     // 1) Initializing session vars
     $_SESSION['ezplayer_logged'] = "user_logged"; // "boolean" stating that we're logged

@@ -27,7 +27,7 @@
 include_once 'lib_print.php';
 ?>
 <script>
-    modalLoad(false);
+    //modalLoad(false);
     ezplayer_mode = '<?php echo $_SESSION['ezplayer_mode']; ?>';
 </script>
 <!-- Left column: player and comments -->
