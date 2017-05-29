@@ -73,6 +73,8 @@ function quiz_question_list_get($album,$asset) {
             return false;
         $assoc_album_quiz = xml_file2assoc_array($xml, 'question');
     }
+
+    ChromePhp::log("here test");
     ChromePhp::log($assoc_album_quiz);
 
     return $assoc_album_quiz;
@@ -184,7 +186,7 @@ function generate_form($token, $all){
     $html .= '<div id="divQuizQuestion" style="width:100%;height:200px;overflow:auto;"></div>';
   }
 
-  ChromePhp::log($html);
+  //ChromePhp::log($html);
   return $html;
 }
 

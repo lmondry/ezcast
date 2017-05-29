@@ -78,7 +78,7 @@ function index($param = array()) {
             array_push($quiz,$question);
       }
 
-      //ChromePhp::log($quiz);
+      ChromePhp::log($quiz);
       quiz_asset_add($quiz_album, $quiz_asset, $quiz);
     }
 

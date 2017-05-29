@@ -184,7 +184,7 @@ function index($param = array()) {
 
 
     bookmarks_list_update(false, $official_bookmarks, $personal_bookmarks);
-    //quiz_list_update(false,$quiz);
+    quiz_list_update(false,$quiz);
 
     if (acl_display_threads()) {
         if (isset($thread_id)) {

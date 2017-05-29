@@ -25,6 +25,9 @@
     // $t = $_SESSION['moodle_token'];
     $t = '5f553956068392ae27280ad3dcb2403e';
     $all = get_quiz_datastructure($t);
+
+    $album = $_SESSION['album'];
+    $asset = $_SESSION['asset'];
 ?>
 
     <div id="quiz_form_header" class="quiz-color">

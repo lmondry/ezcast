@@ -860,7 +860,7 @@ function quiz_list_update($display = true, &$quiz = array()) {
         include_once template_getpath('div_right_details.php');
     }
 
-    ChromePhp::log($quiz);
+    //ChromePhp::log($quiz);
 
     return true;
 }
