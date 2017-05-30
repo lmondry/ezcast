@@ -401,9 +401,11 @@ if ($trace_on) {
 
             // -------------- Q U I Z Z E S ------------- //
 
-            function quiz_form_check() {
-              var timecode = document.getElementsByClassName('quiz_timecode');
-              var title = document.getElementById('quiz_title');
+            function quiz_form_check(timecodeClass,titleId) {
+              var timecode = document.getElementsByClassName(timecodeClass);
+              var title = document.getElementById(titleId);
+
+              console.log(timecode);
 
               for (var i = 0; i < timecode.length; i++) {
                   if (isNaN(timecode[i].value)
@@ -424,7 +426,8 @@ if ($trace_on) {
                     }
               }
 
-              if (title === '') {
+
+              if(!title.value || 0 === title.value.length) {
                   window.alert('Le titre est obligatoire.');
                   return false;
               }
@@ -432,6 +435,7 @@ if ($trace_on) {
               return true;
             }
 
+            /*
             function quiz_form_edit_check() {
 
                 var timecode = document.getElementsByClassName('quiz_timecode_edit');
@@ -440,8 +444,9 @@ if ($trace_on) {
                 for (var i = 0; i < timecode.length; i++) {
                     if (isNaN(timecode[i].value)
                         || timecode[i].value == ''
-                        || timecode[i].value < 0) {
-                        window.alert('Le code temps de la Q'+(i+1)+' est incorrect');
+                        || timecode[i].value < 1
+                        || timecode[i].value > duration) {
+                        window.alert('Le code temps de la Q'+(i+1)+' est non-valide');
                         return false;
                     }
                 }
@@ -452,7 +457,7 @@ if ($trace_on) {
                 }
                 console.log("check return true");
                 return true;
-            }
+            }*/
 
 
             // -------------- B O O K M A R K S ------------- //

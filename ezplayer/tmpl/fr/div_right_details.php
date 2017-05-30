@@ -309,7 +309,7 @@ include_once 'lib_print.php';
                                                 <?php foreach ($quiz as $index => $question) {  ?>
                                                     <input type="hidden" id="quiz_asset" name="quiz_questionId_Q<?php echo ($index+1); ?>" value="<?php echo $question['questionId']; ?>"/>
                                                     <div class="rose-title">Question <?php echo ($index+1); ?>: </div>
-                                                    <input id="quiz_timecode_edit_Q<?php echo $index+1; ?>" name="quiz_timecode_<?php echo $index+1; ?>" type="number" value="<?php echo $question['timecode']; ?>" min="1" required/>
+                                                    <input  class="quiz_timecode_edit" id="quiz_timecode_edit_Q<?php echo $index+1; ?>" name="quiz_timecode_<?php echo $index+1; ?>" type="number" value="<?php echo $question['timecode']; ?>" min="1" required/>
                                                     <script> document.getElementById("quiz_timecode_edit_Q<?php echo $index+1; ?>").max = duration; </script>
                                                 <?php } ?>
 
@@ -321,7 +321,7 @@ include_once 'lib_print.php';
 
                                                 <div class="editButtons">
                                                     <a class="button" href="javascript: quiz_edit_form_toggle();">Cancel</a>
-                                                    <a class="button" href="javascript: if(quiz_form_edit_check()) quiz_edit_form_submit();">Edit</a>
+                                                    <a class="button" href="javascript: if(quiz_form_check('quiz_timecode_edit','quiz_title_edit')){quiz_edit_form_submit();}">Edit</a>
                                                 </div>
                                                 <br/>
                                             </form>
@@ -330,7 +330,7 @@ include_once 'lib_print.php';
                                         <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
                                             <div class="quiz_options">
                                                 <a class="delete-button" title="Supprimer le quiz" href="javascript:popup_quiz('<?php echo $quiz[0]['album']; ?>', '<?php echo $quiz[0]['asset']; ?>', '<?php echo $quiz[0]['title']; ?>');"></a>
-                                                <a class="edit-button rose" title="Editer le quiz" href="javascript:quiz_edit('<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['title'])); ?>','<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['description'])); ?>', quiz_array);"></a>
+                                                <a class="edit-button rose" title="Editer le quiz" href="javascript:quiz_edit('<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['title'])); ?>','<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['description'])); ?>',quiz_array);"></a>
                                             </div>
                                         <?php } ?>
                                     </div>

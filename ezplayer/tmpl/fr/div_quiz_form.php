@@ -29,7 +29,7 @@
     $album = $_SESSION['album'];
     $asset = $_SESSION['asset'];
 ?>
-
+    <script>console.log('<?php echo $_SESSION['moodle_token']; ?>');</script>
     <div id="quiz_form_header" class="quiz-color">
         <span id="quiz_form_header_logo" class="quiz-logo"></span>
         <span class="form_header_label_quiz">Ajouter un quiz</span>
@@ -71,7 +71,7 @@
                 <a class="button" tabindex='16' href="javascript: player_quiz_form_hide(true);">Annuler</a>
             </div>
             <div class="submitButton">
-                <a id="subBtn" class="button" tabindex='17' href="javascript: if(quiz_form_check()) quiz_form_submit();">Ajouter le quiz</a>
+                <a id="subBtn" class="button" tabindex='17' href="javascript: if(quiz_form_check('quiz_timecode','quiz_title')){quiz_form_submit();}">Ajouter le quiz</a>
             </div>
             <br />
         </form>
@@ -86,10 +86,8 @@
 
   $('#quiz_form input').keydown(function (e) {
       if (e.keyCode == 13) {
-          if (quiz_form_check()){
+          if (quiz_form_check('quiz_timecode','quiz_title')){
             quiz_form_submit();
-          }else{
-              console.log("fail");
           }
       }
   });
