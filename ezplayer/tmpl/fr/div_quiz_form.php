@@ -45,7 +45,7 @@
             <label>Titre&nbsp;:
                 <span class="small">Max. 70 caractères</span>
             </label>
-            <input name="title" tabindex='11' id="quiz_title" type="text" maxlength="70" value=""/>
+            <input name="title" tabindex='11' id="quiz_title" type="text" maxlength="70" value="" required/>
 
             <!-- Description field-->
             <label>Description&nbsp;:
@@ -55,18 +55,6 @@
 
             <br/>
 
-            <!--
-            <label>Selectionnez le cours&nbsp;:</label>
-            <select id="selectCourses" name="courseId"></select>
-
-            <label>Selectionnez le quiz&nbsp;:</label>
-            <select id="selectQuizzes" name="quizId"></select>
-
-            <br/>
-
-            <div id="divQuizQuestion" style="width:800px;height:200px;overflow:auto;">
-            </div>
-            -->
             <?php echo generate_form($t,$all); ?>
 
             <br/>
@@ -100,6 +88,8 @@
       if (e.keyCode == 13) {
           if (quiz_form_check()){
             quiz_form_submit();
+          }else{
+              console.log("fail");
           }
       }
   });
@@ -110,7 +100,6 @@ var all = <?php echo json_encode($all); ?>;
 function getTimecode(id){
   document.getElementById('quiz_timecode_Q'+(id)).value = time;
 }
-
 
 if(all.courses[0].quizzes[0].name){
   document.getElementById('quiz_title').value = all.courses[0].quizzes[0].name;
@@ -138,7 +127,7 @@ function populateDivQuestions(courseId,quizId){
           opt.innerHTML += '<br>';
           opt.innerHTML += '<p style="padding-left:10pt;">'+obj.text+'</p>';
           opt.innerHTML += '<input type="hidden" id="quiz_asset" name="quiz_questionId_Q'+(index+1)+'" value="'+obj.slot+'"/>';
-          opt.innerHTML += '<input class="quiz_timecode" id="quiz_timecode_Q'+(index+1)+'" name="quiz_timecode_Q'+(index+1)+'" type="number" value="0" required/>';
+          opt.innerHTML += '<input class="quiz_timecode" id="quiz_timecode_Q'+(index+1)+'" name="quiz_timecode_Q'+(index+1)+'" type="number" value="1" min="1" max="'+(duration-1)+'" required/>';
           opt.innerHTML += '<a class="button" href="javascript:getTimecode('+(index+1)+');">Current Time</a>';
           opt.innerHTML += '<br><br>';
           fragment.appendChild(opt);
@@ -186,24 +175,4 @@ function populateDivQuestions(courseId,quizId){
       }
     }
   }
-/*
-function quiz_form_submit() {
-  console.log($('#submit_quiz_form').serialize());
-    var tab = document.getElementById('bookmark_source').value;
-    (tab == 'personal') ? current_tab = 'main' : current_tab = 'toc';
-    $.ajax({
-        type: 'POST',
-        url: 'index.php?action=bookmark_add&click=true',
-        data: $('#submit_quiz_form').serialize(),
-        success: function (response) {
-            console.log(response);
-            $('#div_right').html(response);
-        }
-    });
-    // doesn't work in IE < 10
-    //   ajaxSubmitForm('submit_bookmark_form', 'index.php', '?action=bookmark_add', 'div_right');
-    player_bookmark_form_hide(true);
-
-}
-*/
 </script>

@@ -122,7 +122,7 @@ function quiz_asset_question_list_get($album, $asset) {
  * @param type $timecode the timecode of the bookmark
  * @return an array of bookmarks if the bookmark has been deleted; false otherwise
  */
-function quiz_delete($album, $asset, $title) {
+function quiz_delete($album, $asset) {
     // Sanity check
     if (!ezmam_album_exists($album))
         return false;

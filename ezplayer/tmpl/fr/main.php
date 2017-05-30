@@ -402,23 +402,33 @@ if ($trace_on) {
             // -------------- Q U I Z Z E S ------------- //
 
             function quiz_form_check() {
-
               var timecode = document.getElementsByClassName('quiz_timecode');
               var title = document.getElementById('quiz_title');
 
               for (var i = 0; i < timecode.length; i++) {
-                if (isNaN(timecode[i].value)
-                        || timecode[i].value == ''
-                        || timecode[i].value < 0) {
-                    window.alert('Le code temps de la Q'+(i+1)+' est incorrect');
-                    return false;
-                }
+                  if (isNaN(timecode[i].value)
+                      || timecode[i].value == ''
+                      || timecode[i].value < 1
+                      || timecode[i].value > duration) {
+                      window.alert('Le code temps de la Q' + (i + 1) + ' est non-valide');
+                      return false;
+                  }
+              }
+
+              for (var i = 0; i < timecode.length; i++) {
+                    for(var j = 0; j < timecode.length; j++){
+                        if((i!=j) && ((parseInt(timecode[i].value) + 2) >= parseInt(timecode[j].value)) && ((parseInt(timecode[i].value) - 2) <= parseInt(timecode[j].value))){
+                            window.alert('Il doit y avoir au moins deux secondes entre chaque question (Q'+(i+1)+' et Q'+(j+1)+')');
+                            return false;
+                        }
+                    }
               }
 
               if (title === '') {
                   window.alert('Le titre est obligatoire.');
                   return false;
               }
+
               return true;
             }
 

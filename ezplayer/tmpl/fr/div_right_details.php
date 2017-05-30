@@ -301,7 +301,7 @@ include_once 'lib_print.php';
                                                 <input type="hidden" name="courseId" id="quiz_course_id" value="<?php echo $quiz[0]['courseId']; ?>"/>
                                                 <input type="hidden" name="quizId" id="quiz_id" value="<?php echo $quiz[0]['quizId']; ?>"/>
                                                 <div class="rose-title">Title:</div>
-                                                <input name="title" id="quiz_title_edit" type="text" maxlength="70" value="<?php echo $quiz[0]["title"]; ?>"/>
+                                                <input name="title" id="quiz_title_edit" type="text" maxlength="70" value="<?php echo $quiz[0]["title"]; ?>" required/>
                                                 <div class="rose-title">Description :</div>
                                                 <textarea name="description" id="quiz_description_edit" rows="4" ><?php print_info($quiz[0]['description']); ?></textarea>
                                                 <br/>
@@ -309,7 +309,8 @@ include_once 'lib_print.php';
                                                 <?php foreach ($quiz as $index => $question) {  ?>
                                                     <input type="hidden" id="quiz_asset" name="quiz_questionId_Q<?php echo ($index+1); ?>" value="<?php echo $question['questionId']; ?>"/>
                                                     <div class="rose-title">Question <?php echo ($index+1); ?>: </div>
-                                                    <input id="quiz_timecode_edit_Q<?php echo $index+1; ?>" name="quiz_timecode_<?php echo $index+1; ?>" type="number" value="<?php echo $question['timecode']; ?>" required/>
+                                                    <input id="quiz_timecode_edit_Q<?php echo $index+1; ?>" name="quiz_timecode_<?php echo $index+1; ?>" type="number" value="<?php echo $question['timecode']; ?>" min="1" required/>
+                                                    <script> document.getElementById("quiz_timecode_edit_Q<?php echo $index+1; ?>").max = duration; </script>
                                                 <?php } ?>
 
                                                 <span class="rose-title">Feedback: <input type="checkbox" name="feedback" id="quiz_feedback_edit" value="1" <?php if($quiz[0]['feedback'] === "1") echo "checked"; ?>></span>
