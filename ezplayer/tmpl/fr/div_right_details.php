@@ -93,8 +93,9 @@ include_once 'lib_print.php';
 
         <div class='toc_button'><a href="#asset_toc" onclick="setActivePane('.toc_button'); server_trace(new Array('3', 'bookmarks_swap', current_album, current_asset, current_tab));" title="Afficher les signets officiels"></a></div>
 
-        <div class='quiz_button'><a href="#asset_quiz" onclick="setActivePane('.quiz_button'); server_trace(new Array('3', 'quiz_swap', current_album, current_asset, current_tab));" title="Afficher les quiz"></a></div>
-
+        <?php if(in_array($quiz[0]['quizId'],$_SESSION['moodle_courses'])) { ?>
+            <div class='quiz_button' ><a href = "#asset_quiz" onclick = "setActivePane('.quiz_button'); server_trace(new Array('3', 'quiz_swap', current_album, current_asset, current_tab));" title = "Afficher les quiz" ></a ></div >
+        <?php } ?>
         <div class="settings bookmarks">
             <a class="menu-button" title="Gestion des signets" onclick="$(this).toggleClass('active')" href="javascript:toggle('#bookmarks_actions');"></a>
             <a class="sort-button <?php echo acl_value_get("personal_bm_order"); ?>" title="Inverser l'ordre des signets" href="javascript:bookmarks_sort('personal', '<?php echo (acl_value_get("personal_bm_order") == "chron") ? "reverse_chron" : "chron"; ?>', 'details');"></a>
@@ -268,16 +269,15 @@ include_once 'lib_print.php';
                     <?php } ?>
                     <div class="side_pane_down"><a href="javascript:bookmarks_scroll('up','.toc_scroll');"></a></div>
                 </div>
-
+                <?php if(in_array($quiz[0]['quizId'],$_SESSION['moodle_courses'])) { ?>
                 <div class="side_pane_content" id="asset_quiz">
                     <script>
                         var quiz_time_code = new Array();
-                        console.log("$quiz variable");
-                        console.log(<?php echo json_encode($quiz); ?>);
+                        //console.log("$quiz variable");
+                        //console.log(<?php echo json_encode($quiz); ?>);
                     </script>
                     <?php if (!isset($quiz) || $quiz == false || sizeof($quiz) == 0 || $quiz === "\n") {  ?>
                         <div class="no_content">Il n y a aucun quiz à afficher.</div>
-                        <script>get_moodle_token_session();</script>
                     <?php } else { ?>
                         <ul class="quiz_scroll">
 
@@ -357,6 +357,7 @@ include_once 'lib_print.php';
                         </ul>
                     <?php } ?>
                 </div>
+                <?php } ?>
                 <!-- end quiz tab -->
         </div>
     </div>

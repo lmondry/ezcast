@@ -51,3 +51,6 @@ $trace_on = false; // determines whether we want to enable traces on actions or 
 $cache_limit = 5; // number of trending threads that are displayed on level 2 
 
 $streaming_video_player = "flowplayer"; // defines the video player to use for live stream ('momovi' | 'flowplayer')
+
+$moodle_basedir = "http://localhost/~laurent/moodle";
+$moodle_webservice = "MoodleQuizTest";

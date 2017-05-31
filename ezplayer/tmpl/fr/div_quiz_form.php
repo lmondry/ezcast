@@ -22,14 +22,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-    // $t = $_SESSION['moodle_token'];
-    $t = '5f553956068392ae27280ad3dcb2403e';
+    $t = $_SESSION['moodle_token'];
     $all = get_quiz_datastructure($t);
 
     $album = $_SESSION['album'];
     $asset = $_SESSION['asset'];
+
 ?>
-    <script>console.log('<?php echo $_SESSION['moodle_token']; ?>');</script>
     <div id="quiz_form_header" class="quiz-color">
         <span id="quiz_form_header_logo" class="quiz-logo"></span>
         <span class="form_header_label_quiz">Ajouter un quiz</span>

@@ -45,7 +45,14 @@ switch (strtolower($_SESSION['browser_name'])) {
             $playbackRate = true;
         break;
 }
+
+
 ?>
+<script>
+    console.log('moodle token');
+    console.log('<?php echo $_SESSION['moodle_token']; ?>');
+
+</script>
 
 <div id="main_player">
     <!-- #player_header : contains album title and asset title
@@ -170,8 +177,11 @@ switch (strtolower($_SESSION['browser_name'])) {
                         if (acl_has_album_moderation($album) || acl_is_admin()) { ?>
                             <a class="add-toc-button" title="Créer un signet officiel" href="javascript:player_bookmark_form_toggle('official');"></a>
                             <!--<a class="add-quiz-button" title="Ajouter un quiz" href="javascript:player_quiz_form_toggle();"></a>-->
-                            <a class="add-quiz-button" title="Ajouter un quiz" href="javascript:player_quiz_form_popup();"></a>
-                            <?php
+                            <?php if (!empty($_SESSION['moodle_token'])) { ?>
+                                <a class="add-quiz-button" title="Ajouter un quiz"
+                                   href="javascript:player_quiz_form_popup();"></a>
+                                <?php
+                            }
                         }
                         if (acl_display_threads()) {
                             ?>

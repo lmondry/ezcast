@@ -1,23 +1,23 @@
 <?php
 // https://github.com/moodlehq/sample-ws-clients/blob/master/PHP-REST/client.php
 
-  function get_moodle_token($username,$password,$service){
-    $moodle_location = "http://localhost/~laurent/moodle/";
-    $loginserver_location = "/login/token.php";
-    $serverurl = $moodle_location . $loginserver_location;
 
-    $curl = new curl;
-    $datas = array('username' => $username, 'password' => $password, 'service' => $service);
-    $response = json_decode($curl->post($serverurl, $datas));
 
-    return $response->token;
-  }
+    function get_moodle_token($username,$password,$service){
+        $moodle_location = "http://localhost/~laurent/moodle/";
+        $loginserver_location = "/login/token.php";
+        $serverurl = $moodle_location . $loginserver_location;
+        $curl = new curl;
+        $datas = array('username' => $username, 'password' => $password, 'service' => $service);
+        $response = json_decode($curl->post($serverurl, $datas));
+        return $response->token;
+    }
 
-  function save_moodle_token_session($login,$password,$service){
-    $token = get_moodle_token($login,$password,$service);
-    $_SESSION['moodle_token'] = $token;
-    return true;
-  }
+    function save_moodle_token_session($login,$password,$service){
+        $token = get_moodle_token($login,$password,$service);
+        $_SESSION['moodle_token'] = $token;
+        return true;
+    }
 
   function moodle_request($functionname,$token,$datas){
     $restformat ='json';
@@ -84,6 +84,23 @@
     return $response;
   }
 
+  function get_data_login($login,$passwd,$service){
+      save_moodle_token_session(strtolower($login),$passwd);//"MoodleQuizTest");
+
+      if (!empty($_SESSION['moodle_token'])) {
+          $user_info = get_site_info($_SESSION['moodle_token']);
+          $_SESSION['moodle_uid'] = $user_info->userid;
+          $courses_assoc = get_user_courses($_SESSION['moodle_token'],$user_info->userid);
+
+          $courses = array();
+          foreach ($courses_assoc as $i => $course) {
+              //error_log(print_r($course,true));
+              $courses[$i] = $course->id;
+          }
+
+          $_SESSION['moodle_courses'] = $courses;
+      }
+  }
   function get_quiz_datastructure($token){
     $all = array();
     $user_info = get_site_info($token);

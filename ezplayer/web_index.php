@@ -537,7 +537,6 @@ function user_anonymous_session() {
  * @param string $passwd
  */
 function user_login($login, $passwd) {
-    // TODO : Get the moodle token here
 
     global $input;
     global $template_folder;
@@ -585,6 +584,20 @@ function user_login($login, $passwd) {
     }
 
     save_moodle_token_session(strtolower($login),$passwd,"MoodleQuizTest");
+
+    if (!empty($_SESSION['moodle_token'])) {
+        $user_info = get_site_info($_SESSION['moodle_token']);
+        $_SESSION['moodle_uid'] = $user_info->userid;
+        $courses_assoc = get_user_courses($_SESSION['moodle_token'],$user_info->userid);
+
+        $courses = array();
+        foreach ($courses_assoc as $i => $course) {
+            //error_log(print_r($course,true));
+            $courses[$i] = $course->id;
+        }
+
+        $_SESSION['moodle_courses'] = $courses;
+    }
 
     // 1) Initializing session vars
     $_SESSION['ezplayer_logged'] = "user_logged"; // "boolean" stating that we're logged

@@ -37,8 +37,7 @@ $distribute_url = "$ezmanager_url/distribute.php";
 
 // Absolute paths 
 $repository_basedir = "/Users/laurent/ezcast";
-$moodle_basedir = "http://localhost/~laurent/moodle";
-$moodle_webservice = "MoodleQuizTest";
+
 $basedir = "/usr/local/ezcast";
 
 // Database info

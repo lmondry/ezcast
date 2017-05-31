@@ -171,7 +171,7 @@ function generate_form($token, $all){
           $html .= '<br>';
           $html .= '<p style="padding-left:10pt;">'.$question['text'].'</p>';
           $html .= '<input type="hidden" id="quiz_asset" name="quiz_questionId_Q'.($k+1).'" value="'.$question['slot'].'"/>';
-          $html .= '<input class="quiz_timecode" id="quiz_timecode_Q'.($k+1).'" name="quiz_timecode_Q'.($k+1).'" type="number" value="0" required/>';
+          $html .= '<input class="quiz_timecode" id="quiz_timecode_Q'.($k+1).'" name="quiz_timecode_Q'.($k+1).'" type="number" value="1" min=""required/>';
           $html .= '<a class="button" href="javascript:getTimecode('.($k+1).');">Current Time</a>';
           $html .= '</div>';
         }
