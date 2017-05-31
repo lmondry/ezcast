@@ -54,7 +54,7 @@
 
             <br/>
 
-            <?php echo generate_form($t,$all); ?>
+            <?php echo generate_form($all); ?>
 
             <br/>
 

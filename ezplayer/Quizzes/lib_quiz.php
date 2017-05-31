@@ -1,21 +1,15 @@
 <?php
 
 /**
- * Adds a bookmark in the bookmarks file (table of contents)
- * @param type $album the album the bookmark is intended to
- * @param type $asset the asset the bookmark is intended to
- * @param type $timecode the specific time code of the bookmark
- * @param type $title the title of the bookmark
- * @param type $description the description of the bookmark
- * @param type $keywords the keywords of the bookmark
- * @param type $level the level of the bookmark
- * @return boolean true if the bookmark has been added to the table of contents;
+ * Adds a quiz in the quiz file of an asset
+ * @param type $album the album the quiz is intended to
+ * @param type $asset the asset the quiz is intended to
+ * @param type $quiz an array containing the the questions, each question is a object of courseId,quizId,questionId,description,timecodecode,feedback,album and asset
+ * @return boolean true if the quiz has been added to the quiz list;
  * false otherwise
  */
 function quiz_asset_add($album, $asset, $quiz) {
     // Sanity check
-    ChromePhp::log("inside quiz_asset_add");
-
 
     if (!ezmam_album_exists($album))
         return false;
@@ -31,25 +25,20 @@ function quiz_asset_add($album, $asset, $quiz) {
         return false;
     }
 
-    // set user's file path
+    // set quiz file path in the asset of the album
     $quiz_path = $quiz_path . '/' . $album . '/' . $asset;
-
-
-    // remove the previous same bookmark if it existed yet
-    //toc_asset_bookmark_delete($album, $asset, $timecode);
-    // TODO
 
 
     return assoc_array2xml_file($quiz, $quiz_path . "/_quiz.xml", "quiz", "question");
 }
 
 /**
- * Returns the list of (official) bookmarks for a given album
+ * Returns the list of questions of a quiz
  * @param type $album the name of the album
- * @return the list of bookmarks for a given album; false if an error occurs
+ * @param type $asset the name of the asset
+ * @return the list of questions' quiz for a given album; false if an error occurs
  */
 function quiz_question_list_get($album,$asset) {
-    //ChromePhp::log("inside quiz_album_quiz_list_get");
     // Sanity check
 
     if (!ezmam_album_exists($album)){
@@ -74,49 +63,11 @@ function quiz_question_list_get($album,$asset) {
         $assoc_album_quiz = xml_file2assoc_array($xml, 'question');
     }
 
-    ChromePhp::log("here test");
-    ChromePhp::log($assoc_album_quiz);
-
     return $assoc_album_quiz;
 }
 
-
-// TODO : not userful ?
 /**
- * Returns the list of (official) bookmarks for a specific asset in a given album
- * @param type $album the name of the album
- * @param type $asset the name of the asset
- * @return boolean|array the list of bookmarks related to the given asset,
- * false if an error occurs
- */
-function quiz_asset_question_list_get($album, $asset) {
-    //ChromePhp::log("inside quiz_asset_question_list_get");
-    $assoc_album_quiz = quiz_album_quiz_list_get($album,$asset);
-
-    if (!isset($assoc_album_quiz) || $assoc_album_quiz === false || empty($assoc_album_quiz)) {
-        return false;
-    }
-
-    $assoc_asset_quiz = array();
-    $index = 0;
-    $ref_asset = $assoc_album_quiz[$index]['asset'];
-    $count = count($assoc_album_quiz);
-    while ($index < $count && $asset >= $ref_asset) {
-        if ($asset == $ref_asset) {
-            array_push($assoc_asset_quiz, $assoc_album_quiz[$index]);
-        }
-        ++$index;
-        if($index < $count) {
-            $ref_asset = $assoc_album_quiz[$index]['asset'];
-        }
-    }
-    return $assoc_asset_quiz;
-}
-
-
-/**
- * Removes a specific bookmark from the bookmarks file (table of contents).
- * If it is the last bookmark contained in the file, the file is deleted.
+ * Remove a quiz by deleting the file from the asset folder.
  * @param type $album the album of the bookmark
  * @param type $asset the asset of the bookmark
  * @param type $timecode the timecode of the bookmark
@@ -144,7 +95,7 @@ function quiz_delete($album, $asset) {
 
 // ---------------
 
-function generate_form($token, $all){
+function generate_form($all){
 
   $html = '<label>Selectionnez le cours&nbsp;:</label>';
   $html .= '<select id="selectCourses" name="courseId">';
@@ -154,7 +105,6 @@ function generate_form($token, $all){
   $html .= '</select>';
 
   if (count($all['courses'][0]['quizzes']) > 0){
-    error_log("here",0);
     $html .= '<label>Selectionnez le quiz&nbsp;:</label>';
     $html .= '<select id="selectQuizzes" name="quizId">';
     foreach ($all['courses'][0]['quizzes'] as $j => $quiz) {
