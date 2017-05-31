@@ -68,10 +68,9 @@ function quiz_question_list_get($album,$asset) {
 
 /**
  * Remove a quiz by deleting the file from the asset folder.
- * @param type $album the album of the bookmark
- * @param type $asset the asset of the bookmark
- * @param type $timecode the timecode of the bookmark
- * @return an array of bookmarks if the bookmark has been deleted; false otherwise
+ * @param type $album the album of the quiz
+ * @param type $asset the asset of the quiz
+ * @return an array of questions if the quiz has been deleted; false otherwise
  */
 function quiz_delete($album, $asset) {
     // Sanity check
@@ -92,52 +91,13 @@ function quiz_delete($album, $asset) {
 
 }
 
-
-// ---------------
-
+/**
+ * This function generates the html form for the quiz add form
+ * @param  $all : multidimentional array with every courses, quizzes and questions
+ * @return string : the HTML code
+ */
 function generate_form($all){
-
-  $html = '<label>Selectionnez le cours&nbsp;:</label>';
-  $html .= '<select id="selectCourses" name="courseId">';
-  foreach ($all['courses'] as $i => $course) {
-    $html .= '<option value="'.$course['id'].'"">'.$course['fullname'].'</option>';
-  }
-  $html .= '</select>';
-
-  if (count($all['courses'][0]['quizzes']) > 0){
-    $html .= '<label>Selectionnez le quiz&nbsp;:</label>';
-    $html .= '<select id="selectQuizzes" name="quizId">';
-    foreach ($all['courses'][0]['quizzes'] as $j => $quiz) {
-      $html .= '<option value="'.$quiz['id'].'">'.$quiz['name'].'</option>';
-      $html .= '</select>';
-
-      $html .+ '<br/>';
-
-      $html .= '<div id="divQuizQuestion" style="width:100%;height:200px;overflow:auto;">';
-      if (count($all['courses'][0]['quizzes'][$j]['questions']) > 0){
-        foreach ($all['courses'][0]['quizzes'][$j]['questions'] as $k => $question) {
-          $html .= '<div class="quizQuestion" id="'.$k.'">';
-          $html .= '<label style="width:20px;">Q'.($k+1).':</label>';
-          $html .= '<br>';
-          $html .= '<p style="padding-left:10pt;">'.$question['text'].'</p>';
-          $html .= '<input type="hidden" id="quiz_asset" name="quiz_questionId_Q'.($k+1).'" value="'.$question['slot'].'"/>';
-          $html .= '<input class="quiz_timecode" id="quiz_timecode_Q'.($k+1).'" name="quiz_timecode_Q'.($k+1).'" type="number" value="1" min="1" required/>';
-          $html .= '<a class="button" href="javascript:getTimecode('.($k+1).');">Current Time</a>';
-          $html .= '</div>';
-        }
-      }
-      $html .= '</div>';
-    }
-
-  }else {
-    $html .= '<select id="selectQuizzes" disabled>';
-    $html .= '<option value="-1">No quiz</option>';
-    $html .= '</select>';
-    $html .= '<div id="divQuizQuestion" style="width:100%;height:200px;overflow:auto;"></div>';
-  }
-
-  //ChromePhp::log($html);
-  return $html;
+    include_once template_getpath('div_quiz_innerform.php');
 }
 
 ?>

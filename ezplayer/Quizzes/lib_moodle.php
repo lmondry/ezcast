@@ -180,7 +180,7 @@ function get_quiz_datastructure($token)
                 // Get the next page
                 $currentPage = $attempt->nextpage;
             } while ($currentPage > 0);
-            // Finish each quiz 
+            // Finish each quiz
             stop_quiz($quiz_info->attempt->id);
         }
 
