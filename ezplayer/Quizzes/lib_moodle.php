@@ -3,10 +3,10 @@
 
 
 
-    function get_moodle_token($username,$password,$service){
+    function get_moodle_token($username,$password){
         global $moodle_webservice;
         global $moodle_basedir;
-        //$moodle_location = "http://localhost/~laurent/moodle/";
+
         $moodle_location = $moodle_basedir;
         $loginserver_location = "/login/token.php";
         $serverurl = $moodle_location . $loginserver_location;
@@ -16,8 +16,8 @@
         return $response->token;
     }
 
-    function save_moodle_token_session($login,$password,$service){
-        $token = get_moodle_token($login,$password,$service);
+    function save_moodle_token_session($login,$password){
+        $token = get_moodle_token($login,$password);
         $_SESSION['moodle_token'] = $token;
         return true;
     }

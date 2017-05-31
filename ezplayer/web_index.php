@@ -282,26 +282,32 @@ function load_page() {
             break;
 
         // ============== Q U I Z Z E S =============== //
+        // create a new quiz
         case 'quiz_add':
             requireController('quiz_add.php');
             break;
 
+        // delete a quiz
         case 'quiz_delete':
             requireController('quiz_delete.php');
             break;
 
+        // get the moodle token to use with the quizzes
         case 'get_moodle_token':
             requireController('retrieve_moodle_token.php');
             break;
 
+        // renders a modal window related to a specific quiz
         case 'quiz_new_popup':
             requireController('quiz_new_popup.php');
             break;
 
+        // return the template of the quiz add form
         case 'quizzes_load':
             requireController('quizzes_load.php');
             break;
 
+        // return the template of a question to answer
         case 'quiz_display_question':
             requireController('quiz_display_question.php');
             break;
@@ -441,7 +447,7 @@ function load_page() {
             requireController('bookmarks_popup.php');
             break;
 
-        // renders a modal window related to a specific bookmark
+        // renders a modal window related to a specific quiz
         case 'quiz_popup':
             requireController('quiz_popup.php');
             break;
@@ -583,23 +589,27 @@ function user_login($login, $passwd) {
         die;
     }
 
-    save_moodle_token_session(strtolower($login),$passwd,"MoodleQuizTest");
+    // 1) Initializing session vars concerning Moodle
+
+    // Save the Moodle token to the $_SESSION variable
+    save_moodle_token_session(strtolower($login),$passwd);
 
     if (!empty($_SESSION['moodle_token'])) {
         $user_info = get_site_info($_SESSION['moodle_token']);
+        // Save the Moodle user id to the $_SESSION variable
         $_SESSION['moodle_uid'] = $user_info->userid;
         $courses_assoc = get_user_courses($_SESSION['moodle_token'],$user_info->userid);
 
         $courses = array();
         foreach ($courses_assoc as $i => $course) {
-            //error_log(print_r($course,true));
             $courses[$i] = $course->id;
         }
 
+        // Save the Moodle courses of the user to the $_SESSION variable
         $_SESSION['moodle_courses'] = $courses;
     }
 
-    // 1) Initializing session vars
+    // 1 bis) Initializing session vars
     $_SESSION['ezplayer_logged'] = "user_logged"; // "boolean" stating that we're logged
     $_SESSION['user_login'] = $res['login'];
     $_SESSION['user_real_login'] = $res['real_login'];
@@ -770,12 +780,12 @@ function refresh_page() {
 }
 
 
-// ============== B O O K M A R K S =============== //
+// ============== B O O K M A R K S ( A N D   Q U I Z Z E S )=============== //
 
 
 
 /**
- * Refreshes the right_div containing the bookmarks
+ * Refreshes the right_div containing the bookmarks and the quizzes
  * @global type $repository_path
  * @global type $user_files_path
  * @global type $has_bookmark
@@ -784,9 +794,10 @@ function refresh_page() {
  * @param type $display
  * @param type $official_bookmarks
  * @param type $personal_bookmarks
+ * @param type $quiz
  * @return boolean
  */
-function bookmarks_list_update($display = true, &$official_bookmarks = array(), &$personal_bookmarks = array()) {
+function bookmarks_list_update($display = true, &$official_bookmarks = array(), &$personal_bookmarks = array(),&$quiz = array()) {
     global $repository_path;
     global $user_files_path;
     global $has_bookmark;
@@ -830,6 +841,7 @@ function bookmarks_list_update($display = true, &$official_bookmarks = array(), 
         $official_bookmarks = array_reverse($official_bookmarks);
     }
 
+    // quiz to display in 'div_right_details.php'
     if (isset($asset) && $asset != '' && ezmam_asset_exists($album, $asset)) {
         $quiz = quiz_question_list_get($album,$asset);
     }
@@ -841,45 +853,6 @@ function bookmarks_list_update($display = true, &$official_bookmarks = array(), 
             include_once template_getpath('div_right_details.php');
         }
     }
-    return true;
-}
-
-// ============== Q U I Z =============== //
-
-/**
- * Refreshes the right_div containing the bookmarks
- * @global type $repository_path
- * @global type $user_files_path
- * @global type $has_quiz
- * @param type $display
- * @return boolean
- */
-function quiz_list_update($display = true, &$quiz = array()) {
-    ChromePhp::log("inside 'quiz_list_update'");
-
-    global $repository_path;
-
-    ezmam_repository_path($repository_path);
-    $album = $_SESSION['album'];
-    $asset = $_SESSION['asset'];
-
-    if (!isset($album) || $album == '')
-        return false;
-    if (!ezmam_album_exists($album))
-        return false;
-
-    if (isset($asset) && $asset != '' && ezmam_asset_exists($album, $asset)) {
-        $quiz = quiz_question_list_get($album,$asset);
-    }
-
-    //ChromePhp::log("back to 'quiz_list_update'");
-
-    if ($display) {
-        include_once template_getpath('div_right_details.php');
-    }
-
-    //ChromePhp::log($quiz);
-
     return true;
 }
 
