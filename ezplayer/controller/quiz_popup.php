@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Return a specific bookmark to display in a popup (delete_bookmark / copy_bookmark)
+ * Return a specific quiz to delete to display in a popup
  * @global type $input
  * @global type $repository_path
- * @global type $user_files_path
  */
 function index($param = array()) {
     global $input;
     global $repository_path;
 
+    // Variables tha will be used in the template
     $quiz_album = $input['album'];
     $quiz_asset = $input['asset'];
     $quiz_title = $input['title'];

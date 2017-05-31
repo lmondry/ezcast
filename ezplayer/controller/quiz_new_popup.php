@@ -1,10 +1,12 @@
 <?php
 
 /**
- * Return a specific bookmark to display in a popup (delete_bookmark / copy_bookmark)
+ * Return a specific layout to display in the pop-up after clicking the button to add a new quiz
+ * Two layouts :
+ * - One to confirm the loading of datas
+ * - One to say that it needs a course to add a new quiz
+ *
  * @global type $input
- * @global type $repository_path
- * @global type $user_files_path
  */
 function index($param = array()) {
     global $input;

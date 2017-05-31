@@ -1,14 +1,13 @@
 <?php
 
 /**
- * Return a specific bookmark to display in a popup (delete_bookmark / copy_bookmark)
+ * Return a specific Moodle question to display in a popup to answer it
  * @global type $input
- * @global type $repository_path
- * @global type $user_files_path
  */
 function index($param = array()) {
     global $input;
 
+    // Variables tha will be used in the template
     $question_id = $input['questionId'];
     $question_html = $input['questionHtml'];
 

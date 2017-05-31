@@ -1,10 +1,8 @@
 <?php
 
 /**
- * Removes an asset bookmark from the user's bookmarks list
- * @global type $input
- * @global type $repository_path
- * @global type $user_files_path
+ * Return the form to add a new quiz
+ * It is used to delay the loading of all the quizzes an datas to add a new quiz
  */
 function index($param = array()) {
 
