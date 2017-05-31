@@ -4,11 +4,14 @@
 
 
     function get_moodle_token($username,$password,$service){
-        $moodle_location = "http://localhost/~laurent/moodle/";
+        global $moodle_webservice;
+        global $moodle_basedir;
+        //$moodle_location = "http://localhost/~laurent/moodle/";
+        $moodle_location = $moodle_basedir;
         $loginserver_location = "/login/token.php";
         $serverurl = $moodle_location . $loginserver_location;
         $curl = new curl;
-        $datas = array('username' => $username, 'password' => $password, 'service' => $service);
+        $datas = array('username' => $username, 'password' => $password, 'service' => $moodle_webservice);
         $response = json_decode($curl->post($serverurl, $datas));
         return $response->token;
     }
@@ -20,9 +23,11 @@
     }
 
   function moodle_request($functionname,$token,$datas){
+    global $moodle_basedir;
     $restformat ='json';
-    $moodle_location = "http://localhost/~laurent/moodle/";
-    $restserver_location = "webservice/rest/server.php";
+    //$moodle_location = "http://localhost/~laurent/moodle/";
+    $moodle_location = $moodle_basedir;
+    $restserver_location = "/webservice/rest/server.php";
     $serverurl = $moodle_location . $restserver_location;
 
     $curl = new curl;

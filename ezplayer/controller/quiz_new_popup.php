@@ -7,5 +7,10 @@
  * @global type $user_files_path
  */
 function index($param = array()) {
-    include_once template_getpath('popup_quiz_new.php');
+    global $input;
+
+    if(!empty($_SESSION['moodle_courses']))
+        include_once template_getpath('popup_quiz_new.php');
+    else
+        include_once template_getpath('popup_quiz_new_nocourse.php');
 }

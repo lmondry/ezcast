@@ -93,7 +93,7 @@ include_once 'lib_print.php';
 
         <div class='toc_button'><a href="#asset_toc" onclick="setActivePane('.toc_button'); server_trace(new Array('3', 'bookmarks_swap', current_album, current_asset, current_tab));" title="Afficher les signets officiels"></a></div>
 
-        <?php if(in_array($quiz[0]['quizId'],$_SESSION['moodle_courses'])) { ?>
+        <?php if(in_array($quiz[0]['courseId'],$_SESSION['moodle_courses']) || ((acl_has_album_moderation($album) || acl_is_admin()) && !empty($_SESSION))) { ?>
             <div class='quiz_button' ><a href = "#asset_quiz" onclick = "setActivePane('.quiz_button'); server_trace(new Array('3', 'quiz_swap', current_album, current_asset, current_tab));" title = "Afficher les quiz" ></a ></div >
         <?php } ?>
         <div class="settings bookmarks">
@@ -180,13 +180,15 @@ include_once 'lib_print.php';
                                                 </div>
                                                 <br />
                                             </div>
-                                            <div class="bookmark_options">
-                                                <a class="delete-button" title="Supprimer le signet" href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'custom', 'details', 'remove')"></a>
-                                                <a class="edit-button" title="Editer le signet" href="javascript:bookmark_edit('<?php echo $index; ?>', 'bookmark', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['title'])) ?>', '<?php echo htmlspecialchars(str_replace(array('"', "'"), array("", "\'"), $bookmark['description'])) ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['keywords'])) ?>', '<?php echo $bookmark['level'] ?>', '<?php echo $bookmark['timecode'] ?>');"></a>
-                                                <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
-                                                    <a class="copy-button" title="Ajouter aux signets officiels"  href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'custom', 'details', 'copy')"></a>
-                                                <?php } ?>
-                                            </div>
+                                            <?php if ((acl_has_album_moderation($album) || acl_is_admin()) && !empty($_SESSION)) { ?>
+                                                <div class="bookmark_options">
+                                                    <a class="delete-button" title="Supprimer le signet" href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'custom', 'details', 'remove')"></a>
+                                                    <a class="edit-button" title="Editer le signet" href="javascript:bookmark_edit('<?php echo $index; ?>', 'bookmark', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['title'])) ?>', '<?php echo htmlspecialchars(str_replace(array('"', "'"), array("", "\'"), $bookmark['description'])) ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $bookmark['keywords'])) ?>', '<?php echo $bookmark['level'] ?>', '<?php echo $bookmark['timecode'] ?>');"></a>
+                                                    <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
+                                                        <a class="copy-button" title="Ajouter aux signets officiels"  href="javascript:popup_bookmark('<?php echo $bookmark['album']; ?>', '<?php echo $bookmark['asset']; ?>', '<?php echo $bookmark['timecode']; ?>', 'custom', 'details', 'copy')"></a>
+                                                    <?php } ?>
+                                                </div>
+                                            <?php } ?>
                                         </div>
                                     </form>
                                 </li>
@@ -269,12 +271,10 @@ include_once 'lib_print.php';
                     <?php } ?>
                     <div class="side_pane_down"><a href="javascript:bookmarks_scroll('up','.toc_scroll');"></a></div>
                 </div>
-                <?php if(in_array($quiz[0]['quizId'],$_SESSION['moodle_courses'])) { ?>
+                <?php if(in_array($quiz[0]['courseId'],$_SESSION['moodle_courses']) || ((acl_has_album_moderation($album) || acl_is_admin()) && !empty($_SESSION))) { ?>
                 <div class="side_pane_content" id="asset_quiz">
                     <script>
                         var quiz_time_code = new Array();
-                        //console.log("$quiz variable");
-                        //console.log(<?php echo json_encode($quiz); ?>);
                     </script>
                     <?php if (!isset($quiz) || $quiz == false || sizeof($quiz) == 0 || $quiz === "\n") {  ?>
                         <div class="no_content">Il n y a aucun quiz à afficher.</div>
@@ -342,8 +342,10 @@ include_once 'lib_print.php';
                             <?php //} ?>-->
                             <script>if(quiz_array.length > 0) quiz_array = new Array();</script>
                             <?php foreach ($quiz as $index => $question) {  ?>
-                                <script>quiz_array.push({courseId:<?php echo $question['courseId']; ?>,quizId:<?php echo $question['quizId']; ?>,questionId:<?php echo $question['questionId']; ?>,timecode:<?php echo $question['timecode']; ?>,feedback:<?php echo $question['feedback']; ?>,done:false});</script>
-                                <script>quiz_time_code.push(<?php echo $question['timecode']; ?>);</script>
+                                <?php if(in_array($quiz[0]['courseId'],$_SESSION['moodle_courses'])) {?>
+                                    <script>quiz_array.push({courseId:<?php echo $question['courseId']; ?>,quizId:<?php echo $question['quizId']; ?>,questionId:<?php echo $question['questionId']; ?>,timecode:<?php echo $question['timecode']; ?>,feedback:<?php echo $question['feedback']; ?>,done:false});</script>
+                                    <script>quiz_time_code.push(<?php echo $question['timecode']; ?>);</script>
+                                <?php } ?>
                                 <li id="question_<?php echo $index; ?>" class="rose level_3">
                                     <div class="question_display">
                                     <a class="item rose" href="javascript:player_video_seek(<?php echo $question['timecode']; ?>, '');">
