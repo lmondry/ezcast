@@ -32,7 +32,13 @@ include_once 'lib_print.php';
 <h2><b style="text-transform:uppercase;">Question <?php echo ($question_id+1); ?></b></h2>
 <br/>
 
-<?php echo $question_html; ?>
+<?php
+$str = <<<HTML_CODE
+    $question_html 
+HTML_CODE;
+    
+echo $str;
+?>
 
 <a class="close-reveal-modal" href="javascript:cancel_question();">&#215;</a>
 <br/>
