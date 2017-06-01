@@ -53,7 +53,6 @@
                     if ($asset['metadata']['status'] == 'processed') {
                         ?>
                         <li>
-                            <!--<a class="item" id="asset-<?php echo $asset['name']; ?>" href="javascript:modalLoad(true),show_asset_details('<?php echo $album; ?>', '<?php echo $asset['name']; ?>', '<?php echo $asset['token']; ?>');">-->
                             <a class="item" id="asset-<?php echo $asset['name']; ?>" href="javascript:show_asset_details('<?php echo $album; ?>', '<?php echo $asset['name']; ?>', '<?php echo $asset['token']; ?>');">
                                 <b><?php print_info(substr(get_user_friendly_date($asset['metadata']['record_date'], '/', false, get_lang(), false), 0, 10)); ?></b>
                                 <div style="display:inline-block; width: 16px; height:1px;"></div>

@@ -783,6 +783,57 @@
         <label id="discussion_student_teacher" lang="en">Students + teachers</label>
         <label id="discussion_student" lang="fr">Etudiants</label>
         <label id="discussion_student" lang="en">Students only</label>
+
+        <!-- Quizzes -->
+        <label id="Add_quiz" lang="fr">Ajouter un nouveau quiz</label>
+        <label id="Add_quiz" lang="en">Add a new quiz</label>
+        <label id="Warning_quiz_add_load" lang="fr">Attention, vous vous apprêtez à ajouter un quiz. Tous vos quizzes Moodle vont être chargés. Cette opération peut prendre un certain temps.</label>
+        <label id="Warning_quiz_add_load" lang="en">Caution, you are about to add a new quiz. All of your Moodle quizzes are going to be loaded. This process could take some time.</label>
+        <label id="Quiz_continue" lang="fr">Continuer</label>
+        <label id="Quiz_continue" lang="en">Continue</label>
+        <label id="Warning_quiz_add_noquiz" lang="fr">Attention, vous n'avez actuellement aucun quiz sur Moodle, veuillez d'abord en créer un.</label>
+        <label id="Warning_quiz_add_noquiz" lang="en">Cauton, you do not have any Moodle quiz associated with this account, you first need to create a quiz.</label>
+        <label id="Quiz_answer" lang="fr">Répondre</label>
+        <label id="Quiz_answer" lang="en">Answer</label>
+        <label id="Quiz_question" lang="fr">Question</label>
+        <label id="Quiz_question" lang="en">Question</label>
+        <label id="Warning_quiz_delete" lang="fr">Attention, vous vous apprêtez à supprimer un quiz. Cette opération est irréversible.</label>
+        <label id="Warning_quiz_delete" lang="en">Caution, you are going to delete a quiz. This operation can't be reverted</label>
+        <label id="Quiz_notvalid_timecode_1" lang="fr">Le code temps de la Q</label>
+        <label id="Quiz_notvalid_timecode_1" lang="en">Timecode of Q</label>
+        <label id="Quiz_notvalid_timecode_2" lang="fr">est non-valide</label>
+        <label id="Quiz_notvalid_timecode_2" lang="en">is not valid</label>
+        <label id="Quiz_notvalid_timecode_3" lang="fr">Il doit y avoir au moins deux secondes entre chaque question (Q</label>
+        <label id="Quiz_notvalid_timecode_3" lang="en">It must have at least 2 seconds between each question (Q</label>
+        <label id="Quiz_notvalid_timecode_4" lang="fr">et Q</label>
+        <label id="Quiz_notvalid_timecode_4" lang="en">and Q</label>
+        <label id="Quiz_mandatory_title" lang="fr">Le titre est obligatoire</label>
+        <label id="Quiz_mandatory_title" lang="en">The title is mandatory</label>
+        <label id="Display_quizzes" lang="fr">Afficher les quizzes</label>
+        <label id="Display_quizzes" lang="en">Display quizzes</label>
+        <label id="No_quiz" lang="fr">Il n y a aucun quiz pour ce cours.</label>
+        <label id="No_quiz" lang="en">There is no quiz for this course.</label>
+        <label id="Quiz_title" lang="fr">Titre</label>
+        <label id="Quiz_title" lang="en">Title</label>
+        <label id="Quiz_feedback" lang="fr">Feedback</label>
+        <label id="Quiz_feedback" lang="en">Feedback</label>
+        <label id="Quiz_delete_title" lang="fr">Supprimer le quiz</label>
+        <label id="Quiz_delete_title" lang="en">Delete the quiz</label>
+        <label id="Quiz_edit_title" lang="fr">Editer le quiz</label>
+        <label id="Quiz_edit_title" lang="en">Edit quiz</label>
+        <label id="Quiz_feedback_info" lang="fr">Après la dernière question</label>
+        <label id="Quiz_feedback_info" lang="en">After the last question</label>
+        <label id="Quiz_add_form_button" lang="fr">Ajouter le quiz</label>
+        <label id="Quiz_add_form_button" lang="en">Add quiz</label>
+        <label id="Quiz_current_time" lang="fr">Temps actuel</label>
+        <label id="Quiz_current_time" lang="en">Current Time</label>
+        <label id="Quiz_no_quiz" lang="fr">Pas de quiz</label>
+        <label id="Quiz_no_quiz" lang="en">No quiz</label>
+        <label id="Quiz_select_quiz" lang="fr">Sélectionnez le quiz</label>
+        <label id="Quiz_select_quiz" lang="en">Select the quiz</label>
+        <label id="Quiz_select_course" lang="fr">Selectionnez le cours</label>
+        <label id="Quiz_select_course" lang="en">Select the course</label>
+
         
     </labels>
     

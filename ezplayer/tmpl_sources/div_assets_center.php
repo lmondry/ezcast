@@ -44,7 +44,7 @@ include_once 'lib_print.php';
 
 <!-- Right column: assets list -->
 <div id="div_right">
-    <!-- Side part goes here : assets list, asset details and ToC -->                        
+    <!-- Side part goes here : assets list, asset details and ToC -->
     <?php
     if ($_SESSION['ezplayer_mode'] == 'view_album_assets') {
         require template_getpath('div_right_assets.php');
@@ -56,7 +56,7 @@ include_once 'lib_print.php';
 </div><!-- div_right END -->
 
 <div id="bottom">
-    <!-- bottom part goes here : trending posts, discussions, ... -->                        
+    <!-- bottom part goes here : trending posts, discussions, ... -->
     <?php
     if ($_SESSION['ezplayer_mode'] == 'view_album_assets') {
         require template_getpath('div_trending_threads.php');

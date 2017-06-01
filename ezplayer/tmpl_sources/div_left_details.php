@@ -45,7 +45,19 @@ switch (strtolower($_SESSION['browser_name'])) {
             $playbackRate = true;
         break;
 }
+
+
 ?>
+<script>
+    console.log("moodle_token");
+    console.log('<?php echo $_SESSION['moodle_token']; ?>');
+    console.log("moodle_basedir");
+    console.log('<?php global $moodle_basedir; echo $moodle_basedir; ?>');
+    console.log("moodle_webservices");
+    console.log('<?php global $moodle_webservice; echo $moodle_webservice; ?>');
+    console.log("moodle_courses");
+    console.log('<?php echo json_encode($_SESSION['moodle_courses']); ?>');
+</script>
 
 <div id="main_player">
     <!-- #player_header : contains album title and asset title
@@ -53,18 +65,20 @@ switch (strtolower($_SESSION['browser_name'])) {
         If the current view is the album page, the header contains album title only
         If the current view is the asset page, the header contains album title and asset title -->
     <div id="site_map">
-        <a class="home-link" href="index.php" title="®Back_to_home®">®Home®</a>
+        <a class="home-link" href="index.php" title="Retour à l'accueil">Accueil</a>
         <?php
         if (acl_has_album_permissions($album)) {
             $token = acl_token_get($album);
             $token = $token['token'];
             ?>
             <div class="right-arrow"></div>
-            <a  href="javascript:show_album_assets('<?php echo $album; ?>', '<?php echo $token; ?>');" title="®Back_to_album®">(<?php echo suffix_remove($album); ?>) <?php echo get_album_title($album); ?></a>
+            <a  href="javascript:show_album_assets('<?php echo $album; ?>', '<?php echo $token; ?>');" title="Retour à l'album">(<?php echo suffix_remove($album); ?>) <?php echo get_album_title($album); ?></a>
         <?php } ?>
         <div class="right-arrow"></div><?php print_info($asset_meta['title']); ?>
     </div>
 
+    <div id="question_div" style="display: none"></div>
+    
     <div id="video_player" class="remove_full">
         <!-- #main_video : HTML5 video player.
             There is no selected source by default.
@@ -72,16 +86,17 @@ switch (strtolower($_SESSION['browser_name'])) {
         <div id="video_shortcuts">
             <div class="shortcuts">
                 <ul>
-                    <li><span class="key space"></span><span>®key_space®</span></li>
-                    <li><span class="key back-next"></span><span>®key_back®</span></li>
-                    <li><span class="key speed"></span><span>®key_speed®</span></li>
-                    <li><span class="key volume"></span><span>®key_volume®</span></li>
-                    <li><span class="key m"></span><span>®key_m®</span></li>
-                    <li><span class="key s"></span><span>®key_s®</span></li>
-                    <li><span class="key n"></span><span>®key_n®</span></li>
-                    <li><span class="key d"></span><span>®key_d®</span></li>
-                    <li><span class="key shift"></span><span>®key_shift®</span></li>
-                    <li><span class="key f"></span><span>®key_f®</span></li>
+                    <li><span class="key space"></span><span>Play / Pause</span></li>
+                    <li><span class="key back-next"></span><span>Retour / Avance</span></li>
+                    <li><span class="key speed"></span><span>Vitesse de lecture</span></li>
+                    <li><span class="key volume"></span><span>Volume</span></li>
+                    <li><span class="key m"></span><span>Muet</span></li>
+                    <li><span class="key s"></span><span>Basculer cam / slide</span></li>
+                    <li><span class="key n"></span><span>Nouveau signet</span></li>
+                    <li><span class="key d"></span><span>Nouvelle discussion</span></li>
+                    <li><span class="key shift"></span><span>Afficher les signets</span></li>
+                    <li><span class="key f"></span><span>Plein écran</span></li>
+                    <li><span class="key q"></span><span>Nouveau Quiz</span></li>
                 </ul>
             </div>
             <div class="shortcuts_tab"><a href="javascript:player_shortcuts_toggle();"></a></div>
@@ -92,12 +107,12 @@ switch (strtolower($_SESSION['browser_name'])) {
                 display_threads_notif = true;
             </script>
             <div id='video_notifications'>
-                <div class='notifications_title'><b>®Current_discussions®</b></div>
+                <div class='notifications_title'><b>Discussions en cours</b></div>
                 <div id='notifications'></div>
             </div>
         <?php } ?>
 
-        <video id="main_video" poster="./images/Generale/¤poster¤-<?php echo get_lang(); ?>.jpg" controls src="<?php echo $asset_meta['src']; ?>" preload="auto" type="video/mp4">
+        <video id="main_video" poster="./images/Generale/poster-<?php echo get_lang(); ?>.jpg" controls src="<?php echo $asset_meta['src']; ?>" preload="auto" type="video/mp4">
             <source id="main_video_source"
                     <?php if(array_key_exists('low_slide_src', $asset_meta)) { ?>
                     high_slide_src="<?php echo $asset_meta['high_slide_src'] . '&origin=' . $appname; ?>"
@@ -111,11 +126,11 @@ switch (strtolower($_SESSION['browser_name'])) {
 
         <?php if ($asset_meta['record_type'] == 'camslide') { ?>
 
-            <video id="secondary_video" poster="./images/Generale/¤poster¤-<?php echo get_lang(); ?>.jpg" controls src="<?php echo $asset_meta['low_slide_src'] . '&origin=' . $appname; ?>" preload="auto" type="video/mp4">
+            <video id="secondary_video" poster="./images/Generale/poster-<?php echo get_lang(); ?>.jpg" controls src="<?php echo $asset_meta['low_slide_src'] . '&origin=' . $appname; ?>" preload="auto" type="video/mp4">
             </video>
         <?php } ?>
 
-        <div id="load_warn">®Load_for_switch®</div>
+        <div id="load_warn">Les deux vidéos doivent être chargées une première fois pour disposer de la fonction de switch. Appuyez sur "Play" et le switch sera fonctionnel.</div>
 
 
         <script>
@@ -137,52 +152,57 @@ switch (strtolower($_SESSION['browser_name'])) {
 
 <?php require template_getpath('div_bookmark_form.php'); ?>
 <?php require template_getpath('div_thread_form.php'); ?>
-<?php require template_getpath('div_quiz_form.php'); ?>
-
+<?php //require template_getpath('div_quiz_form.php'); ?>
+        <div class="form" id="quiz_form"></div>
 
         <div class="video_controls">
             <ul>
 <?php if ($playbackRate) { ?>
                     <li>
-                        <a id="toggleRate" href="javascript:player_playbackspeed_toggle();" title="®Change_speedrate®">1.0x</a>
+                        <a id="toggleRate" href="javascript:player_playbackspeed_toggle();" title="Modifier la vitesse de lecture">1.0x</a>
                     </li>
                     <?php
                 }
                 if (isset($asset_meta['record_type']) && $asset_meta['record_type'] == 'camslide') {
                     ?>
                     <li>
-                        <a class="movie-button active" title="®Watch_video®" href="javascript:player_video_type_set('cam');"></a>
-                        <a class="slide-button" title="®Watch_slide®" href="javascript:player_video_type_set('slide');"></a>
+                        <a class="movie-button active" title="Regarder la vidéo" href="javascript:player_video_type_set('cam');"></a>
+                        <a class="slide-button" title="Regarder le diaporama" href="javascript:player_video_type_set('slide');"></a>
                     </li>
 <?php } ?>
                 <li>
-                    <a class="high-button" title="®Watch_high®" href="javascript:player_video_quality_set('high');"></a>
-                    <a class="low-button active" title="®Watch_low®" href="javascript:player_video_quality_set('low');"></a>
+                    <a class="high-button" title="Regarder en haute résolution" href="javascript:player_video_quality_set('high');"></a>
+                    <a class="low-button active" title="Regarder en basse résolution" href="javascript:player_video_quality_set('low');"></a>
                 </li>
                     <?php if (acl_user_is_logged()) { ?>
                     <li>
                         <?php if (acl_has_album_permissions($album)){ ?>
-                        <a class="add-bookmark-button" title="®Add_bookmark®" href="javascript:player_bookmark_form_toggle('personal');"></a>
+                        <a class="add-bookmark-button" title="Créer un signet personnel" href="javascript:player_bookmark_form_toggle('personal');"></a>
                         <?php }
                         if (acl_has_album_moderation($album) || acl_is_admin()) { ?>
-                            <a class="add-toc-button" title="®Add_toc®" href="javascript:player_bookmark_form_toggle('official');"></a>
-                            <?php
+                            <a class="add-toc-button" title="Créer un signet officiel" href="javascript:player_bookmark_form_toggle('official');"></a>
+                            <!--<a class="add-quiz-button" title="Ajouter un quiz" href="javascript:player_quiz_form_toggle();"></a>-->
+                            <?php if (!empty($_SESSION['moodle_token'])) { ?>
+                                <a class="add-quiz-button" title="Ajouter un quiz"
+                                   href="javascript:player_quiz_form_popup();"></a>
+                                <?php
+                            }
                         }
                         if (acl_display_threads()) {
                             ?>
-                            <a class="add-thread-button" title="®Add_discussion®" href="javascript:player_thread_form_toggle();"></a>
+                            <a class="add-thread-button" title="Créer une discussion" href="javascript:player_thread_form_toggle();"></a>
                     <?php } ?>
                     </li>
 <?php } ?>
                 <li>
-                    <a class="share-button" href="javascript:popup_asset(current_album, current_asset, time, type, 'share_time')" title="®Share_time®"
+                    <a class="share-button" href="javascript:popup_asset(current_album, current_asset, time, type, 'share_time')" title="Partager cette minute de la vidéo"
                        onclick="player_video_link()"></a>
                 </li>
                 <li>
-                    <a class="fullscreen-button" href="javascript:player_video_fullscreen(!fullscreen);" title="®Toggle_fullscreen®" ></a>
+                    <a class="fullscreen-button" href="javascript:player_video_fullscreen(!fullscreen);" title="Modifier l'affichage" ></a>
                 </li>
                 <li>
-                    <a class="panel-button" href="javascript:player_bookmarks_panel_toggle();" title="®Display_tab®" ></a>
+                    <a class="panel-button" href="javascript:player_bookmarks_panel_toggle();" title="Afficher les signets" ></a>
                 </li>
             </ul>
         </div>

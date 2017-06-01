@@ -87,7 +87,8 @@ if ($trace_on) {
         <script type="text/javascript" src="js/lib_threads.js"></script>
         <script type="text/javascript" src="js/lib_bookmarks.js"></script>
         <script type="text/javascript" src="js/lib_chat.js"></script>
-        //<script type="text/javascript" src="js/lib_quiz.js"></script>
+        <script type="text/javascript" src="js/lib_quiz.js"></script>
+        
 
         <script>
             var current_album;
@@ -97,6 +98,7 @@ if ($trace_on) {
             var clippy;
             var ie_browser = false;
             var threads_array = new Array();
+            var quiz_array = new Array();
             var display_thread_details = false;
             var display_threads_notif = false;
             var thread_to_display = null;
@@ -385,6 +387,40 @@ if ($trace_on) {
             }
 
             // ============== F O R M   V A L I D A T I O N ============= //
+
+            // -------------- Q U I Z Z E S ------------- //
+
+            /**
+             * checks the quiz creation form before submitting it
+             * @returns {Boolean}
+             */		
+            function quiz_form_check(timecodeClass,titleId) {
+              var timecode = document.getElementsByClassName(timecodeClass);
+              var title = document.getElementById(titleId);
+
+              for (var i = 0; i < timecode.length; i++) {
+                  if (isNaN(timecode[i].value)
+                      || timecode[i].value == ''
+                      || timecode[i].value < 1
+                      || timecode[i].value > duration) {
+                      window.alert('®Quiz_notvalid_timecode_1®' + (i + 1) + ' ®Quiz_notvalid_timecode_2®');
+                      return false;
+                  }
+              }
+              for (var i = 0; i < timecode.length; i++) {
+                    for(var j = 0; j < timecode.length; j++){
+                        if((i!=j) && ((parseInt(timecode[i].value) + 2) >= parseInt(timecode[j].value)) && ((parseInt(timecode[i].value) - 2) <= parseInt(timecode[j].value))){
+                            window.alert('®Quiz_notvalid_timecode_3®'+(i+1)+' ®Quiz_notvalid_timecode_4®'+(j+1)+')');
+                            return false;
+                        }
+                    }
+              }
+              if(!title.value || 0 === title.value.length) {
+                  window.alert('®Quiz_mandatory_title®');
+                  return false;
+              }
+              return true;
+            }
 
             // -------------- B O O K M A R K S ------------- //
 
@@ -717,13 +753,19 @@ if ($trace_on) {
                     $('.settings.bookmarks').show();
                     $('.settings.toc').hide();
                     current_tab = 'main';
-                } else {
+                } else if (elem == '.toc_button'){
                     $('.settings.bookmarks').hide();
                     $('.settings.toc').show();
                     current_tab = 'toc';
+                } else {
+                  $('.settings.bookmarks').hide();
+                  $('.settings.toc').hide();
+                  current_tab = 'quiz';
+                  // TODO : add .setting_quiz		
                 }
                 $('.bookmarks_button').removeClass("active");
                 $('.toc_button').removeClass("active");
+                $('.quiz_button').removeClass("active");		
                 $(elem).addClass("active");
             }
 
@@ -846,6 +888,5 @@ if ($trace_on) {
 
         <!-- Popup are generated on demand and included in this div -->
         <div id="div_popup" class="reveal-modal"></div>
-
     </body>
 </html>

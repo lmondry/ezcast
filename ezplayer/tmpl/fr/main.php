@@ -167,17 +167,6 @@ if ($trace_on) {
                 // history.pushState({"key": "show-album-assets", "function": "show_album_assets(" + album + "," + token + ")", "url": "index.php?action=view_album_assets&album=" + album + "&token=" + token}, 'album-details', 'index.php?action=view_album_assets');
             }
 
-            function modalLoad(show){
-              $body = $("body");
-              if (show) {
-                //console.log("should load");
-                $body.addClass("loading");
-              }else {
-                //console.log("should remove load");
-                $body.removeClass("loading");
-              }
-            }
-
             /**
              * Navigates to the given asset
              * @param {type} album
