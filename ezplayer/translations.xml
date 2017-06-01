@@ -833,6 +833,14 @@
         <label id="Quiz_select_quiz" lang="en">Select the quiz</label>
         <label id="Quiz_select_course" lang="fr">Selectionnez le cours</label>
         <label id="Quiz_select_course" lang="en">Select the course</label>
+        <label id="Quiz_answer_quiz" lang="fr">Répondre au quiz</label>
+        <label id="Quiz_answer_quiz" lang="en">Answer quiz</label>
+        <label id="Quiz_confirm_answer_quiz" lang="fr">Cette vidéo contient un quiz Moodle, voulez-vous y repondre ?</label>
+        <label id="Quiz_confirm_answer_quiz" lang="en">This video has an integrated Moodle quiz, would you want to answer it ?</label>
+        <label id="Quiz_finish_congrats" lang="fr">Bravo, vous avez fini le quiz Moodle !</label>
+        <label id="Quiz_finish_congrats" lang="en">Congratulations, you have finished the Moodle quiz !</label>
+        <label id="Quiz_close" lang="fr">Fermer</label>
+        <label id="Quiz_close" lang="en">Close</label>
 
         
     </labels>
