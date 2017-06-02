@@ -29,7 +29,7 @@
 include_once 'lib_print.php';
 ?>
 
-<div class="que"><div class="congrats"><h1>®Quiz_finish_congrats®</h1></div></div>
+<div class="que"><div class="congrats"><h1>Bravo, vous avez fini le quiz Moodle !</h1></div></div>
 <br>
 
 <?php
@@ -42,4 +42,4 @@ echo $str;
 
 <a class="close-reveal-modal" href="javascript:cancel_question();">&#215;</a>
 <br/>
-<a class="close-reveal-modal-button"  href="javascript:cancel_question();">®Close®</a>
+<a class="close-reveal-modal-button"  href="javascript:cancel_question();">Fermer</a>

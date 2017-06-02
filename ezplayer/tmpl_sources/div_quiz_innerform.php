@@ -20,13 +20,14 @@
         <div id="divQuizQuestion" style="width:100%;height:200px;overflow:auto;">
         <?php foreach ($all['courses'][0]['quizzes'][0]['questions'] as $k => $question) { ?>
             <div class="quizQuestion" id="<?php echo $k; ?>">
-                <label style="width:60px;">®Quiz_question® <?php echo ($k+1); ?></label>
+                <label style="width:100px;align=left;">®Quiz_question® <?php echo ($k+1); ?></label>
                 <br>
                 <p style="padding-left:10pt;"><?php echo $question['text']; ?></p>
                 <input type="hidden" id="quiz_asset" name="quiz_questionId_Q<?php echo ($k+1); ?>" value="<?php echo $question['slot']; ?>"/>
                 <input class="quiz_timecode" id="quiz_timecode_Q<?php echo ($k+1); ?>" name="quiz_timecode_Q<?php echo ($k+1); ?>" type="number" value="1" min="1" required/>
                 <a class="button" href="javascript:getTimecode(<?php echo ($k+1); ?>);">®Quiz_current_time®</a>
             </div>
+            <br>
         <?php } ?>
         </div>
     <?php } else { ?>

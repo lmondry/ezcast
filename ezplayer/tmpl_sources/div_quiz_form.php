@@ -102,70 +102,74 @@ if(all.courses[0].quizzes[0].intro){
   document.getElementById('quiz_description').value = all.courses[0].quizzes[0].intro.replace(/<(?:.|\n)*?>/gm, '');
 }
 
-function populateDivQuestions(courseId,quizId){
+function populateDivQuestions(courseId,quizId) {
     var fragment = document.createDocumentFragment();
     var sel = document.getElementById('divQuizQuestion');
 
-    if (sel){
-      $('#divQuizQuestion').find('.quizQuestion').remove().end();
+    if (sel) {
+        $('#divQuizQuestion').find('.quizQuestion').remove().end();
+        $('#divQuizQuestion').find('br').remove().end();
     }
 
     var list = all.courses[courseId].quizzes[quizId].questions;
-    if(list.length > 0){
-      list.forEach(function(obj, index) {
-          var opt = document.createElement('div');
-          opt.className = 'quizQuestion';
-          opt.id = index;
-          opt.innerHTML = '<label style="width:60px;">®Quiz_question® '+(index+1)+'</label>';
-          opt.innerHTML += '<br>';
-          opt.innerHTML += '<p style="padding-left:10pt;">'+obj.text+'</p>';
-          opt.innerHTML += '<input type="hidden" id="quiz_asset" name="quiz_questionId_Q'+(index+1)+'" value="'+obj.slot+'"/>';
-          opt.innerHTML += '<input class="quiz_timecode" id="quiz_timecode_Q'+(index+1)+'" name="quiz_timecode_Q'+(index+1)+'" type="number" value="1" min="1" max="'+(duration-1)+'" required/>';
-          opt.innerHTML += '<a class="button" href="javascript:getTimecode('+(index+1)+');">®Quiz_current_time®</a>';
-          opt.innerHTML += '<br><br>';
-          fragment.appendChild(opt);
-      });
+    if (list.length > 0) {
+        list.forEach(function (obj, index) {
+            var opt = document.createElement('div');
+            opt.className = 'quizQuestion';
+            opt.id = index;
+            opt.innerHTML = '<label style="width:100px;align=left;">®Quiz_question® ' + (index + 1) + '</label>';
+            opt.innerHTML += '<br>';
+            opt.innerHTML += '<p style="padding-left:10pt;">' + obj.text + '</p>';
+            opt.innerHTML += '<input type="hidden" id="quiz_asset" name="quiz_questionId_Q' + (index + 1) + '" value="' + obj.slot + '"/>';
+            opt.innerHTML += '<input class="quiz_timecode" id="quiz_timecode_Q' + (index + 1) + '" name="quiz_timecode_Q' + (index + 1) + '" type="number" value="1" min="1" max="' + (duration - 1) + '" required/>';
+            opt.innerHTML += '<a class="button" href="javascript:getTimecode(' + (index + 1) + ');">®Quiz_current_time®</a>';
+            fragment.appendChild(opt);
+            var br = document.createElement('br');
+            fragment.appendChild(br);
+        });
     }
     sel.appendChild(fragment);
-  }
+}
 
-  if(document.getElementById('selectCourses')){
-    document.getElementById('selectCourses').onchange = function(){
+if(document.getElementById('selectCourses')) {
+    document.getElementById('selectCourses').onchange = function () {
 
-      if ($('#divQuizQuestion.quizQuestion')){
-        $('#divQuizQuestion').find('.quizQuestion').remove().end();
-      }
-      for(var i = 0;i<all.courses.length;i++){
-        if(all.courses[i].id == document.getElementById('selectCourses').value){
-          populateSelect('selectQuizzes','quizId',all.courses[i].quizzes,"name","id",{id:-1,name:"®Quiz_no_quiz®"});
-          for (var j = 0; j < all.courses[i].quizzes.length; j++) {
-            if(all.courses[i].quizzes[j].id == document.getElementById('selectQuizzes').value){
-              populateDivQuestions(i,j);
-              document.getElementById('quiz_title').value = all.courses[i].quizzes[j].name;
-              document.getElementById('quiz_description').value = all.courses[i].quizzes[j].intro.replace(/<(?:.|\n)*?>/gm, '');
-              return;
+        if ($('#divQuizQuestion.quizQuestion')) {
+            $('#divQuizQuestion').find('.quizQuestion').remove().end();
+        }
+        for (var i = 0; i < all.courses.length; i++) {
+            if (all.courses[i].id == document.getElementById('selectCourses').value) {
+                populateSelect('selectQuizzes', 'quizId', all.courses[i].quizzes, "name", "id", {
+                    id: -1,
+                    name: "®Quiz_no_quiz®"
+                });
+                for (var j = 0; j < all.courses[i].quizzes.length; j++) {
+                    if (all.courses[i].quizzes[j].id == document.getElementById('selectQuizzes').value) {
+                        populateDivQuestions(i, j);
+                        document.getElementById('quiz_title').value = all.courses[i].quizzes[j].name;
+                        document.getElementById('quiz_description').value = all.courses[i].quizzes[j].intro.replace(/<(?:.|\n)*?>/gm, '');
+                        return;
+                    }
+                }
+                return;
             }
-          }
-          return;
         }
-      }
     }
-  }
+}
 
 
-  if(document.getElementById('selectQuizzes')){
-
-    document.getElementById('selectQuizzes').onchange = function(){
-      for(var i = 0;i<all.courses.length;i++){
-        for (var j = 0; j < all.courses[i].quizzes.length; j++) {
-          if(all.courses[i].quizzes[j].id == document.getElementById('selectQuizzes').value){
-            populateDivQuestions(i,j);
-            document.getElementById('quiz_title').value = all.courses[i].quizzes[j].name;
-            document.getElementById('quiz_description').value = all.courses[i].quizzes[j].intro.replace(/<(?:.|\n)*?>/gm, '');
-            return;
-          }
+if(document.getElementById('selectQuizzes')) {
+    document.getElementById('selectQuizzes').onchange = function () {
+        for (var i = 0; i < all.courses.length; i++) {
+            for (var j = 0; j < all.courses[i].quizzes.length; j++) {
+                if (all.courses[i].quizzes[j].id == document.getElementById('selectQuizzes').value) {
+                    populateDivQuestions(i, j);
+                    document.getElementById('quiz_title').value = all.courses[i].quizzes[j].name;
+                    document.getElementById('quiz_description').value = all.courses[i].quizzes[j].intro.replace(/<(?:.|\n)*?>/gm, '');
+                    return;
+                }
+            }
         }
-      }
     }
-  }
+}
 </script>

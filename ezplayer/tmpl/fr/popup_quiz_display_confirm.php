@@ -29,10 +29,10 @@
 include_once 'lib_print.php';
 ?>
 
-<h2><b style="text-transform:uppercase;">®Quiz_answer_quiz®</b></h2>
+<h2><b style="text-transform:uppercase;">Répondre au quiz</b></h2>
 
-<br/><p>®Quiz_confirm_answer_quiz®</p>
+<br/><p>Cette vidéo contient un quiz Moodle, voulez-vous y repondre ?</p>
 <a class="close-reveal-modal" href="javascript:display_quiz=false;close_popup();">&#215;</a>
 <br/>
-<a href="javascript:yes_popup_answer_quiz();" class="delete-button-confirm">®Yes®</a>
-<a class="close-reveal-modal-button"  href="javascript:display_quiz=false;close_popup();">®No®</a>
+<a href="javascript:yes_popup_answer_quiz();" class="delete-button-confirm">Oui</a>
+<a class="close-reveal-modal-button"  href="javascript:display_quiz=false;close_popup();">Non</a>

@@ -112,6 +112,7 @@ function populateDivQuestions(courseId,quizId){
 
     if (sel){
       $('#divQuizQuestion').find('.quizQuestion').remove().end();
+      $('#divQuizQuestion').find('br').remove().end();
     }
 
     var list = all.courses[courseId].quizzes[quizId].questions;
@@ -120,14 +121,15 @@ function populateDivQuestions(courseId,quizId){
           var opt = document.createElement('div');
           opt.className = 'quizQuestion';
           opt.id = index;
-          opt.innerHTML = '<label style="width:60px;">Question '+(index+1)+'</label>';
+          opt.innerHTML = '<label style="width:100px;align=left;">Question '+(index+1)+'</label>';
           opt.innerHTML += '<br>';
           opt.innerHTML += '<p style="padding-left:10pt;">'+obj.text+'</p>';
           opt.innerHTML += '<input type="hidden" id="quiz_asset" name="quiz_questionId_Q'+(index+1)+'" value="'+obj.slot+'"/>';
           opt.innerHTML += '<input class="quiz_timecode" id="quiz_timecode_Q'+(index+1)+'" name="quiz_timecode_Q'+(index+1)+'" type="number" value="1" min="1" max="'+(duration-1)+'" required/>';
           opt.innerHTML += '<a class="button" href="javascript:getTimecode('+(index+1)+');">Current Time</a>';
-          opt.innerHTML += '<br><br>';
           fragment.appendChild(opt);
+          var br = document.createElement('br');
+          fragment.appendChild(br);
       });
     }
     sel.appendChild(fragment);
