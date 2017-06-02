@@ -114,10 +114,29 @@ function populateDivQuestions(courseId,quizId) {
     var list = all.courses[courseId].quizzes[quizId].questions;
     if (list.length > 0) {
         list.forEach(function (obj, index) {
+            var qtype = '';
+
+            switch (obj.type) {
+                case 'multichoice':
+                    qtype =  '®Quiz_multichoice®';
+                    break;
+                case 'truefalse':
+                    qtype =  '®Quiz_truefalse®';
+                    break;
+                case 'shortanswer':
+                    qtype =  '®Quiz_shortanswer®';
+                    break;
+                default:
+                    qtype =  '®Quiz_unknown type®';
+                    break;
+            }
+
             var opt = document.createElement('div');
             opt.className = 'quizQuestion';
             opt.id = index;
             opt.innerHTML = '<label style="width:100px;align=left;">®Quiz_question® ' + (index + 1) + '</label>';
+            opt.innerHTML += '<br>';
+            opt.innerHTML += '<label style="width:150px;text-align:left;">®Quiz_question_type® : '+qtype+'</label>';
             opt.innerHTML += '<br>';
             opt.innerHTML += '<p style="padding-left:10pt;">' + obj.text + '</p>';
             opt.innerHTML += '<input type="hidden" id="quiz_asset" name="quiz_questionId_Q' + (index + 1) + '" value="' + obj.slot + '"/>';

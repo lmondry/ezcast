@@ -36,11 +36,14 @@ include_once 'lib_print.php';
 $str = <<<HTML_CODE
     $question_html 
 HTML_CODE;
-    
+
+$str = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $str);
 echo $str;
 ?>
 
+<div>
 <a class="close-reveal-modal" href="javascript:cancel_question();">&#215;</a>
 <br/>
 <a href="javascript:submit_question(<?php echo ($question_id); ?>,quiz_array[<?php echo ($question_id); ?>].attemptid);" class="delete-button-confirm">®Quiz_answer®</a>
 <a class="close-reveal-modal-button"  href="javascript:cancel_question();">®Cancel®</a>
+</div>

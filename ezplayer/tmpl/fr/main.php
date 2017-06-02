@@ -915,7 +915,7 @@ if ($trace_on) {
         <div class="reveal-modal-bg"></div>
 
         <!-- Popup are generated on demand and included in this div -->
-        <div id="div_popup" class="reveal-modal"></div>
+        <div id="div_popup" class="reveal-modal" style="top:0px"></div>
         <div class="modal"><!-- Place at bottom of page --></div>
     </body>
 </html>

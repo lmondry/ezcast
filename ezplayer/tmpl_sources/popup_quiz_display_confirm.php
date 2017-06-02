@@ -30,7 +30,6 @@ include_once 'lib_print.php';
 ?>
 
 <h2><b style="text-transform:uppercase;">®Quiz_answer_quiz®</b></h2>
-
 <br/><p>®Quiz_confirm_answer_quiz®</p>
 <a class="close-reveal-modal" href="javascript:display_quiz=false;close_popup();">&#215;</a>
 <br/>

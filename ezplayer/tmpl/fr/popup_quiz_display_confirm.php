@@ -30,7 +30,6 @@ include_once 'lib_print.php';
 ?>
 
 <h2><b style="text-transform:uppercase;">Répondre au quiz</b></h2>
-
 <br/><p>Cette vidéo contient un quiz Moodle, voulez-vous y repondre ?</p>
 <a class="close-reveal-modal" href="javascript:display_quiz=false;close_popup();">&#215;</a>
 <br/>

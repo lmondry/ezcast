@@ -841,6 +841,26 @@
         <label id="Quiz_finish_congrats" lang="en">Congratulations, you have finished the Moodle quiz !</label>
         <label id="Quiz_close" lang="fr">Fermer</label>
         <label id="Quiz_close" lang="en">Close</label>
+        <label id="Quiz_multichoice" lang="fr">Choix Multiple</label>
+        <label id="Quiz_multichoice" lang="en">Multi-choice</label>
+        <label id="Quiz_truefalse" lang="fr">Vrai ou Faux</label>
+        <label id="Quiz_truefalse" lang="en">True or False</label>
+        <label id="Quiz_shortanswer" lang="fr">Réponse Courte</label>
+        <label id="Quiz_shortanswer" lang="en">Short Answer</label>
+        <label id="Quiz_unknown type" lang="fr">Type Inconnu</label>
+        <label id="Quiz_unknown type" lang="en">Unknown Type</label>
+        <label id="Quiz_question_type" lang="fr">Type</label>
+        <label id="Quiz_question_type" lang="en">Type</label>
+        <label id="" lang="fr"></label>
+        <label id="" lang="en"></label>
+        <label id="" lang="fr"></label>
+        <label id="" lang="en"></label>
+        <label id="" lang="fr"></label>
+        <label id="" lang="en"></label>
+        <label id="" lang="fr"></label>
+        <label id="" lang="en"></label>
+
+
 
         
     </labels>

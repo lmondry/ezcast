@@ -37,9 +37,12 @@ $str = <<<HTML_CODE
     $correction_html 
 HTML_CODE;
 
+$str = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $str);
 echo $str;
 ?>
 
+<div>
 <a class="close-reveal-modal" href="javascript:cancel_question();">&#215;</a>
 <br/>
 <a class="close-reveal-modal-button"  href="javascript:cancel_question();">Fermer</a>
+</div>

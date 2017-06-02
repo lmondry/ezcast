@@ -18,9 +18,27 @@
     <br/>
     <?php if (count($all['courses'][0]['quizzes'][0]['questions']) > 0){ ?>
         <div id="divQuizQuestion" style="width:100%;height:200px;overflow:auto;">
-        <?php foreach ($all['courses'][0]['quizzes'][0]['questions'] as $k => $question) { ?>
+        <?php foreach ($all['courses'][0]['quizzes'][0]['questions'] as $k => $question) {
+
+            switch ($question['type']) {
+                case 'multichoice':
+                    $type =  'Choix Multiple';
+                    break;
+                case 'truefalse':
+                    $type =  'Vrai ou Faux';
+                    break;
+                case 'shortanswer':
+                    $type =  'Réponse Courte';
+                    break;
+                default:
+                    $type =  'Type inconnu';
+                    break;
+            }
+            ?>
             <div class="quizQuestion" id="<?php echo $k; ?>">
                 <label style="width:100px;align=left;">®Quiz_question® <?php echo ($k+1); ?></label>
+                <br>
+                <label style="width:150px;text-align:left;">®Quiz_question_type® : <?php echo $type; ?></label>
                 <br>
                 <p style="padding-left:10pt;"><?php echo $question['text']; ?></p>
                 <input type="hidden" id="quiz_asset" name="quiz_questionId_Q<?php echo ($k+1); ?>" value="<?php echo $question['slot']; ?>"/>
