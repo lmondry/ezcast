@@ -52,5 +52,5 @@ echo $str;
 <div>
 <a class="close-reveal-modal" href="javascript:cancel_question();">&#215;</a>
 <br/>
-<a class="close-reveal-modal-button"  href="javascript:cancel_question();">®Close®</a>
+<a class="close-reveal-modal-button"  href="javascript:cancel_question();">®Quiz_close®</a>
 </div>

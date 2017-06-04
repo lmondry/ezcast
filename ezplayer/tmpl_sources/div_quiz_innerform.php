@@ -36,7 +36,7 @@
             }
             ?>
             <div class="quizQuestion" id="<?php echo $k; ?>">
-                <label style="width:100px;align=left;">®Quiz_question® <?php echo ($k+1); ?></label>
+                <label style="width:100px;text-align:left;">®Quiz_question® <?php echo ($k+1); ?></label>
                 <br>
                 <label style="width:150px;text-align:left;">®Quiz_question_type® : <?php echo $type; ?></label>
                 <br>
