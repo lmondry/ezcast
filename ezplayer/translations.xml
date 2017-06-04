@@ -851,10 +851,10 @@
         <label id="Quiz_unknown type" lang="en">Unknown Type</label>
         <label id="Quiz_question_type" lang="fr">Type</label>
         <label id="Quiz_question_type" lang="en">Type</label>
-        <label id="" lang="fr"></label>
-        <label id="" lang="en"></label>
-        <label id="" lang="fr"></label>
-        <label id="" lang="en"></label>
+        <label id="key_q" lang="fr">Nouveau quiz</label>
+        <label id="key_q" lang="en">New quiz</label>
+        <label id="Quiz_redo_title" lang="fr">Refaire le quiz</label>
+        <label id="Quiz_redo_title" lang="en">Redo the quiz</label>
         <label id="" lang="fr"></label>
         <label id="" lang="en"></label>
         <label id="" lang="fr"></label>

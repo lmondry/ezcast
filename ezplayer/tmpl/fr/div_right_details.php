@@ -94,7 +94,7 @@ include_once 'lib_print.php';
         <div class='toc_button'><a href="#asset_toc" onclick="setActivePane('.toc_button'); server_trace(new Array('3', 'bookmarks_swap', current_album, current_asset, current_tab));" title="Afficher les signets officiels"></a></div>
 
         <?php if(in_array($quiz[0]['courseId'],$_SESSION['moodle_courses']) || ((acl_has_album_moderation($album) || acl_is_admin()) && !empty($_SESSION))) { ?>
-            <div class='quiz_button' ><a href = "#asset_quiz" onclick = "setActivePane('.quiz_button'); server_trace(new Array('3', 'quiz_swap', current_album, current_asset, current_tab));" title = "Afficher les quiz" ></a ></div >
+            <div class='quiz_button' ><a href = "#asset_quiz" onclick = "setActivePane('.quiz_button'); server_trace(new Array('3', 'quiz_swap', current_album, current_asset, current_tab));" title="Afficher les quiz" ></a ></div >
         <?php } ?>
         <div class="settings bookmarks">
             <a class="menu-button" title="Gestion des signets" onclick="$(this).toggleClass('active')" href="javascript:toggle('#bookmarks_actions');"></a>
@@ -300,7 +300,7 @@ include_once 'lib_print.php';
                                                 <input type="hidden" name="asset" id="quiz_asset" value="<?php echo $quiz[0]['asset']; ?>"/>
                                                 <input type="hidden" name="courseId" id="quiz_course_id" value="<?php echo $quiz[0]['courseId']; ?>"/>
                                                 <input type="hidden" name="quizId" id="quiz_id" value="<?php echo $quiz[0]['quizId']; ?>"/>
-                                                <div class="rose-title">Title:</div>
+                                                <div class="rose-title">Titre:</div>
                                                 <input name="title" id="quiz_title_edit" type="text" maxlength="70" value="<?php echo $quiz[0]["title"]; ?>" required/>
                                                 <div class="rose-title">Description :</div>
                                                 <textarea name="description" id="quiz_description_edit" rows="4" ><?php print_info($quiz[0]['description']); ?></textarea>
@@ -327,19 +327,17 @@ include_once 'lib_print.php';
                                             </form>
                                         </div>
 
-                                        <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
+
                                             <div class="quiz_options">
-                                                <a class="delete-button" title="Supprimer le quiz" href="javascript:popup_quiz('<?php echo $quiz[0]['album']; ?>', '<?php echo $quiz[0]['asset']; ?>', '<?php echo $quiz[0]['title']; ?>');"></a>
+                                                <a class="redo-button rotatable" title="Refaire le quiz" href="javascript:if(!display_quiz){quiz_redo();}"></a>
+                                                <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
+                                                <a class="delete-button" title="Supprimer le quiz" href="javascript:popup_quiz('<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['album'])); ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['asset'])); ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['title'])); ?>');"></a>
                                                 <a class="edit-button rose" title="Editer le quiz" href="javascript:quiz_edit('<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['title'])); ?>','<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['description'])); ?>',quiz_array);"></a>
+                                                <?php } ?>
                                             </div>
-                                        <?php } ?>
+
                                     </div>
                                 </li>
-                            <!--<?php //if (isset($timecode) && $timecode == $bookmark['timecode']) { ?>
-                                <script>
-                                    bookmark_more_toggle('<?php echo $index; ?>', 'toc', $("#toc_<?php echo $index; ?> .more a"));
-                                </script>
-                            <?php //} ?>-->
                             <script>if(quiz_array.length > 0) quiz_array = new Array();</script>
                             <?php foreach ($quiz as $index => $question) {  ?>
                                 <?php if(in_array($quiz[0]['courseId'],$_SESSION['moodle_courses'])) {?>

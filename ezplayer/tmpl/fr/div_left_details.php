@@ -48,16 +48,6 @@ switch (strtolower($_SESSION['browser_name'])) {
 
 
 ?>
-<script>
-    console.log("moodle_token");
-    console.log('<?php echo $_SESSION['moodle_token']; ?>');
-    console.log("moodle_basedir");
-    console.log('<?php global $moodle_basedir; echo $moodle_basedir; ?>');
-    console.log("moodle_webservices");
-    console.log('<?php global $moodle_webservice; echo $moodle_webservice; ?>');
-    console.log("moodle_courses");
-    console.log('<?php echo json_encode($_SESSION['moodle_courses']); ?>');
-</script>
 
 <div id="main_player">
     <!-- #player_header : contains album title and asset title
@@ -78,7 +68,7 @@ switch (strtolower($_SESSION['browser_name'])) {
     </div>
 
     <div id="question_div" style="display: none"></div>
-    
+
     <div id="video_player" class="remove_full">
         <!-- #main_video : HTML5 video player.
             There is no selected source by default.

@@ -80,10 +80,6 @@
 
 <script>
 
-    console.log(<?php echo json_encode($all);?>);
-//$(document).ready(function() {
-  //$.getScript('js/lib_quiz.js');
-
   $('#quiz_form input').keydown(function (e) {
       if (e.keyCode == 13) {
           if (quiz_form_check('quiz_timecode','quiz_title')){
@@ -91,7 +87,6 @@
           }
       }
   });
-//});
 
 var all = <?php echo json_encode($all); ?>;
 

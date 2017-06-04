@@ -34,6 +34,14 @@ include_once 'lib_print.php';
 
 <?php
 $str = <<<HTML_CODE
+    $generalFeedbackHTML;
+HTML_CODE;
+?>
+
+<div class="que"><div class="inform"><h3><?php echo $generalFeedbackHTML; ?></h3></div></div>
+
+<?php
+$str = <<<HTML_CODE
     $correction_html 
 HTML_CODE;
 

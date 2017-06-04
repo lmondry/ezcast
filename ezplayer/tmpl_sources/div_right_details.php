@@ -94,7 +94,7 @@ include_once 'lib_print.php';
         <div class='toc_button'><a href="#asset_toc" onclick="setActivePane('.toc_button'); server_trace(new Array('3', 'bookmarks_swap', current_album, current_asset, current_tab));" title="®Display_toc®"></a></div>
 
         <?php if(in_array($quiz[0]['courseId'],$_SESSION['moodle_courses']) || ((acl_has_album_moderation($album) || acl_is_admin()) && !empty($_SESSION))) { ?>
-            <div class='quiz_button' ><a href = "#asset_quiz" onclick = "setActivePane('.quiz_button'); server_trace(new Array('3', 'quiz_swap', current_album, current_asset, current_tab));" title = "®Display_quizzes®" ></a ></div >
+            <div class='quiz_button' ><a href="#asset_quiz" onclick = "setActivePane('.quiz_button'); server_trace(new Array('3', 'quiz_swap', current_album, current_asset, current_tab));" title="®Display_quizzes®" ></a ></div >
         <?php } ?>
         <div class="settings bookmarks">
             <a class="menu-button" title="®Bookmarks_actions®" onclick="$(this).toggleClass('active')" href="javascript:toggle('#bookmarks_actions');"></a>
@@ -327,12 +327,13 @@ include_once 'lib_print.php';
                                             </form>
                                         </div>
 
-                                        <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
-                                            <div class="quiz_options">
-                                                <a class="delete-button" title="®Quiz_delete_title®" href="javascript:popup_quiz('<?php echo $quiz[0]['album']; ?>', '<?php echo $quiz[0]['asset']; ?>', '<?php echo $quiz[0]['title']; ?>');"></a>
+                                        <div class="quiz_options">
+                                            <a class="redo-button rotatable" title="®Quiz_redo_title®" href="javascript:if(!display_quiz){quiz_redo();}"></a>
+                                            <?php if (acl_user_is_logged() && acl_has_album_moderation($album)) { ?>
+                                                <a class="delete-button" title="®Quiz_delete_title®" href="javascript:popup_quiz('<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['album'])); ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['asset'])); ?>', '<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['title'])); ?>');"></a>
                                                 <a class="edit-button rose" title="®Quiz_edit_title®" href="javascript:quiz_edit('<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['title'])); ?>','<?php echo htmlspecialchars(str_replace("'", "\'", $quiz[0]['description'])); ?>',quiz_array);"></a>
-                                            </div>
-                                        <?php } ?>
+                                            <?php } ?>
+                                        </div>
                                     </div>
                                 </li>
                             <script>if(quiz_array.length > 0) quiz_array = new Array();</script>

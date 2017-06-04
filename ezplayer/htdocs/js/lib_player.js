@@ -63,7 +63,7 @@ window.addEventListener("keyup", function (e) {
         from_shortcut = true;
         // focused element is not an input or textarea
         switch (e.keyCode) {
-            case 32:  // space 
+            case 32:  // space
                 player_video_play_toggle();
                 break;
             case 66:  // 'b'
@@ -149,7 +149,7 @@ window.addEventListener("keydown", function (e) {
     }
 }, false);
 
-// resizes the video when video is played fullscreen 
+// resizes the video when video is played fullscreen
 $(window).bind('resize', function (e)
 {
     window.resizeEvt;
@@ -191,7 +191,7 @@ function player_prepare(currentQuality, currentType, startTime) {
     var videos = document.getElementsByTagName('video');
     var max = videos.length;
     var seeked = false;
-    
+
     // determines whether it's a camslide or not
     camslide = (max === 2);
     // set the current type being played
@@ -207,11 +207,11 @@ function player_prepare(currentQuality, currentType, startTime) {
     }
 
     for (var i = 0; i < max; i++) {
-        // when the user seeks the video 
+        // when the user seeks the video
         // --> saves the current time
         // --> puts the timecode in bookmark and thread forms
         videos[i].addEventListener("seeked", function () {
-            // checks if the mouse is up. If not, the user is still seeking so 
+            // checks if the mouse is up. If not, the user is still seeking so
             // we don't need to save this trace
             if (!mouseDown) {
                 time = Math.round(this.currentTime);
@@ -275,10 +275,10 @@ function player_prepare(currentQuality, currentType, startTime) {
         videos[i].addEventListener('play', function () {
             if(seeked) {
                 seeked = false;
-                console.log("video_seeked");
+                //console.log("video_seeked");
                 server_trace(new Array('4', 'video_seeked', current_album, current_asset, duration, previous_time, time, type, quality));
             }
-            
+
             if (!shortcuts)
                 $(".shortcuts_tab").css('display', 'none');
             if (!trace_pause) {
@@ -454,7 +454,7 @@ function player_video_quality_set(media_quality) {
     var paused = video.paused;
     var oldCurrentTime = video.currentTime;
     // doesn't work in Safari 5
-    // source.setAttribute('src', source.getAttribute(media + '_src')); 
+    // source.setAttribute('src', source.getAttribute(media + '_src'));
 
     if (camslide) {
         document.getElementById('main_video').setAttribute('src', source.getAttribute(media_quality + '_cam_src'));
@@ -503,7 +503,7 @@ function player_video_seek(bookmark_time, bookmark_type) {
 }
 
 /**
- * changes the video playback speed 
+ * changes the video playback speed
  * @param {type} rate up | down
  * @returns {undefined}
  */
@@ -725,23 +725,23 @@ function player_bookmark_form_toggle(source) {
 
     from_shortcut = false;
     if (bookmark_form != "") {
-        
+
         server_trace(new Array('4', 'bookmark_form_hide', current_album, current_asset, duration, time, type, bookmark_form, quality, origin));
         if(bookmark_form == source) {
             player_bookmark_form_hide(false);
             return;
         }
     }
-    
+
 
     server_trace(new Array('4', 'bookmark_form_show', current_album, current_asset, duration, time, type, source, quality, origin));
     player_bookmark_form_show(source);
-    $("#bookmark_title").focus();   
+    $("#bookmark_title").focus();
 }
 
 // ===================== T H R E A D S    A C T I O N S ======================= //
 
-// displays thread creation form 
+// displays thread creation form
 function player_thread_form_show() {
     // Creates the editor if it doesn't exist yet otherwise it will display 2 editors (or more)
     if (!$('#thread_desc_tinymce').hasClass('editor-created')) {

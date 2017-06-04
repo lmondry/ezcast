@@ -21,6 +21,7 @@ function index($param = array()) {
             break;
         case 'feedback':
             $correction_html = $input['correctionHtml'];
+            $generalFeedbackHTML = $input['feedbackHtml'];
             include_once template_getpath('popup_quiz_display_feedback.php');
             break;
         case 'noFeedback':

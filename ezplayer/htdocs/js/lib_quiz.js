@@ -133,7 +133,6 @@ $(document).ready(function() {
     ajaxRequest("mod_quiz_process_attempt",{attemptid:id,finishattempt: 1}).success(function(response){
       populateSelect('selectCourses',all.courses,"fullname","id",{id:-1,name:"No course"});
       populateSelect('selectQuizzes',all.courses[0].quizzes,"name","id",{id:-1,name:"No quiz"});
-      console.log(all);
     });
   }
 
@@ -190,7 +189,6 @@ $(document).ready(function() {
   if(document.getElementById('selectQuizzes')){
 
     document.getElementById('selectQuizzes').onchange = function(){
-      console.log("hello world");
       for(var i = 0;i<all.courses.length;i++){
         for (var j = 0; j < all.courses[i].quizzes.length; j++) {
           if(all.courses[i].quizzes[j].id == document.getElementById('selectQuizzes').value){

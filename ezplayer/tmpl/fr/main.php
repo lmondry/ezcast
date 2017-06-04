@@ -390,11 +390,14 @@ if ($trace_on) {
 
             // -------------- Q U I Z Z E S ------------- //
 
+            /**
+             * checks the quiz creation form before submitting it
+             * @returns {Boolean}
+             */
             function quiz_form_check(timecodeClass,titleId) {
               var timecode = document.getElementsByClassName(timecodeClass);
               var title = document.getElementById(titleId);
 
-              console.log(timecode);
 
               for (var i = 0; i < timecode.length; i++) {
                   if (isNaN(timecode[i].value)
@@ -423,30 +426,6 @@ if ($trace_on) {
 
               return true;
             }
-
-            /*
-            function quiz_form_edit_check() {
-
-                var timecode = document.getElementsByClassName('quiz_timecode_edit');
-                var title = document.getElementById('quiz_title_edit');
-
-                for (var i = 0; i < timecode.length; i++) {
-                    if (isNaN(timecode[i].value)
-                        || timecode[i].value == ''
-                        || timecode[i].value < 1
-                        || timecode[i].value > duration) {
-                        window.alert('Le code temps de la Q'+(i+1)+' est non-valide');
-                        return false;
-                    }
-                }
-
-                if (title === '') {
-                    window.alert('Le titre est obligatoire.');
-                    return false;
-                }
-                console.log("check return true");
-                return true;
-            }*/
 
 
             // -------------- B O O K M A R K S ------------- //
