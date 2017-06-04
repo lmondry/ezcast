@@ -312,6 +312,9 @@ function load_page() {
             requireController('quiz_display_question.php');
             break;
 
+        case 'get_moodle_servUrl':
+            requireController('quiz_moodle_server_url.php');
+            break;
 
         // ============== B O O K M A R K S =============== //
         // creates a new bookmark
