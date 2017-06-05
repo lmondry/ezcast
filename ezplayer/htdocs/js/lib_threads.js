@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -30,6 +30,7 @@ function thread_form_submit() {
         data: $('#submit_thread_form').serialize(),
         success: function (response) {
             $('#threads').html(response);
+            console.log("reload thread");
             tinymce.remove('textarea');
         }
     });
@@ -235,7 +236,7 @@ function thread_comment_edit_form_prepare(comId) {
 }
 
 /**
- * Submits the comment edition form to the server 
+ * Submits the comment edition form to the server
  * @param {type} comment_id
  * @returns {Boolean}
  */
@@ -506,7 +507,7 @@ function popup_thread_visibility() {
 
 /**
  * Renders a modal window containing the thread information
- * 
+ *
  * @param {type} thread_id
  * @param {type} display the action to be shown in the modal window (delete | ...)
  * @returns {undefined}
@@ -526,7 +527,7 @@ function popup_thread(thread_id, display) {
 
 /**
  * Renders a modal window containing the comment information
- * 
+ *
  * @param {type} comment_id
  * @param {type} display the action to be shown in the modal window (delete | ...)
  * @returns {undefined}

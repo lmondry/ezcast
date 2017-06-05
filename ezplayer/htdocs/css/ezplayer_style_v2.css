@@ -921,7 +921,6 @@ body {
     background: url(../images/Generale/q.png) no-repeat center;
 }
 
-
 .shortcuts_tab{
     display: inline-block;
     position: relative;
@@ -1226,6 +1225,160 @@ body {
     margin: 0 auto;
 }
 
+#quiz_form{
+    display: none;
+    height: 500px;
+    z-index: 850;
+    background-color: #F1F1F1;
+    width: 100%;
+}
+
+#quiz_form_wrapper{
+    max-width: 638px;
+    margin: 0 auto;
+}
+
+.que .outcome, .que .comment {
+    background-color: #fcf8e3;
+    border-color: #faf2cc;
+    color: #8a6d3b;
+}
+
+.que.multichoice .answer .specificfeedback {
+    display: inline;
+    padding: 0 .7em;
+    background: #fff3bf;
+}
+
+.que .specificfeedback, .que .generalfeedback, .que .rightanswer, .que .im-feedback, .que .feedback, .que p {
+    margin: 0 0 .5em;
+}
+
+.que.multichoice .answer div[class^="r"] label, .que.multichoice .answer div[class^="r"] div.specificfeedback {
+    text-indent: 0;
+}
+
+.que.multichoice .answer div[class^="r"]{
+    padding: .3em 0 .3em 25px;
+    text-indent: -25px;
+}
+
+.que.multichoice .answer div[class^="r"] input {
+    margin: 0 5px;
+    padding: 0;
+    width: 15px;
+}
+
+.que .ablock {
+    margin: .7em 0 .3em 0;
+}
+
+.que.shortanswer .answer input {
+    width: 80%;
+}
+
+.que label {
+    display: inline;
+    padding-left: 5px;
+}
+
+.que.truefalse .answer div.r0, .que.truefalse .answer div.r1 {
+    padding: .3em;
+}
+
+.que .questioncorrectnessicon {
+    vertical-align: text-bottom;
+}
+
+.que .formulation, .que .outcome, .que .comment, .que .congrats {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    margin-left:15px;
+}
+
+.que .congrats {
+  background-color: #e6ffe6;
+  border-color: #e6ffe6;
+  color: #006600;
+}
+
+.que .inform {
+    background-color: #d9edf7;
+    border-color: #d9edf7;
+    padding: 5px;
+    color: #31708f;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.que .formulation {
+    background-color: #d9edf7;
+    border-color: #bcdff1;
+    color: #31708f;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    margin-left: 105px;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+div.outcome.clearfix {
+    margin-left: 105px;
+    margin-top: -10px;
+    margin-bottom: 0px;
+}
+
+.que .info {
+    float: left;
+    width: 7em;
+    padding: .5em;
+    margin: 5px;
+    background-color: #eceeef;
+    border: 1px solid #d9dddf;
+    border-radius: 2px;
+}
+
+.que span.qno {
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+.que .info>div {
+    font-size: .8em;
+    margin-top: .7em;
+}
+
+.que .info .editquestion img, .que .info .questionflag img, .que .info .questionflag input {
+    vertical-align: bottom;
+}
+
+.que input.questionflagimage {
+    padding-right: 3px;
+}
+
+.que .info .questionflag.editable {
+    cursor: pointer;
+}
+
+.que {
+    clear: left;
+    text-align: left;
+    margin: 0 auto 1.8em auto;
+}
+
+.que p {
+    margin: 0 0 .5em;
+}
+
+.que .content {
+    background-color: #c6c6d2;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
 #thread_form{
     display: none;
     z-index: 850;
@@ -1262,14 +1415,22 @@ body {
 }
 #quiz_form_header{
     width: 100%;
-    padding-top: 8px;
-    padding-bottom: 11px;
+    padding-top: 4px;
+    padding-bottom: 14px;
 }
 .form_header_label{
     font-size: 16px;
     text-align: center;
     padding-left: 8px;
     color: white;
+}
+
+.form_header_label_quiz{
+    font-size: 16px;
+    text-align: center;
+    padding-left: 8px;
+    color: white;
+    margin-top: 10px;
 }
 
 .toc-logo{
@@ -1293,6 +1454,19 @@ body {
     background: url(../images/Generale/bookmark-logo.png) no-repeat center center;
     padding-left: 48px;
     padding-top: 12px;
+    padding-bottom: 12px;
+    margin-left: 12px;
+}
+
+.quiz-color{
+    background-color: #ff0080;
+}
+.quiz-logo{
+    height: 32px;
+    width: 32px;
+    background: url(../images/Generale/quiz-logo.png) no-repeat center center;
+    padding-left: 48px;
+    margin-top: 10px;
     padding-bottom: 12px;
     margin-left: 12px;
 }
@@ -2311,6 +2485,17 @@ body {
     background:transparent url(../images/Generale/add-thread-b.png) no-repeat center;
 }
 
+.add-quiz-button{
+      height: 28px;
+      width: 22px;
+      background:transparent url(../images/Generale/add-quiz-a.png) no-repeat center;
+}
+
+.add-quiz-button:hover,
+.add-quiz-button.active{
+    background:transparent url(../images/Generale/add-quiz-b.png) no-repeat center;
+}
+
 .thread-logo,
 .visibility-logo{
     height: 11px;
@@ -2645,7 +2830,8 @@ body {
 }
 
 .bookmarks_button,
-.toc_button{
+.toc_button,
+.quiz_button{
     display: inline-block;
     margin-right: 2px;
     width: 36px;
@@ -2655,12 +2841,14 @@ body {
 }
 
 .bookmarks_button.active,
-.toc_button.active{
+.toc_button.active,
+.quiz_button.active{
     background: #ffffff;
 }
 
 .bookmarks_button a,
-.toc_button a{
+.toc_button a,
+.quiz_button a{
     display: block;
     width: 36px;
     height: 36px;
@@ -2702,13 +2890,22 @@ body {
     background:transparent url(../images/Generale/toc-dir-b.png) no-repeat center;
 }
 
+.quiz_button a{
+    background:transparent url(../images/Generale/quiz.png) no-repeat center;
+}
+
+.quiz_button a:hover,
+.quiz_button.active a{
+    background:transparent url(../images/Generale/quiz_active.png) no-repeat center;
+}
+
 /* ------- Bookmarks options ------- */
 
 .settings{
     display: block;
     position: absolute;
     right: 0px;
-    width: 155px;
+    width: 100px;
     padding: 5px;
 }
 
@@ -3219,7 +3416,8 @@ b.green-title{
 .delete-button,
 .edit-button,
 .link-button,
-.copy-button{
+.copy-button,
+.redo-button{
     display: inline-block;
     width: 17px;
     height: 17px;
@@ -3270,9 +3468,118 @@ b.green-title{
     background: url(../images/Generale/copy-a.png) no-repeat center;
 }
 
+.redo-button{
+    background: url(../images/Generale/redo-h.png) no-repeat center;
+}
+
+.redo-button:hover{
+    background: url(../images/Generale/redo-d.png) no-repeat center;
+}
+.rotatable:hover {
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
 /* ------------------ END BOOKMARKS PANE ---------------- */
 
 
+/* ------------------ QUIZ PANE ------------------------- */
+
+.quiz_detail{
+    display: none;
+    width: 100%;
+    padding: 0px;
+    padding-bottom: 6px;
+}
+
+.edit_quiz_form input{
+    display: block;
+}
+
+.edit_quiz_form{
+    display: none;
+    width: 215px;
+}
+
+.edit_quiz_form .editButtons{
+    display: block;
+}
+
+b.rose-title{
+    display: block;
+    background: #ff0080;
+    color: #ffffff;
+    padding: 8px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.rose-title{
+    color: #ff0080;
+    font-weight: bold;
+}
+
+.side_pane_content ul li.level_1.rose{
+    background-image: url(../images/Generale/lvl-rose-1-a.png);
+}
+
+.side_pane_content ul li.level_1.rose:hover,
+.side_pane_content ul li.level_1.active.rose{
+    background-image: url(../images/Generale/lvl-rose-1-b.png);
+}
+
+.side_pane_content ul li.level_3.rose{
+    background-image: url(../images/Generale/lvl-rose-3-a.png);
+}
+
+.side_pane_content ul li.level_3.rose:hover,
+.side_pane_content ul li.level_3.active.rose{
+    background-image: url(../images/Generale/lvl-rose-3-b.png);
+}
+
+.side_pane_content ul li a.item.rose{
+    padding: 6px 0px;
+    padding-right: 14px;
+    width: 175px;
+    display: inline-block;
+    vertical-align:top;
+}
+
+
+.side_pane_content ul li a.item.rose:hover{
+    color: #ff0080;
+}
+
+span.timecode.rose{
+    color: #ff0080;
+}
+
+.more-button.rose:hover{
+    background: url(../images/Generale/more-b-rose.png) no-repeat center;
+}
+
+.more-button.active.rose{
+    background: url(../images/Generale/more-c-rose.png) no-repeat center;
+}
+
+.edit-button.rose:hover{
+    background: url(../images/Generale/edit-d.png) no-repeat center;
+}
+
+.quiz_options{
+    display: block;
+    height: 17px;
+    padding: 5px 0px;
+}
 /* ------------------ ASSET DETAILS PANE ---------------- */
 
 
@@ -3836,6 +4143,55 @@ body.loading {
 body.loading .modal {
     display: block;
 }
+
+
+.quizQuestion {
+    background: #FBEFFB!important;
+    padding:10px;
+    margin-right:15px;
+    border-radius:10px;
+    box-shadow: 5px 5px 5px grey;
+}
+
+div#divQuizQuestion {
+    padding: 5px;
+    background-color: #d0d0d0;
+    border-radius: 5px;
+}
+
+/* -------- end from --------- */
+
+/* From : http://codepen.io/pedox/pen/Kfzso */
+
+a.buttonQuizz{
+  background: #ECECEC;
+  border-radius: 15px;
+  padding: 10px 20px;
+  display: inline-block;
+  font-family: arial;
+  font-weight: bold;
+  color:#7f7f7f;
+  text-decoration: none;
+  text-shadow:0px 1px 0px #fff;
+  border:1px solid #a7a7a7;
+  width: 145px;
+  margin:10px 5px;
+  margin-top:0px;
+  box-shadow: 0px 2px 1px white inset, 0px -2px 8px white, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+  -webkit-transition:box-shadow 0.5s;
+}
+a.buttonQuizz i{
+  float: right;
+  margin-top: 2px;
+}
+a.buttonQuizz:hover{
+  box-shadow: 0px 2px 1px white inset, 0px -2px 20px white, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+}
+a.buttonQuizz:active{
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5) inset, 0px -2px 20px white, 0px 1px 5px rgba(0, 0, 0, 0.1), 0px 2px 10px rgba(0, 0, 0, 0.1);
+  background:-webkit-linear-gradient(top, #d1d1d1 0%,#ECECEC 100%);
+}
+
 /* -------- end from --------- */
 
 /* --- REMOVE Bootstrap CSS ---  */

@@ -166,6 +166,22 @@
                                     </div>
 
                                     <div class="control-group">
+                                        <label class="control-label">®settings_moodle_basedir®</label>
+                                        <div class="controls">
+                                            <input type="text"  name="moodle_basedir" value="<?php echo htmlspecialchars($input['moodle_basedir']) ?>" />
+                                            <span class="help-block">URL to the Moodle application (from the root)</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">®settings_moodle_webservice®</label>
+                                        <div class="controls">
+                                            <input type="text"  name="moodle_webservice" value="<?php echo htmlspecialchars($input['moodle_webservice']) ?>" />
+                                            <span class="help-block">Name of the web service used to communicate with Moodle</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
                                         <label class="control-label">®settings_php_path®</label>
                                         <div class="controls">
                                             <input type="text" required name="php_cli_cmd" value="<?php echo htmlspecialchars($input['php_cli_cmd']) ?>" />

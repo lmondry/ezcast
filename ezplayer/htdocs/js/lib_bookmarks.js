@@ -1,4 +1,4 @@
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -38,7 +38,7 @@ function bookmark_form_submit() {
         }
     });
     // doesn't work in IE < 10
-    //   ajaxSubmitForm('submit_bookmark_form', 'index.php', '?action=bookmark_add', 'div_right');  
+    //   ajaxSubmitForm('submit_bookmark_form', 'index.php', '?action=bookmark_add', 'div_right');
     player_bookmark_form_hide(true);
 
 }
@@ -172,7 +172,7 @@ function bookmarks_upload_form_submit() {
         ajaxUpload('XMLbookmarks', 'loadingfile', 'index.php', '?action=bookmarks_upload', 'div_popup');
     }
     $('#div_popup').html('<div style="text-align: center;"><img src="images/loading_white.gif" alt="loading..." /></div>');
-            
+
 }
 
 /**
@@ -286,14 +286,14 @@ function popup_bookmark(album, asset, timecode, tab, source, display) {
         }
     });
     // doesn't work in IE < 10
-    //        ajaxSubmitForm('search_form', 'index.php', '?action=search_bookmark', 'div_popup');  
+    //        ajaxSubmitForm('search_form', 'index.php', '?action=search_bookmark', 'div_popup');
 
     $('#div_popup').reveal($(this).data());
 }
 
 /**
  * Renders a modal window containing a list of bookmarks
- * @param {type} album 
+ * @param {type} album
  * @param {type} asset
  * @param {type} tab
  * @param {type} source
@@ -313,4 +313,3 @@ function popup_bookmarks(album, asset, tab, source, display) {
 
     $('#div_popup').reveal($(this).data());
 }
-

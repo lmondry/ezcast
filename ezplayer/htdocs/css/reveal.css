@@ -17,7 +17,7 @@
 	.reveal-modal {
                 display: none;
                 font-family: Helvetica, Arial, sans-serif;
-		top: 75px; 
+		top: 75px;
 		left: 50%;
 		margin-left: -300px;
 		width: 520px;
@@ -156,7 +156,7 @@
 		<h2>Awesome. I have it.</h2>
 		<p class="lead">Your couch.  I it's mine.</p>
 		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultrices aliquet placerat. Duis pulvinar orci et nisi euismod vitae tempus lorem consectetur. Duis at magna quis turpis mattis venenatis eget id diam. </p>
-		<a class="close-reveal-modal">&#215;</a>
+		<a class="close-reveal-modalclose-reveal-modal">&#215;</a>
 	</div>
 	
 	*/

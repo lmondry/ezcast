@@ -39,9 +39,12 @@ var panel_width = 231;
 // variable describing which components are displayed on the page
 var fullscreen = false;
 var show_panel = false;
+var display_quiz = false;
+var display_feedback = false;
 var bookmark_form = "";
 var thread_form = false;
 var comment_form = false;
+var quiz_form = false;
 var shortcuts = false;
 
 /**
@@ -54,6 +57,7 @@ var notif_display_delay = 3;
  * @type Number
  */
 var notif_display_number = 3;
+
 
 window.addEventListener("keyup", function (e) {
     var el = document.activeElement;
@@ -126,6 +130,10 @@ window.addEventListener("keyup", function (e) {
                 if (is_lecturer == true)
                     player_bookmark_form_toggle('official');
                 break;
+            case 81 : // 'q'
+                if (is_lecturer == true)
+                    player_quiz_form_toggle();
+                break;
             case 8:  // 'backspace'
                 break;
         }
@@ -175,6 +183,18 @@ $(window).bind('resize', function (e)
     });
 });
 
+function delay(ms) {
+        var cur_d = new Date();
+        var cur_ticks = cur_d.getTime();
+        var ms_passed = 0;
+        while(ms_passed < ms) {
+            var d = new Date();  // Possible memory leak?
+            var ticks = d.getTime();
+            ms_passed = ticks - cur_ticks;
+            // d = null;  // Prevent memory leak?
+        }
+    }
+
 /**
  * Adds all the listeners on the videos to handle various events
  * This function should be called immediately after the video tags have been created
@@ -217,6 +237,7 @@ function player_prepare(currentQuality, currentType, startTime) {
                 time = Math.round(this.currentTime);
                 document.getElementById('bookmark_timecode').value = time;
                 document.getElementById('thread_timecode').value = time;
+                //document.getElementById('quiz_timecode_Q1').value = time;
                 seeked = true;
                 if (trace_pause) {
                     trace_pause = false;
@@ -227,6 +248,7 @@ function player_prepare(currentQuality, currentType, startTime) {
         // when the video is being played
         // --> saves the current time
         // --> loads the thread notifications to be displayed over the player
+        // --> loads the questions to be displayed over the player
         videos[i].addEventListener("timeupdate", function () {
             var currentTime = Math.round(this.currentTime);
 
@@ -244,6 +266,7 @@ function player_prepare(currentQuality, currentType, startTime) {
             if ((time % 3) == 0 && !mouseDown) {
                 player_range_count_update(time, type);
             }
+
             // loads the thread notifications
             while (i < notif_display_number && timecode <= currentTime) {
                 if (timecode >= 0 && typeof threads_array[timecode] !== 'undefined') {
@@ -267,6 +290,30 @@ function player_prepare(currentQuality, currentType, startTime) {
                 $('#video_notifications').slideDown();
             else
                 $('#video_notifications').slideUp();
+
+
+            var questionHTML = '';
+            // quizzes
+            if (display_quiz) {
+                // loads the questions to be displayed over the player
+                for(var i = 0 ; i<quiz_array.length ; i++){
+                    if(quiz_array[i]['timecode'] == currentTime  && quiz_array[i]['done'] == false){
+                        player_video_play_toggle();
+
+                        $.ajax({
+                            type: 'POST',
+                            url: 'index.php?action=quiz_display_question&click=true',
+                            data: {questionId:i,questionHtml:quiz_array[i].html,option:'question'},
+                            success: function (response) {
+                                $('#div_popup').html(response);
+                            }
+                        });
+
+                        $('#div_popup').reveal($(this).data());
+
+                    }
+                }
+            }
         });
 
         // when the video is played
@@ -275,7 +322,6 @@ function player_prepare(currentQuality, currentType, startTime) {
         videos[i].addEventListener('play', function () {
             if(seeked) {
                 seeked = false;
-                //console.log("video_seeked");
                 server_trace(new Array('4', 'video_seeked', current_album, current_asset, duration, previous_time, time, type, quality));
             }
 
@@ -318,11 +364,26 @@ function player_prepare(currentQuality, currentType, startTime) {
         // When data are loaded
         // --> Sets a variable that states the video is loaded (for iOS and Android)
         // --> Saves the duration of the video
+        // --> Display a popup to know if the user want to answer the quiz if there is one
         videos[i].addEventListener('loadeddata', function () {
             duration = Math.round(this.duration);
             (this.getAttribute('id') == "main_video") ? cam_loaded = true : slide_loaded = true;
             document.getElementById("load_warn").style.display = 'none';
 
+            if(quiz_array.length>0){
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'index.php?action=quiz_display_question&click=true',
+                    data: {option:'confirmation'},
+                    success: function (response) {
+                        $('#div_popup').html(response);
+                    }
+                });
+
+                $('#div_popup').reveal($(this).data());
+
+            }
         }, false);
 
         // when metadata is loaded
@@ -355,6 +416,174 @@ function player_prepare(currentQuality, currentType, startTime) {
         $('#secondary_video').show();
         $('.movie-button, .slide-button').toggleClass('active');
     }
+}
+
+/**
+ * Function to call when the user want to answer the quiz
+ */
+function yes_popup_answer_quiz(){
+    display_quiz = true;
+
+    if(quiz_array[0]['feedback'] == 1){
+        display_feedback = true;
+    }
+
+    player_video_seek(0);
+
+    quiz_array.forEach(function(value,i){
+        quiz_array[i]['done'] = false;
+        document.getElementById('question'+i).setAttribute("style", "");
+    });
+
+    // When quitting the quiz before finishing it
+    window.onunload = window.onbeforeunload = (function(){on_quit_finish_quiz(quiz_array[0].attemptid)});
+
+    // Load all questions
+    getQuizForVideo(quiz_array[0]['quizId']);
+
+    setActivePane('.quiz_button');
+    $('#side_pane').scrollTo('#asset_quiz');
+
+    close_popup();
+}
+
+/**
+ * Function to call want closing the popup of confimation/question/feedback
+ */
+function cancel_question(){
+    close_popup();
+    player_video_play_toggle();
+}
+
+/**
+ * Submit a question answer
+ * @param index : index of the question in the quiz_array
+ * @param attemptid : attempt number of the quiz
+ */
+function submit_question(index,attemptid){
+  var sequencecheck = $("div.formulation input:hidden");
+  var sequencecheck_name = sequencecheck.attr("name");
+  var sequencecheck_val = sequencecheck.val();
+
+  var input = $("div.answer input:checked");
+
+  if(input.length > 0) {
+      var input_name = input.attr("name");
+      var input_val = input.val();
+  } else {
+      var input = $("span.answer input:text");
+      var input_name = input.attr("name");
+      var input_val = input.val();
+  }
+
+  quiz_array[index]['done'] = true;
+  //document.getElementById('question'+index).textContent = document.getElementById('question'+index).innerHTML = 'Question '+(index+1);
+  document.getElementById('question'+index).setAttribute("style", "background-color:#ccffcc;");
+
+  var finished = true;
+  quiz_array.forEach(function(question) {
+      if(question['done'] != true){
+        finished = false;
+      }
+  });
+
+  // If finished, end the quiz, Else just submit the question then close popup
+  if(finished){
+    process_attempt_question(attemptid,sequencecheck_name,sequencecheck_val,input_name,input_val,1);
+  }else{
+    process_attempt_question(attemptid,sequencecheck_name,sequencecheck_val,input_name,input_val,0);
+  }
+
+}
+
+/**
+ * Submit the question and/or finish the quiz if all question are answered
+ * @param idAttempt : attempt number of the quiz
+ * @param sequenceName : question secquence check name
+ * @param sequenceValue : question sequence check value
+ * @param inputName : answer sequence check name
+ * @param inputValue : answer sequence check value
+ * @param finishattempt : 0 if quiz if not finished, 1 if it is finished
+ */
+function process_attempt_question(idAttempt,sequenceName,sequenceValue,inputName,inputValue,finishattempt) {
+
+    var answers = [
+        {
+            name: inputName,
+            value: inputValue
+        },
+        {
+            name: sequenceName,
+            value: sequenceValue
+        }
+    ]
+
+    if (finishattempt == 0) {
+        cancel_question();
+    }
+
+
+    ajaxRequest("mod_quiz_process_attempt", {
+        attemptid: idAttempt,
+        data: answers,
+        finishattempt: finishattempt
+    }).success(function (response) {
+        if(finishattempt == true){
+            if (display_feedback == false) {
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'index.php?action=quiz_display_question&click=true',
+                    data: {option:'noFeedback'},
+                    success: function (response) {
+                        $('#div_popup').html(response);
+                    }
+                });
+                display_quiz = false;
+
+            } else {
+                ajaxRequest("mod_quiz_get_attempt_review", {attemptid: idAttempt, page: -1}).success(function (response) {
+                    var correctionHTML = '';
+                    var generalFeedbackHTML = '';
+
+                    if (response.grade >= 0 && display_feedback == true) {
+                        response.questions.forEach(function (question) {
+                            correctionHTML += question.html;
+                            correctionHTML += '<br>';
+                        });
+
+                        ajaxRequest("mod_quiz_get_quiz_feedback_for_grade", {quizid:quiz_array[0]['quizId'], grade: response.grade}).success(function (response) {
+                            if(response.feedbacktext){
+                                generalFeedbackHTML = response.feedbacktext;
+                            }
+
+                            $.ajax({
+                                type: 'POST',
+                                url: 'index.php?action=quiz_display_question&click=true',
+                                data: {option:'feedback', correctionHtml:correctionHTML, feedbackHtml:generalFeedbackHTML
+                                },
+                                success: function (response) {
+                                    $('#div_popup').html(response);
+                                }
+                            });
+
+                            display_quiz = false;
+                        });
+                    }
+                });
+            }
+        }
+    });
+}
+
+/**
+ * Function that is triggered when the user quits the page before finishing the quiz
+ * @param id : attempt number of the started quiz
+ */
+function on_quit_finish_quiz(id) {
+    ajaxRequest("mod_quiz_process_attempt", {attemptid: id, finishattempt: 1}).success(function (response) {
+
+    });
 }
 
 // Sends the current time and type to the server to be saved as an array
@@ -648,6 +877,90 @@ function player_video_mute_toggle() {
     server_trace(new Array('4', 'video_mute', current_album, current_asset, duration, time, type, quality, video.muted, origin));
 }
 
+// =================== Q U I Z   A C T I O N S ===================== //
+
+// displays the quiz creation form
+function player_quiz_form_show() {
+    // Hide thread form if it's visible
+    if (thread_form) {
+        player_thread_form_hide(false);
+        return;
+    } else if (bookmark_form != ""){
+        player_bookmark_form_hide(false);
+        return;
+    }
+
+    $("#video_shortcuts").css("display", "none");
+    if (camslide && type == 'slide') {
+        var video = document.getElementById('secondary_video');
+    } else {
+        var video = document.getElementById('main_video');
+    }
+
+    video.pause();
+
+    $('.quiz-color').show();
+    $('.add-quiz-button').addClass("active");
+    $('#subBtn').addClass("quiz-color");
+    $('#quiz_form').addClass("bookmark");
+
+    var window_height = $(window).height() - 39;
+    $('video').animate({'height': (fullscreen) ? (window_height - 300) + 'px' : '250px'});
+    if (camslide)
+        (type == 'slide') ? $('#main_video').hide() : $('#secondary_video').hide();
+    $('#quiz_form').slideDown();
+    quiz_form = true;
+
+}
+
+// hides the quiz creation form
+function player_quiz_form_hide(canceled) {
+    var window_height = $(window).height() - 39;
+    quiz_form = "";
+    $("#video_shortcuts").css("display", "block");
+    $('video').animate({'height': (fullscreen) ? window_height + 'px' : '525px'});
+    if (camslide)
+        (type == 'slide') ? $('#main_video').hide() : $('#secondary_video').hide();
+
+    $('#quiz_form').slideUp();
+    if (canceled) {
+        document.getElementById('quiz_timecode_Q1').value = '0';
+        document.getElementById('quiz_title').value = '';
+        // empty all fields of quiz
+    }
+    $('.add-quiz-button').removeClass("active");
+    $('#quiz_form').removeClass("quiz-color");
+    quiz_form = false;
+}
+
+function player_quiz_form_toggle() {
+
+  from_shortcut = false;
+  if (quiz_form) {
+      player_quiz_form_hide(false);
+      return;
+  } else if (quiz_form != "") {
+      player_quiz_form_hide(false);
+      return;
+  }
+  player_quiz_form_show();
+  $("#quiz_title").focus();
+}
+
+function player_quiz_form_popup(){
+    $('#div_popup').html('<div style="text-align: center;"><img src="images/loading_white.gif" alt="loading..." /></div>');
+
+    $.ajax({
+        type: 'POST',
+        url: 'index.php?action=quiz_new_popup&click=true',
+        success: function (response) {
+            $('#div_popup').html(response);
+        }
+    });
+
+    $('#div_popup').reveal($(this).data());
+}
+
 // =================== B O O K M A R K S   A C T I O N S ===================== //
 
 // displays the bookmark creation form
@@ -655,6 +968,9 @@ function player_bookmark_form_show(source) {
     // Hide thread form if it's visible
     if (thread_form) {
         player_thread_form_hide(false);
+        return;
+    } else if (quiz_form){
+        player_quiz_form_hide(false);
         return;
     }
 
@@ -743,6 +1059,13 @@ function player_bookmark_form_toggle(source) {
 
 // displays thread creation form
 function player_thread_form_show() {
+    if (quiz_form) {
+        player_quiz_form_hide(false);
+        return;
+    } else if (bookmark_form != ""){
+        player_bookmark_form_hide(false);
+        return;
+    }
     // Creates the editor if it doesn't exist yet otherwise it will display 2 editors (or more)
     if (!$('#thread_desc_tinymce').hasClass('editor-created')) {
         tinymce.init({

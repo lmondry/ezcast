@@ -605,6 +605,10 @@
         <label id="settings_repository_basedir" lang="en">Repository root path</label>
         <label id="settings_ezcast_basedir" lang="fr">Chemin racine de l'application</label>
         <label id="settings_ezcast_basedir" lang="en">Application root path</label>
+        <label id="settings_moodle_basedir" lang="fr">Chemin racine de Moodle</label>
+        <label id="settings_moodle_basedir" lang="en">Moodle root path</label>
+        <label id="settings_moodle_webservice" lang="fr">Service Web Moodle</label>
+        <label id="settings_moodle_webservice" lang="en">Moodle Web Service</label>
         <label id="settings_php_path" lang="fr">Commande cli PHP</label>
         <label id="settings_php_path" lang="en">PHP cli command</label>
         <label id="settings_rsync_path" lang="fr">Commande rsync</label>
